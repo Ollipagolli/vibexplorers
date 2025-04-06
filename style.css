@@ -25,6 +25,10 @@ body {
   padding: 2rem 1rem;
 }
 
+.section .container {
+  text-align: center;
+}
+
 /* Navigaatio */
 .navbar {
   background-color: #1a1a1a;
@@ -223,14 +227,83 @@ iframe[src*="docs.google.com"] {
 }
 /* Founder Section */ 
 
-.founders-section { background-color: #111; padding: 4rem 0; }
+.founders-section {
+  background-color: #111;
+  padding: 4rem 0;
+}
 
-.founder-cards { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; }
+.founder-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
 
-.founder-card { background-color: #1a1a1a; padding: 2rem; border-radius: 12px; text-align: center; flex: 1 1 300px; max-width: 400px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+.founder-card {
+  background-color: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  flex: 1 1 300px;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
 
-.founder-image { width: 120px; height: 120px; object-fit: cover; border-radius: 50%; margin-bottom: 1rem; border: 3px solid var(--primary-color); }
+.founder-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 3px solid var(--primary-color);
+}
 
-.founder-card h3 { color: var(--primary-color); margin-bottom: 0.5rem; }
+.founder-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
 
-.founder-card p { color: var(--muted-color); font-size: 0.95rem; line-height: 1.5; }
+.founder-card p {
+  color: var(--muted-color);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.founder-card a.linkedin-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  color: #fff;
+  background-color: #0077b5;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.founder-card a.linkedin-link:hover {
+  background-color: #005983;
+}
+
+/* Responsiivisuus mobiilille */
+@media (max-width: 600px) {
+  .founder-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .founder-card {
+    width: 100%;
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .founder-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .founder-card p {
+    font-size: 0.95rem;
+  }
+}
