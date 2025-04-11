@@ -225,7 +225,7 @@ iframe[src*="docs.google.com"] {
     height: 500px;
   }
 }
-/* Founder Section */ 
+/* Founder Section improvements */
 
 .founders-section {
   background-color: #111;
@@ -245,8 +245,11 @@ iframe[src*="docs.google.com"] {
   border-radius: 12px;
   text-align: center;
   flex: 1 1 300px;
-  max-width: 400px;
+  max-width: 360px;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .founder-image {
@@ -267,22 +270,25 @@ iframe[src*="docs.google.com"] {
   color: var(--muted-color);
   font-size: 0.95rem;
   line-height: 1.5;
+  max-width: 90%;
+  margin: 0 auto 1rem;
+  text-align: left;
 }
 
-.founder-card a.linkedin-link {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  color: #fff;
-  background-color: #0077b5;
-  border-radius: 6px;
+.linkedin-link {
+  margin-top: auto;
+  color: var(--primary-color);
+  font-weight: 600;
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
+  border: 1px solid var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.3s ease;
 }
 
-.founder-card a.linkedin-link:hover {
-  background-color: #005983;
+.linkedin-link:hover {
+  background: var(--primary-color);
+  color: #111;
 }
 
 /* Responsiivisuus mobiilille */
@@ -306,4 +312,12 @@ iframe[src*="docs.google.com"] {
   .founder-card p {
     font-size: 0.95rem;
   }
+}
+
+.navbar {
+  transition: top 0.3s ease;
+}
+
+.navbar.hide {
+  top: -100px; /* piilottaa navbarin yläreunan taakse */
 }

@@ -104,5 +104,23 @@
       <p>&copy; 2025 VibeXplorers. Kaikki oikeudet pidätetään.</p>
     </div>
   </footer>
+  
+  <script>
+    let lastScroll = 0;
+    const navbar = document.querySelector('.navbar');
+  
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+  
+      if (currentScroll > lastScroll && currentScroll > 50) {
+        navbar.classList.add('hide'); // scroll down → piiloon
+      } else {
+        navbar.classList.remove('hide'); // scroll up → näkyviin
+      }
+  
+      lastScroll = currentScroll;
+    });
+  </script>
+  
 </body>
 </html>
