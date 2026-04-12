@@ -156,6 +156,21 @@ header .container {
   z-index: 1;
 }
 
+.hero-centered {
+  max-width: 760px;
+  text-align: center;
+}
+
+.hero-centered .hero-lead,
+.hero-centered .hero-note {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-centered .hero-actions {
+  justify-content: center;
+}
+
 .hero-layout {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
@@ -390,6 +405,12 @@ header p {
   max-width: 700px;
   margin: 0 auto 1rem;
   color: var(--muted-color);
+}
+
+.cta-link-wrap {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .form-wrapper {
