@@ -670,3 +670,31 @@ iframe[src*="docs.google.com"] {
     font-size: 0.95rem;
   }
 }
+
+.program-card {
+  background-color: var(--background-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1.35rem;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+
+.program-logo-wrap {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.program-logo {
+  max-height: 44px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  filter: none;
+}
