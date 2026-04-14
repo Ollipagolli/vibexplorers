@@ -689,12 +689,13 @@ iframe[src*="docs.google.com"] {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  min-height: 56px;
 }
 
 .program-logo {
-  max-height: 44px;
+  max-height: 40px;
   width: auto;
-  max-width: 140px;
+  max-width: 130px;
   object-fit: contain;
-  filter: none;
 }
+
