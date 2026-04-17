@@ -335,7 +335,7 @@ header p {
   box-shadow: var(--shadow-soft);
 }
 
-.program-week {
+.program-date {
   display: inline-block;
   margin-bottom: 0.65rem;
   padding: 0.28rem 0.65rem;
