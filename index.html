@@ -256,21 +256,30 @@ Ensimmäinen toteutus soveltuu 4-6 vuotiaille ja järjestetään Espoossa. Paikk
     </div>
   </footer>
 
-  <script>
-    let lastScroll = 0;
-    const navbar = document.querySelector('.navbar');
+<script>
+  let lastScroll = 0;
+  const navbar = document.querySelector('.navbar');
+  const scrollThreshold = 10;
 
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
 
-      if (currentScroll > lastScroll && currentScroll > 50) {
-        navbar.classList.add('hide');
-      } else {
-        navbar.classList.remove('hide');
-      }
+    if (currentScroll <= 0) {
+      navbar.classList.remove('hide');
+      return;
+    }
 
-      lastScroll = currentScroll;
-    });
-  </script>
-</body>
+    if (Math.abs(currentScroll - lastScroll) < scrollThreshold) {
+      return;
+    }
+
+    if (currentScroll > lastScroll && currentScroll > 80) {
+      navbar.classList.add('hide');
+    } else {
+      navbar.classList.remove('hide');
+    }
+
+    lastScroll = currentScroll;
+  }, { passive: true });
+</script>
 </html>
