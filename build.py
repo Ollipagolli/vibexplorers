@@ -116,6 +116,7 @@ def head(title, desc, path, preload):
   <meta property="og:locale" content="fi_FI" />
   <meta property="og:site_name" content="VibeXplorers" />
   <meta property="og:url" content="https://vibexplorers.com/{path}" />
+  <link rel="canonical" href="https://vibexplorers.com/{path}" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://vibexplorers.com/share-2027.jpg" />
@@ -133,10 +134,10 @@ def head(title, desc, path, preload):
 def nav(active):
     def li(slug, label):
         cur = ' aria-current="page"' if slug == active else ""
-        return f'<li><a href="{slug}.html"{cur}>{label}</a></li>'
+        return f'<li><a href="/{slug}"{cur}>{label}</a></li>'
     return f"""  <nav class="nav" aria-label="Päävalikko">
     <div class="wrap">
-      <a href="index.html" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
+      <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
       <ul>
         {li("syksy", "Syksy<span class=\"yr\"> 2026</span>") if FALL_ACTIVE else ""}{li("espoo", "Espoo")}{li("vantaa", "Vantaa")}{li("tampere", "Tampere")}
         <li><a href="{FORM_URL}" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
@@ -189,7 +190,7 @@ FOOTER = f"""  <footer>
 """
 
 
-FALL_NOTICE = f'<a href="syksy.html" class="notice"><span class="dot"></span>Syksyn ryhmä on käynnissä – katso aikataulu {ARROW}</a>\n      '
+FALL_NOTICE = f'<a href="/syksy" class="notice"><span class="dot"></span>Syksyn ryhmä on käynnissä – katso aikataulu {ARROW}</a>\n      '
 
 
 def fig(name, cls=""):
@@ -210,7 +211,7 @@ def city_logos(c):
 # ------------------------------------------------------------------ index
 def index_page():
     rows = "\n".join(
-        f"""        <a href="{s}.html" class="city-row rv">
+        f"""        <a href="/{s}" class="city-row rv">
           <div><h3>{c['name']}</h3>{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
@@ -287,7 +288,7 @@ def city_page(slug, c):
             rows.append(f'        <div class="row off"><div class="wk">Viikko<b>{s[0]}</b></div><div><h3>Hiihtoloma</h3></div><div></div><div></div><div></div></div>')
         else:
             rows.append(row(s))
-    others = " · ".join(f'<a href="{s}.html" style="color:var(--white);font-weight:700">{CITIES[s]["name"]}</a>' for s in CITIES if s != slug)
+    others = " · ".join(f'<a href="/{s}" style="color:var(--white);font-weight:700">{CITIES[s]["name"]}</a>' for s in CITIES if s != slug)
     return head(
         f"VibeXplorers {c['name']} – Talvi 2027",
         f"8 lajin liikkari 4–6-vuotiaille, {c['name']}, talvi 2027.",
@@ -349,7 +350,7 @@ def fall_page():
     <section class="sec cta" style="padding-top:0">
       <div class="wrap rv">
         <h2>Jatketaanko talvella?</h2>
-        <a href="index.html#kaupungit" class="btn">Talvi 2027 {ARROW}</a>
+        <a href="/#kaupungit" class="btn">Talvi 2027 {ARROW}</a>
       </div>
     </section>
   </main>
