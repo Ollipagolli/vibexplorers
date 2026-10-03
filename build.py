@@ -6,7 +6,7 @@ import html, pathlib
 OUT = pathlib.Path(__file__).parent
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor"
 EMAIL = "vibexhq@gmail.com"
-PRICE = "69 €"
+PRICE = "69 €"  # oletushinta; kaupunkikohtainen hinta CITIES-listassa ("price")
 
 # Seuran nimi -> logo (img/logot/). Lisää uusia seuroja tähän.
 LOGOS = {
@@ -50,7 +50,7 @@ FALL = [
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
-        "name": "Espoo", "hero": "kuva-judo.jpg", "pos": "50% 70%",
+        "name": "Espoo", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Luistelu", "Espoon Jäätaiturit", None, "Su 24.1. klo 12.30–13.15"),
@@ -298,7 +298,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span><span>2 ryhmää</span><span><b>{PRICE}</b> / kausi</span></div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span><span>2 ryhmää</span><span><b>{c.get('price', PRICE)}</b> / kausi</span></div>
     </div>
   </header>
 
