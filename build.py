@@ -15,7 +15,7 @@ LOGOS = {
     "GrIFK Handboll": "grifk.png",
     "Olarin Voimistelijat": "ovo.png",
     "Espoon Palloseura": "eps.png",
-    "Espoon Tennisseura": "ets.png",
+    "Laaksolahden Sulkapallo": "lasupa.png",
     "Sirkus- ja teatterikoulu Esko": "esko.png",
     # Vantaa
     "Vantaan Voimisteluseura": "vvs.png",
@@ -59,7 +59,7 @@ CITIES = {
             (6, None, None, None, None),
             (7, "Voimistelu", "Olarin Voimistelijat", None, "Ke 17.2."),
             (9, "Jalkapallo", "Espoon Palloseura", None, None),
-            (10, "Sulkapallo", "Espoon Tennisseura", None, "La 13.3. klo 8–10"),
+            (10, "Sulkapallo", "Laaksolahden Sulkapallo", None, "La 13.3. klo 8–10"),
             (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", None, None),
         ],
     },
