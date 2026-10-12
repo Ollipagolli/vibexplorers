@@ -13,6 +13,7 @@ LOGOS = {
     "Espoon Jäätaiturit": "esjt.png",
     "Espoon Urheilijat": "esu.png",
     "GrIFK Handboll": "grifk.png",
+    "GrIFK Alpine": "grifk.png",
     "Olarin Voimistelijat": "ovo.png",
     "Espoon Palloseura": "eps.png",
     "Laaksolahden Sulkapallo": "lasupa.png",
@@ -56,11 +57,11 @@ CITIES = {
             (3, "Luistelu", "Espoon Jäätaiturit", None, "Su 24.1. klo 12.30–13.15"),
             (4, "Paini", "Espoon Urheilijat", None, "Su 31.1. klo 14–16"),
             (5, "Käsipallo", "GrIFK Handboll", None, "Ke 3.2."),
-            (6, None, None, None, None),
-            (7, "Voimistelu", "Olarin Voimistelijat", None, "Ke 17.2."),
+            (6, "Voimistelu", "Olarin Voimistelijat", None, "Ke 10.2."),
+            (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2."),
             (9, "Jalkapallo", "Espoon Palloseura", None, None),
             (10, "Sulkapallo", "Laaksolahden Sulkapallo", None, "La 13.3. klo 8–10"),
-            (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", None, None),
+            (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", "Järvenperän sirkustila, Auroranmäki 1", None),
         ],
     },
     "vantaa": {
@@ -82,10 +83,10 @@ CITIES = {
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", None),
-            (5, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 3.2. klo 17"),
+            (5, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 3.2."),
             (6, "Padel", "TATS", "Tampereen tenniskeskus", None),
             (7, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 17.2."),
-            (8, None, None, None, None),
+            (8, "Käsipallo", "KooVee", None, "To 25.2."),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
             (11, None, None, None, None),
             (12, None, None, None, None),
@@ -147,11 +148,11 @@ def nav(active):
 """
 
 
-def cta(title):
+def cta(title, button="Liity listalle"):
     return f"""    <section class="sec cta">
       <div class="wrap rv">
         <h2>{title}</h2>
-        <a href="{FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn">Liity listalle {ARROW}</a>
+        <a href="{FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn">{button} {ARROW}</a>
         <div class="contact">
           <img src="olli.jpg" alt="" width="56" height="56" />
           <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div>
@@ -201,7 +202,7 @@ def fig(name, cls=""):
 def city_logos(c):
     seen = []
     for s in c["sessions"]:
-        if s[2] in LOGOS and s[2] not in seen:
+        if s[2] in LOGOS and LOGOS[s[2]] not in [LOGOS[x] for x in seen]:
             seen.append(s[2])
     if not seen:
         return ""
@@ -212,7 +213,7 @@ def city_logos(c):
 def index_page():
     rows = "\n".join(
         f"""        <a href="/{s}" class="city-row rv">
-          <div><h3>{c['name']}</h3>{city_logos(c)}</div>
+          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
         </a>""" for s, c in CITIES.items())
@@ -298,7 +299,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span><span>2 ryhmää</span><span><b>{c.get('price', PRICE)}</b> / kausi</span></div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span><span>2 ryhmää</span><span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
     </div>
   </header>
 
@@ -309,11 +310,11 @@ def city_page(slug, c):
         <div class="program rv">
 {chr(10).join(rows)}
         </div>
-        <p class="note">Ohjelma täydentyy. Ryhmäkohtaiset ajat lähetetään ilmoittautuneille.</p>
+        <p class="note">{"Kaikki 8 lajia on varmistettu." if all(s[1] for s in c["sessions"]) else "Ohjelma täydentyy."} Ryhmäkohtaiset ajat lähetetään ilmoittautuneille.</p>
       </div>
     </section>
 
-{cta("Talven ryhmät aukeavat pian.")}
+{cta(c["name"] + " on täynnä.", "Jonotuslistalle") if c.get("full") else cta("Talven ryhmät aukeavat pian.")}
     <p style="text-align:center;color:var(--grey);margin:-3rem 0 5rem">Myös {others}</p>
   </main>
 

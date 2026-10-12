@@ -203,3 +203,8 @@ footer a:hover { color: var(--white); }
 }
 @media (max-width: 360px) { .nav ul { gap: .6rem; font-size: .8rem; } }
 @media (max-width: 640px) { .fall-hero { min-height: 46svh; } }
+
+/* Full group tag */
+.full-tag { display: inline-block; vertical-align: middle; margin-left: .7rem; padding: .3rem .7rem; border-radius: 999px; background: var(--orange); color: var(--black); font-size: .8rem; font-weight: 700; letter-spacing: .02em; line-height: 1.2; }
+.city-row h3 .full-tag { font-size: clamp(.75rem, 1.2vw, .9rem); transform: translateY(-.4em); }
+.facts .full-tag { margin-left: 0; font-size: .85rem; }
