@@ -22,10 +22,16 @@ LOGOS = {
     "Vantaan Voimisteluseura": "vvs.png",
     "Atlas Handball": "atlas.png",
     "Ylä-Tikkurilan Kipinä": "ytk.png",
+    "Vantaan Tanssiopisto": "vantaan-tanssiopisto.png",
+    "Vanders": "vanders.png",
+    "Vantaan Hiihtoseura": "vhs.png",
+    "Pakkalan Palloseura": "paps.png",
+    "Vantaan Lentopalloseura": "vanle.png",
     # Tampere
     "TATS": "tats.png",
     "Tampereen Pyrintö": "pyrinto.png",
     "Tampereen Hiihtoseura": "tahs.png",
+    "KooVee": "koovee.png",
 }
 
 
