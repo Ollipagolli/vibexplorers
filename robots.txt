@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /Archive/
+
+Sitemap: https://vibexplorers.com/sitemap.xml

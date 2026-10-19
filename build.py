@@ -48,6 +48,10 @@ FALL = [
     (44, "2026-10-28", "Salibandy", "Esport Oilers", "Esport Arena, kenttä 6", "Ke 28.10. klo 17.30–18.30", "oilers.png"),
 ]
 
+# Tulossa olevat kaupungit: oma sivu + rivi etusivulle ilman ohjelmaa
+COMING = {
+}
+
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
@@ -91,6 +95,11 @@ CITIES = {
             (11, None, None, None, None),
             (12, None, None, None, None),
         ],
+    },
+    "helsinki": {
+        "name": "Helsinki", "groups": None, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
+        "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
+        "sessions": [(w, None, None, None, None) for w in (4, 5, 6, 7, 9, 10, 11, 12)],
     },
 }
 
@@ -140,7 +149,7 @@ def nav(active):
     <div class="wrap">
       <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
       <ul>
-        {li("syksy", "Syksy<span class=\"yr\"> 2026</span>") if FALL_ACTIVE else ""}{li("espoo", "Espoo")}{li("vantaa", "Vantaa")}{li("tampere", "Tampere")}
+        {li("syksy", "Syksy<span class=\"yr\"> 2026</span>") if FALL_ACTIVE else ""}{li("espoo", "Espoo")}{li("vantaa", "Vantaa")}{li("tampere", "Tampere")}{li("helsinki", "Helsinki")}
         <li><a href="{FORM_URL}" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
       </ul>
     </div>
@@ -216,7 +225,12 @@ def index_page():
           <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
-        </a>""" for s, c in CITIES.items())
+        </a>""" for s, c in CITIES.items()) + "\n" + "\n".join(
+        f"""        <a href="/{s}" class="city-row rv soon">
+          <div><h3>{c['name']} <span class="soon-tag">Tulossa</span></h3></div>
+          <span class="when">Seuraavaksi</span>
+          <span class="arrow">{ARROW}</span>
+        </a>""" for s, c in COMING.items())
     return head(
         "VibeXplorers – 8 lajin liikkari 4–6-vuotiaille",
         "Kokeile eri lajeja. Löydä oma juttu. 8 lajin liikkari 4–6-vuotiaille – talvi 2027 Espoossa, Vantaalla ja Tampereella.",
@@ -289,7 +303,8 @@ def city_page(slug, c):
             rows.append(f'        <div class="row off"><div class="wk">Viikko<b>{s[0]}</b></div><div><h3>Hiihtoloma</h3></div><div></div><div></div><div></div></div>')
         else:
             rows.append(row(s))
-    others = " · ".join(f'<a href="/{s}" style="color:var(--white);font-weight:700">{CITIES[s]["name"]}</a>' for s in CITIES if s != slug)
+    allc = {**CITIES, **COMING}
+    others = " · ".join(f'<a href="/{s}" style="color:var(--white);font-weight:700">{allc[s]["name"]}</a>' for s in allc if s != slug)
     return head(
         f"VibeXplorers {c['name']} – Talvi 2027",
         f"8 lajin liikkari 4–6-vuotiaille, {c['name']}, talvi 2027.",
@@ -299,7 +314,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span><span>2 ryhmää</span><span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} ryhmää</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
     </div>
   </header>
 
@@ -369,7 +384,47 @@ def fall_page():
 """ + FOOTER
 
 
+def coming_page(slug, c):
+    name = c["name"]
+    others = " · ".join(f'<a href="/{s}" style="color:var(--white);font-weight:700">{CITIES[s]["name"]}</a>' for s in CITIES)
+    return head(
+        f"VibeXplorers {name} – tulossa",
+        f"VibeXplorers on tulossa {c['ill']}. 8 lajin liikkari 4–6-vuotiaille paikallisten seurojen kanssa. Liity listalle.",
+        slug, c["hero"]) + nav(slug) + f"""
+  <header class="hero city-hero">
+    <img src="img/{c['hero']}" alt="" style="object-position:{c['pos']}" />
+    <div class="wrap">
+      <span class="label">Tulossa</span>
+      <h1>{name}</h1>
+      <div class="facts"><span>4–6-vuotiaat</span><span>8 lajia</span><span>Paikalliset seurat</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="sec">
+      <div class="wrap split" style="align-items:start">
+        <div class="rv">
+          <h2 class="statement">{name} on seuraava.</h2>
+          <p class="sub">Kokoamme parhaillaan {c['gen']} ensimmäistä ohjelmaa. Liity listalle, niin kuulet ensimmäisenä, kun lajit ja ryhmät varmistuvat.</p>
+          <div style="margin-top:2rem"><a href="{FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn">Liity listalle {ARROW}</a></div>
+        </div>
+        <div class="rv">
+          <span class="label">Seuroille</span>
+          <h2 class="statement" style="margin-top:.8rem;font-size:clamp(1.8rem,3.6vw,2.8rem)">Tuo lajisi mukaan.</h2>
+          <p class="sub">Etsimme {c['ela']} seuroja, jotka haluavat esitellä lajiaan uusille perheille.</p>
+          <div style="margin-top:2rem"><a href="mailto:{EMAIL}?subject=Seurayhteisty%C3%B6%20{name}" class="btn ghost">Ota yhteyttä {ARROW}</a></div>
+        </div>
+      </div>
+    </section>
+    <p style="text-align:center;color:var(--grey);margin:0 0 5rem">Talvi 2027: {others}</p>
+  </main>
+
+""" + FOOTER
+
+
 if __name__ == "__main__":
+    for slug, c in COMING.items():
+        (OUT / f"{slug}.html").write_text(coming_page(slug, c), encoding="utf-8")
     if FALL_ACTIVE:
         (OUT / "syksy.html").write_text(fall_page(), encoding="utf-8")
     (OUT / "index.html").write_text(index_page(), encoding="utf-8")
