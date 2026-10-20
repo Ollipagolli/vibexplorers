@@ -277,3 +277,4 @@ section[id] { scroll-margin-top: 88px; }
 .prose a { color: var(--orange); font-weight: 600; }
 .prose .steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .6rem; color: var(--grey); }
 .prose .steps li::marker { color: var(--orange); font-weight: 800; }
+.city-row .opens { display: block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--orange); }

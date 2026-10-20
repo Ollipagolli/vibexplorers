@@ -33,7 +33,7 @@
       <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
       <ul>
         <li><a href="/syksy">Syksy<span class="yr"> 2026</span></a></li><li><a href="/espoo">Espoo</a></li><li><a href="/vantaa">Vantaa</a></li><li><a href="/tampere">Tampere</a></li><li><a href="/helsinki">Helsinki</a></li>
-        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+        <li><a href="/#kaupungit" class="cta">Ilmoittaudu</a></li>
       </ul>
     </div>
   </nav>
@@ -52,14 +52,15 @@
     var t = (location.hash || '').slice(1), out = document.querySelector('[data-out]'), h = document.querySelector('[data-title]');
     function show(title, html) { h.textContent = title; out.innerHTML = html; }
     if (!/^[a-f0-9]{64}$/.test(t)) { show('Linkki ei toimi.', '<p>Avaa linkki suoraan sähköpostista tai kirjoita <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.</p>'); return; }
-    var tries = 0;
+    var tries = 0, apis = ['https://script.google.com/macros/s/AKfycbxaE8k7ecQkRbApqkRnJxMLZdKQ932snYAb1148hZ644TEFt3Ra5DZ1m1UEX1Vsi7Tr/exec', 'https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec'], ai = 0;
     function go() {
-      fetch('https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'confirm', token: t }) })
+      fetch(apis[ai], { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'confirm', token: t }) })
         .then(function (r) { return r.json(); })
         .then(function (r) {
           if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan! Vahvistus tulee sähköpostiin, ja lasku lähtee erikseen. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
           else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
           else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
+          else if (r.error === 'invalid_token' && ai < apis.length - 1) { ai++; go(); }
           else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.</p>');
           else show('Linkki ei toimi.', '<p>' + (r.message || 'Kirjoita meille') + ' <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a></p>');
         })

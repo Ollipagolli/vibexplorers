@@ -33,7 +33,7 @@
       <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
       <ul>
         <li><a href="/syksy">Syksy<span class="yr"> 2026</span></a></li><li><a href="/espoo">Espoo</a></li><li><a href="/vantaa" aria-current="page">Vantaa</a></li><li><a href="/tampere">Tampere</a></li><li><a href="/helsinki">Helsinki</a></li>
-        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+        <li><a href="#ilmoittaudu" class="cta">Ilmoittaudu</a></li>
       </ul>
     </div>
   </nav>
@@ -66,16 +66,71 @@
       </div>
     </section>
 
-    <section class="sec cta">
-      <div class="wrap rv">
-        <h2>Talven ryhmät aukeavat pian.</h2>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" class="btn">Liity listalle <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <div class="contact">
-          <img src="olli.jpg" alt="" width="56" height="56" />
-          <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a></div>
-        </div>
+    <section class="sec reg" id="ilmoittaudu" data-api="https://script.google.com/macros/s/AKfycbxaE8k7ecQkRbApqkRnJxMLZdKQ932snYAb1148hZ644TEFt3Ra5DZ1m1UEX1Vsi7Tr/exec" data-city="vantaa" data-years="2020,2021,2022,2023">
+      <div class="wrap narrow">
+        <span class="label">Vantaa · Talvi 2027</span>
+        <h2 data-title>Ilmoittaudu.</h2>
+        <p class="reg-status" data-status aria-live="polite"></p>
+        <div class="reg-done" data-done hidden aria-live="polite"></div>
+        <form novalidate>
+          <div data-kids></div>
+          <button type="button" class="linkbtn add" data-add-kid>+ Lisää sisarus</button>
+
+          <fieldset><legend>Huoltaja</legend>
+            <div class="field"><label for="guardian">Nimi</label><input id="guardian" name="guardian" type="text" autocomplete="name" aria-describedby="err-guardian" /><span class="err" id="err-guardian" aria-live="polite"></span></div>
+            <div class="field"><label for="street">Katuosoite</label><span class="hint">Laskutusta varten</span><input id="street" name="street" type="text" autocomplete="street-address" aria-describedby="err-street" /><span class="err" id="err-street" aria-live="polite"></span></div>
+            <div class="two">
+              <div class="field"><label for="postcode">Postinumero</label><input id="postcode" name="postcode" type="text" autocomplete="postal-code" aria-describedby="err-postcode" inputmode="numeric" maxlength="5"/><span class="err" id="err-postcode" aria-live="polite"></span></div>
+              <div class="field"><label for="postCity">Postitoimipaikka</label><input id="postCity" name="postCity" type="text" autocomplete="address-level2" aria-describedby="err-postCity" /><span class="err" id="err-postCity" aria-live="polite"></span></div>
+            </div>
+            <div class="field"><label for="email">Sähköposti</label><input id="email" name="email" type="email" autocomplete="email" aria-describedby="err-email" inputmode="email"/><span class="err" id="err-email" aria-live="polite"></span></div>
+            <div class="field"><label for="phone">Puhelin</label><input id="phone" name="phone" type="tel" autocomplete="tel" aria-describedby="err-phone" /><span class="err" id="err-phone" aria-live="polite"></span></div>
+          </fieldset>
+
+          <fieldset><legend>Varayhteyshenkilö <span class="opt">vapaaehtoinen</span></legend>
+            <p class="hint">Kenelle soitamme, jos emme tavoita sinua?</p>
+            <div class="two">
+              <div class="field"><label for="emergencyName">Nimi</label><input id="emergencyName" name="emergencyName" type="text" autocomplete="off" aria-describedby="err-emergencyName" /><span class="err" id="err-emergencyName" aria-live="polite"></span></div>
+              <div class="field"><label for="emergencyPhone">Puhelin</label><input id="emergencyPhone" name="emergencyPhone" type="tel" autocomplete="off" aria-describedby="err-emergencyPhone" /><span class="err" id="err-emergencyPhone" aria-live="polite"></span></div>
+            </div>
+          </fieldset>
+
+          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lapsi näkyä jakamissamme kuvissa?</legend>
+            <p class="hint">Otamme lajikerroilta kuvia someen ja verkkosivuille. Kuvaamme niin, etteivät lasten kasvot näy.</p>
+            <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
+            <span class="err" id="err-photo" aria-live="polite"></span>
+          </fieldset>
+
+          <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
+            <div class="field"><label for="notes">Onko jotain, mitä meidän olisi hyvä tietää?</label><span class="hint">Kerro esimerkiksi, jos lapsi jännittää uusia paikkoja. Terveysasioista, kuten allergioista, kerrothan suoraan ohjaajalle tai Hostille paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option><option>Kaveri</option><option>Instagram</option><option>Facebook</option><option>Päiväkoti</option><option>Seura</option><option>Muu</option></select></div>
+          </fieldset>
+
+          <fieldset class="checks"><legend class="sr">Hyväksynnät</legend>
+            <label class="check"><input type="checkbox" name="terms" id="terms" aria-describedby="err-terms" /> <span>Hyväksyn <a href="/vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener">osallistumisehdot</a> ja <a href="/vibexplorers-saannot.pdf" target="_blank" rel="noopener">tapahtumasäännöt</a>.</span></label>
+            <span class="err" id="err-terms" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="privacy" id="privacy" aria-describedby="err-privacy" /> <span>Olen lukenut <a href="/vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener">tietosuojaselosteen</a>.</span></label>
+            <span class="err" id="err-privacy" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan kuulla tulevista kausista sähköpostilla.</span></label>
+            <label class="check"><input type="checkbox" name="host" /> <span>Voisin toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Mikä on Host?</a></span></label>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+
+          <p class="fine">Hinta on 69 € / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja sen eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <div class="form-msg" data-form-msg hidden role="alert"></div>
+          <button type="submit" class="btn submit" disabled><span>Ladataan…</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <template id="kid-tpl">
+          <fieldset class="kid"><legend>Lapsi</legend>
+            <div class="field"><label data-for="Name">Lapsen etu- ja sukunimi</label><input data-k="Name" type="text" autocomplete="off" /><span class="err" data-err="Name" aria-live="polite"></span></div>
+            <div class="field"><label data-for="Year">Syntymävuosi</label><select data-k="Year"><option value="">Valitse</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option></select><span class="err" data-err="Year" aria-live="polite"></span></div>
+            <button type="button" class="linkbtn rm" data-rm hidden>Poista</button>
+          </fieldset>
+        </template>
       </div>
     </section>
+    <script src="/ilmo.js?v=3" defer></script>
 
     <p style="text-align:center;color:var(--grey);margin:-3rem 0 5rem">Myös <a href="/espoo" style="color:var(--white);font-weight:700">Espoo</a> · <a href="/tampere" style="color:var(--white);font-weight:700">Tampere</a> · <a href="/helsinki" style="color:var(--white);font-weight:700">Helsinki</a></p>
   </main>

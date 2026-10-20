@@ -6,10 +6,11 @@ import html, pathlib
 OUT = pathlib.Path(__file__).parent
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor"
 EMAIL = "vibexhq@gmail.com"
-# Ilmoittautumisen taustapalvelu (Apps Script /exec). Testi nyt, tuotanto myöhemmin.
-API_URL = "https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec"
+# Ilmoittautumisen taustapalvelu (Apps Script /exec): tuotanto ja testitaulukko.
+API_URL = "https://script.google.com/macros/s/AKfycbxaE8k7ecQkRbApqkRnJxMLZdKQ932snYAb1148hZ644TEFt3Ra5DZ1m1UEX1Vsi7Tr/exec"
+API_TEST_URL = "https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec"
 # Kaupungit, joiden sivulla näkyy oma ilmoittautumislomake. Muilla on kiinnostuslista.
-REG_CITIES = set()
+REG_CITIES = {"vantaa", "espoo", "tampere"}
 BIRTH_YEARS = [2020, 2021, 2022, 2023]
 PRICE = "69 €"  # oletushinta; kaupunkikohtainen hinta CITIES-listassa ("price")
 
@@ -66,7 +67,7 @@ COMING = {
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
-        "name": "Espoo", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
+        "name": "Espoo", "opens": "ke 28.10. klo 20", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15"),
@@ -80,7 +81,7 @@ CITIES = {
         ],
     },
     "vantaa": {
-        "name": "Vantaa", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
+        "name": "Vantaa", "opens": "ti 27.10. klo 20", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
@@ -94,7 +95,7 @@ CITIES = {
         ],
     },
     "tampere": {
-        "name": "Tampere", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
+        "name": "Tampere", "opens": "to 29.10. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", None),
@@ -161,18 +162,19 @@ def nav(active):
       <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
       <ul>
         {li("syksy", "Syksy<span class=\"yr\"> 2026</span>") if FALL_ACTIVE else ""}{li("espoo", "Espoo")}{li("vantaa", "Vantaa")}{li("tampere", "Tampere")}{li("helsinki", "Helsinki")}
-        <li><a href="{FORM_URL}" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+        <li><a href="{'#ilmoittaudu' if active in REG_CITIES else '/#kaupungit'}" class="cta">Ilmoittaudu</a></li>
       </ul>
     </div>
   </nav>
 """
 
 
-def cta(title, button="Liity listalle"):
+def cta(title, button="Liity listalle", href=None):
+    link = f'href="{href}"' if href else f'href="{FORM_URL}" target="_blank" rel="noopener noreferrer"'
     return f"""    <section class="sec cta">
       <div class="wrap rv">
         <h2>{title}</h2>
-        <a href="{FORM_URL}" target="_blank" rel="noopener noreferrer" class="btn">{button} {ARROW}</a>
+        <a {link} class="btn">{button} {ARROW}</a>
         <div class="contact">
           <img src="olli.jpg" alt="" width="56" height="56" />
           <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div>
@@ -230,13 +232,14 @@ def city_logos(c):
 
 
 # ------------------------------------------------------------------ registration
-def reg_section(slug, c):
+def reg_section(slug, c, api=None):
+    api = api or API_URL
     years = "".join(f'<option value="{y}">{y}</option>' for y in BIRTH_YEARS)
     srcs = "".join(f'<option>{x}</option>' for x in ["Kaveri", "Instagram", "Facebook", "Päiväkoti", "Seura", "Muu"])
     def field(name, label, typ="text", ac="", extra="", hint=""):
         h = f'<span class="hint">{hint}</span>' if hint else ""
         return f"""<div class="field"><label for="{name}">{label}</label>{h}<input id="{name}" name="{name}" type="{typ}" autocomplete="{ac}" aria-describedby="err-{name}" {extra}/><span class="err" id="err-{name}" aria-live="polite"></span></div>"""
-    return f"""    <section class="sec reg" id="ilmoittaudu" data-api="{API_URL}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
+    return f"""    <section class="sec reg" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
         <h2 data-title>Ilmoittaudu.</h2>
@@ -300,7 +303,7 @@ def reg_section(slug, c):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js" defer></script>
+    <script src="/ilmo.js?v=3" defer></script>
 """
 
 
@@ -309,7 +312,7 @@ def test_page():
     return head("VibeXplorers – ilmoittautumisen testi", "Testisivu.", "ilmo-testi", "kuva-trampoliini.jpg").replace(
         "<title>", '<meta name="robots" content="noindex, nofollow" />\n  <title>', 1).replace('  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
   <main style="padding-top:72px">
-{reg_section("testi", c)}  </main>
+{reg_section("testi", c, API_TEST_URL)}  </main>
 """ + FOOTER
 
 
@@ -330,14 +333,15 @@ def confirm_page():
     var t = (location.hash || '').slice(1), out = document.querySelector('[data-out]'), h = document.querySelector('[data-title]');
     function show(title, html) {{ h.textContent = title; out.innerHTML = html; }}
     if (!/^[a-f0-9]{{64}}$/.test(t)) {{ show('Linkki ei toimi.', '<p>Avaa linkki suoraan sähköpostista tai kirjoita <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>'); return; }}
-    var tries = 0;
+    var tries = 0, apis = ['{API_URL}', '{API_TEST_URL}'], ai = 0;
     function go() {{
-      fetch('{API_URL}', {{ method: 'POST', headers: {{ 'Content-Type': 'text/plain;charset=utf-8' }}, body: JSON.stringify({{ action: 'confirm', token: t }}) }})
+      fetch(apis[ai], {{ method: 'POST', headers: {{ 'Content-Type': 'text/plain;charset=utf-8' }}, body: JSON.stringify({{ action: 'confirm', token: t }}) }})
         .then(function (r) {{ return r.json(); }})
         .then(function (r) {{
           if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan! Vahvistus tulee sähköpostiin, ja lasku lähtee erikseen. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
           else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
           else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
+          else if (r.error === 'invalid_token' && ai < apis.length - 1) {{ ai++; go(); }}
           else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>');
           else show('Linkki ei toimi.', '<p>' + (r.message || 'Kirjoita meille') + ' <a href="mailto:{EMAIL}">{EMAIL}</a></p>');
         }})
@@ -383,7 +387,7 @@ def host_page():
 def index_page():
     rows = "\n".join(
         f"""        <a href="/{s}" class="city-row rv">
-          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{city_logos(c)}</div>
+          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else ''}{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
         </a>""" for s, c in CITIES.items()) + "\n" + "\n".join(
@@ -443,7 +447,7 @@ def index_page():
       </div>
     </section>
 
-{cta("Talven ryhmät aukeavat pian.")}  </main>
+{cta("Ilmoittautuminen aukeaa 27.10.", "Valitse kaupunki", "#kaupungit")}  </main>
 
 """ + FOOTER
 
