@@ -1,4 +1,7 @@
 User-agent: *
 Disallow: /Archive/
+Disallow: /ilmo-testi
+Disallow: /vahvista
+Disallow: /apps-script/
 
 Sitemap: https://vibexplorers.com/sitemap.xml

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>VibeXplorers – vahvista paikka</title>
+  <meta name="description" content="Jonotuslistalta tarjotun paikan vahvistus." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta property="og:title" content="VibeXplorers – vahvista paikka" />
+  <meta property="og:description" content="Jonotuslistalta tarjotun paikan vahvistus." />
+  <meta property="og:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="VibeXplorers – Kokeile eri lajeja. Löydä oma juttu." />
+  <meta property="og:locale" content="fi_FI" />
+  <meta property="og:site_name" content="VibeXplorers" />
+  <meta property="og:url" content="https://vibexplorers.com/vahvista" />
+  <link rel="canonical" href="https://vibexplorers.com/vahvista" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav" aria-label="Päävalikko">
+    <div class="wrap">
+      <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
+      <ul>
+        <li><a href="/syksy">Syksy<span class="yr"> 2026</span></a></li><li><a href="/espoo">Espoo</a></li><li><a href="/vantaa">Vantaa</a></li><li><a href="/tampere">Tampere</a></li><li><a href="/helsinki">Helsinki</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main style="padding-top:72px">
+    <section class="sec reg" id="vahvista">
+      <div class="wrap narrow">
+        <span class="label">Jonotuslista</span>
+        <h2 data-title>Vahvistetaan paikkaa…</h2>
+        <div class="reg-done" data-out aria-live="polite"><p>Hetki…</p></div>
+      </div>
+    </section>
+  </main>
+  <script>
+  (function () {
+    var t = (location.hash || '').slice(1), out = document.querySelector('[data-out]'), h = document.querySelector('[data-title]');
+    function show(title, html) { h.textContent = title; out.innerHTML = html; }
+    if (!/^[a-f0-9]{64}$/.test(t)) { show('Linkki ei toimi.', '<p>Avaa linkki suoraan sähköpostista tai kirjoita <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.</p>'); return; }
+    var tries = 0;
+    function go() {
+      fetch('https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'confirm', token: t }) })
+        .then(function (r) { return r.json(); })
+        .then(function (r) {
+          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan' + (r.city ? ' ' + r.city + 'n ryhmään' : '') + '. Vahvistus ja laskun tiedot tulevat sähköpostiin. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
+          else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
+          else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
+          else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.</p>');
+          else show('Linkki ei toimi.', '<p>' + (r.message || 'Kirjoita meille') + ' <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a></p>');
+        })
+        .catch(function () { if (tries++ < 3) setTimeout(go, 2000 * tries); else show('Yhteys ei toiminut.', '<p>Päivitä sivu hetken päästä.</p>'); });
+    }
+    go();
+  })();
+  </script>
+  <footer>
+    <div class="wrap">
+      <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
+      <nav aria-label="Alatunniste">
+        <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
+        <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
+        <a href="vibexplorers-saannot.pdf" target="_blank" rel="noopener noreferrer">Säännöt</a>
+        <a href="https://www.instagram.com/vibexplorers_/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var nav = document.querySelector('.nav');
+      var onScroll = function () { nav.classList.toggle('solid', window.scrollY > 40); };
+      onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+      var els = document.querySelectorAll('.rv');
+      if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>

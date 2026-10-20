@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>VibeXplorers – ilmoittautumisen testi</title>
+  <meta name="description" content="Testisivu." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta property="og:title" content="VibeXplorers – ilmoittautumisen testi" />
+  <meta property="og:description" content="Testisivu." />
+  <meta property="og:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="VibeXplorers – Kokeile eri lajeja. Löydä oma juttu." />
+  <meta property="og:locale" content="fi_FI" />
+  <meta property="og:site_name" content="VibeXplorers" />
+  <meta property="og:url" content="https://vibexplorers.com/ilmo-testi" />
+  <link rel="canonical" href="https://vibexplorers.com/ilmo-testi" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav" aria-label="Päävalikko">
+    <div class="wrap">
+      <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
+      <ul>
+        <li><a href="/syksy">Syksy<span class="yr"> 2026</span></a></li><li><a href="/espoo">Espoo</a></li><li><a href="/vantaa">Vantaa</a></li><li><a href="/tampere">Tampere</a></li><li><a href="/helsinki">Helsinki</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main style="padding-top:72px">
+    <section class="sec reg" id="ilmoittaudu" data-api="https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec" data-city="testi" data-years="2020,2021,2022,2023">
+      <div class="wrap narrow">
+        <span class="label">Testi · Talvi 2027</span>
+        <h2 data-title>Ilmoittaudu.</h2>
+        <p class="reg-status" data-status aria-live="polite"></p>
+        <div class="reg-done" data-done hidden aria-live="polite"></div>
+        <form novalidate>
+          <div data-kids></div>
+          <button type="button" class="linkbtn add" data-add-kid>+ Lisää sisarus</button>
+
+          <fieldset><legend>Huoltaja</legend>
+            <div class="field"><label for="guardian">Nimi</label><input id="guardian" name="guardian" type="text" autocomplete="name" aria-describedby="err-guardian" /><span class="err" id="err-guardian" aria-live="polite"></span></div>
+            <div class="field"><label for="street">Katuosoite</label><span class="hint">Laskua varten</span><input id="street" name="street" type="text" autocomplete="street-address" aria-describedby="err-street" /><span class="err" id="err-street" aria-live="polite"></span></div>
+            <div class="two">
+              <div class="field"><label for="postcode">Postinumero</label><input id="postcode" name="postcode" type="text" autocomplete="postal-code" aria-describedby="err-postcode" inputmode="numeric" maxlength="5"/><span class="err" id="err-postcode" aria-live="polite"></span></div>
+              <div class="field"><label for="postCity">Postitoimipaikka</label><input id="postCity" name="postCity" type="text" autocomplete="address-level2" aria-describedby="err-postCity" /><span class="err" id="err-postCity" aria-live="polite"></span></div>
+            </div>
+            <div class="field"><label for="email">Sähköposti</label><input id="email" name="email" type="email" autocomplete="email" aria-describedby="err-email" inputmode="email"/><span class="err" id="err-email" aria-live="polite"></span></div>
+            <div class="field"><label for="phone">Puhelin</label><input id="phone" name="phone" type="tel" autocomplete="tel" aria-describedby="err-phone" /><span class="err" id="err-phone" aria-live="polite"></span></div>
+          </fieldset>
+
+          <fieldset><legend>Varayhteyshenkilö <span class="opt">vapaaehtoinen</span></legend>
+            <p class="hint">Jos et itse ole paikalla.</p>
+            <div class="two">
+              <div class="field"><label for="emergencyName">Nimi</label><input id="emergencyName" name="emergencyName" type="text" autocomplete="off" aria-describedby="err-emergencyName" /><span class="err" id="err-emergencyName" aria-live="polite"></span></div>
+              <div class="field"><label for="emergencyPhone">Puhelin</label><input id="emergencyPhone" name="emergencyPhone" type="tel" autocomplete="off" aria-describedby="err-emergencyPhone" /><span class="err" id="err-emergencyPhone" aria-live="polite"></span></div>
+            </div>
+          </fieldset>
+
+          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lasta kuvata?</legend>
+            <p class="hint">Kuvat otetaan niin, etteivät lasten kasvot näy. Niitä käytetään somessa ja verkkosivuilla.</p>
+            <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
+            <span class="err" id="err-photo" aria-live="polite"></span>
+          </fieldset>
+
+          <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
+            <div class="field"><label for="notes">Lisätietoja ohjaajalle</label><span class="hint">Älä kirjoita terveystietoja. Kerro ne ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option><option>Kaveri</option><option>Instagram</option><option>Facebook</option><option>Päiväkoti</option><option>Seura</option><option>Muu</option></select></div>
+          </fieldset>
+
+          <fieldset class="checks"><legend class="sr">Hyväksynnät</legend>
+            <label class="check"><input type="checkbox" name="terms" id="terms" aria-describedby="err-terms" /> <span>Hyväksyn <a href="/vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener">osallistumisehdot</a> ja <a href="/vibexplorers-saannot.pdf" target="_blank" rel="noopener">tapahtumasäännöt</a>.</span></label>
+            <span class="err" id="err-terms" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="privacy" id="privacy" aria-describedby="err-privacy" /> <span>Olen lukenut <a href="/vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener">tietosuojaselosteen</a>.</span></label>
+            <span class="err" id="err-privacy" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan tietoa tulevista kausista sähköpostilla.</span></label>
+            <label class="check"><input type="checkbox" name="host" /> <span>Kiinnostaisi toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Lue lisää</a></span></label>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+
+          <p class="fine">Hinta 1 € / lapsi. Lasku tulee sähköpostilla, ja eräpäivä on 7 päivää ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <div class="form-msg" data-form-msg hidden role="alert"></div>
+          <button type="submit" class="btn submit" disabled><span>Ladataan…</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <template id="kid-tpl">
+          <fieldset class="kid"><legend>Lapsi</legend>
+            <div class="field"><label data-for="Name">Lapsen etu- ja sukunimi</label><input data-k="Name" type="text" autocomplete="off" /><span class="err" data-err="Name" aria-live="polite"></span></div>
+            <div class="field"><label data-for="Year">Syntymävuosi</label><select data-k="Year"><option value="">Valitse</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option></select><span class="err" data-err="Year" aria-live="polite"></span></div>
+            <button type="button" class="linkbtn rm" data-rm hidden>Poista sisarus</button>
+          </fieldset>
+        </template>
+      </div>
+    </section>
+    <script src="/ilmo.js" defer></script>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
+      <nav aria-label="Alatunniste">
+        <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
+        <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
+        <a href="vibexplorers-saannot.pdf" target="_blank" rel="noopener noreferrer">Säännöt</a>
+        <a href="https://www.instagram.com/vibexplorers_/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var nav = document.querySelector('.nav');
+      var onScroll = function () { nav.classList.toggle('solid', window.scrollY > 40); };
+      onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+      var els = document.querySelectorAll('.rv');
+      if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>

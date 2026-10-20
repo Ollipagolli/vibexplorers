@@ -216,3 +216,58 @@ section[id] { scroll-margin-top: 88px; }
 .city-row.soon h3 { color: rgba(255,255,255,.55); }
 .city-row.soon:hover h3 { color: var(--orange); }
 .soon-tag, .full-tag { letter-spacing: .01em; }
+
+/* Ilmoittautuminen */
+.wrap.narrow { width: min(100% - 40px, 640px); }
+.reg h2 { font-size: clamp(2.4rem, 6vw, 4rem); margin: .6rem 0 .8rem; }
+.reg-status { color: var(--grey); margin: 0 0 2rem; min-height: 1.55em; }
+.reg[data-state="open"] .reg-status { color: var(--white); font-weight: 600; }
+.reg form { display: grid; gap: 1.6rem; }
+.reg fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 1rem; min-width: 0; }
+.reg legend { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; padding: 0; margin-bottom: .2rem; }
+.reg .kid { padding: 1.2rem; border-radius: var(--r); background: var(--charcoal); box-shadow: inset 0 0 0 1px var(--line); }
+.reg .kid + .kid { margin-top: 1rem; }
+.reg .kid legend { float: left; width: 100%; margin-bottom: .8rem; }
+.reg .opt { font-weight: 500; font-size: .85rem; color: var(--grey); margin-left: .4rem; }
+.reg .field { display: grid; gap: .35rem; }
+.reg label { font-weight: 600; font-size: .92rem; }
+.reg .hint { color: var(--grey); font-size: .85rem; margin: 0; }
+.reg input[type=text], .reg input[type=email], .reg input[type=tel], .reg select, .reg textarea {
+  width: 100%; font: inherit; font-size: 16px; color: var(--white); background: var(--charcoal);
+  border: 1.5px solid rgba(255,255,255,.18); border-radius: 12px; padding: 0 14px; height: 52px; appearance: none; -webkit-appearance: none; }
+.reg textarea { height: auto; padding: 12px 14px; resize: vertical; }
+.reg select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23B2B7C2' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+.reg .kid input, .reg .kid select { background-color: var(--ink); }
+.reg input:focus, .reg select:focus, .reg textarea:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,106,61,.25); }
+.reg [aria-invalid="true"] { border-color: #ff8a7a; }
+.reg .err { color: #ff8a7a; font-size: .85rem; font-weight: 600; min-height: 0; }
+.reg .err:empty { display: none; }
+.reg .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.reg .two .field:first-child { min-width: 0; }
+.reg .choice { display: flex; gap: .8rem; }
+.reg .choice label { flex: 1; display: flex; align-items: center; gap: .6rem; height: 52px; padding: 0 1rem; border-radius: 12px; background: var(--charcoal); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.18); cursor: pointer; }
+.reg .choice label:has(input:checked) { box-shadow: inset 0 0 0 2px var(--orange); }
+.reg input[type=radio], .reg input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--orange); flex: none; margin: 0; }
+.reg .check { display: flex; gap: .75rem; align-items: flex-start; font-weight: 500; line-height: 1.45; cursor: pointer; }
+.reg .check input { margin-top: 1px; }
+.reg .check a, .reg .form-msg a, .reg-done a { color: var(--orange); font-weight: 600; }
+.reg .checks { gap: .9rem; }
+.reg .linkbtn { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--orange); cursor: pointer; justify-self: start; }
+.reg .linkbtn.rm { color: var(--grey); font-weight: 600; font-size: .88rem; }
+.reg .add { margin-top: -.6rem; }
+.reg .fine { color: var(--grey); font-size: .88rem; margin: 0; }
+.reg .form-msg { padding: .9rem 1.1rem; border-radius: 12px; background: rgba(255,138,122,.12); color: #ffb3a8; font-weight: 600; }
+.reg .submit { justify-self: start; border: 0; cursor: pointer; font-family: inherit; }
+.reg .submit:disabled { background: #3a3d44; color: var(--grey); cursor: default; transform: none; }
+.reg .submit[aria-busy="true"] { background: var(--orange); color: var(--black); opacity: .75; }
+.reg-done { padding: 1.6rem; border-radius: var(--r); background: var(--charcoal); box-shadow: inset 0 0 0 1px var(--line); }
+.reg-done h3 { margin: 0 0 .6rem; font-size: 1.5rem; letter-spacing: -0.02em; }
+.reg-done p { margin: .6rem 0 0; }
+.reg-done:focus { outline: none; }
+.reg .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+@media (max-width: 640px) {
+  .reg .two { grid-template-columns: 1fr; }
+  .reg .submit { width: 100%; justify-self: stretch; }
+  .reg .kid { padding: 1rem; }
+}

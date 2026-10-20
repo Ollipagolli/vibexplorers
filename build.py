@@ -6,6 +6,11 @@ import html, pathlib
 OUT = pathlib.Path(__file__).parent
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor"
 EMAIL = "vibexhq@gmail.com"
+# Ilmoittautumisen taustapalvelu (Apps Script /exec). Testi nyt, tuotanto myöhemmin.
+API_URL = "https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec"
+# Kaupungit, joiden sivulla näkyy oma ilmoittautumislomake. Muilla on kiinnostuslista.
+REG_CITIES = set()
+BIRTH_YEARS = [2020, 2021, 2022, 2023]
 PRICE = "69 €"  # oletushinta; kaupunkikohtainen hinta CITIES-listassa ("price")
 
 # Seuran nimi -> logo (img/logot/). Lisää uusia seuroja tähän.
@@ -224,6 +229,126 @@ def city_logos(c):
     return '<div class="mini-logos">' + "".join(f'<span title="{e(n)}"><img src="img/logot/{LOGOS[n]}" alt="{e(n)}" loading="lazy" /></span>' for n in seen) + '</div>'
 
 
+# ------------------------------------------------------------------ registration
+def reg_section(slug, c):
+    years = "".join(f'<option value="{y}">{y}</option>' for y in BIRTH_YEARS)
+    srcs = "".join(f'<option>{x}</option>' for x in ["Kaveri", "Instagram", "Facebook", "Päiväkoti", "Seura", "Muu"])
+    def field(name, label, typ="text", ac="", extra="", hint=""):
+        h = f'<span class="hint">{hint}</span>' if hint else ""
+        return f"""<div class="field"><label for="{name}">{label}</label>{h}<input id="{name}" name="{name}" type="{typ}" autocomplete="{ac}" aria-describedby="err-{name}" {extra}/><span class="err" id="err-{name}" aria-live="polite"></span></div>"""
+    return f"""    <section class="sec reg" id="ilmoittaudu" data-api="{API_URL}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
+      <div class="wrap narrow">
+        <span class="label">{e(c['name'])} · Talvi 2027</span>
+        <h2 data-title>Ilmoittaudu.</h2>
+        <p class="reg-status" data-status aria-live="polite"></p>
+        <div class="reg-done" data-done hidden aria-live="polite"></div>
+        <form novalidate>
+          <div data-kids></div>
+          <button type="button" class="linkbtn add" data-add-kid>+ Lisää sisarus</button>
+
+          <fieldset><legend>Huoltaja</legend>
+            {field("guardian", "Nimi", ac="name")}
+            {field("street", "Katuosoite", ac="street-address", hint="Laskua varten")}
+            <div class="two">
+              {field("postcode", "Postinumero", ac="postal-code", extra='inputmode="numeric" maxlength="5"')}
+              {field("postCity", "Postitoimipaikka", ac="address-level2")}
+            </div>
+            {field("email", "Sähköposti", typ="email", ac="email", extra='inputmode="email"')}
+            {field("phone", "Puhelin", typ="tel", ac="tel")}
+          </fieldset>
+
+          <fieldset><legend>Varayhteyshenkilö <span class="opt">vapaaehtoinen</span></legend>
+            <p class="hint">Jos et itse ole paikalla.</p>
+            <div class="two">
+              {field("emergencyName", "Nimi", ac="off")}
+              {field("emergencyPhone", "Puhelin", typ="tel", ac="off")}
+            </div>
+          </fieldset>
+
+          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lasta kuvata?</legend>
+            <p class="hint">Kuvat otetaan niin, etteivät lasten kasvot näy. Niitä käytetään somessa ja verkkosivuilla.</p>
+            <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
+            <span class="err" id="err-photo" aria-live="polite"></span>
+          </fieldset>
+
+          <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
+            <div class="field"><label for="notes">Lisätietoja ohjaajalle</label><span class="hint">Älä kirjoita terveystietoja. Kerro ne ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option>{srcs}</select></div>
+          </fieldset>
+
+          <fieldset class="checks"><legend class="sr">Hyväksynnät</legend>
+            <label class="check"><input type="checkbox" name="terms" id="terms" aria-describedby="err-terms" /> <span>Hyväksyn <a href="/vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener">osallistumisehdot</a> ja <a href="/vibexplorers-saannot.pdf" target="_blank" rel="noopener">tapahtumasäännöt</a>.</span></label>
+            <span class="err" id="err-terms" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="privacy" id="privacy" aria-describedby="err-privacy" /> <span>Olen lukenut <a href="/vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener">tietosuojaselosteen</a>.</span></label>
+            <span class="err" id="err-privacy" aria-live="polite"></span>
+            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan tietoa tulevista kausista sähköpostilla.</span></label>
+            <label class="check"><input type="checkbox" name="host" /> <span>Kiinnostaisi toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Lue lisää</a></span></label>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+
+          <p class="fine">Hinta {c.get('price', PRICE)} / lapsi. Lasku tulee sähköpostilla, ja eräpäivä on 7 päivää ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <div class="form-msg" data-form-msg hidden role="alert"></div>
+          <button type="submit" class="btn submit" disabled><span>Ladataan…</span> {ARROW}</button>
+        </form>
+        <template id="kid-tpl">
+          <fieldset class="kid"><legend>Lapsi</legend>
+            <div class="field"><label data-for="Name">Lapsen etu- ja sukunimi</label><input data-k="Name" type="text" autocomplete="off" /><span class="err" data-err="Name" aria-live="polite"></span></div>
+            <div class="field"><label data-for="Year">Syntymävuosi</label><select data-k="Year"><option value="">Valitse</option>{years}</select><span class="err" data-err="Year" aria-live="polite"></span></div>
+            <button type="button" class="linkbtn rm" data-rm hidden>Poista sisarus</button>
+          </fieldset>
+        </template>
+      </div>
+    </section>
+    <script src="/ilmo.js" defer></script>
+"""
+
+
+def test_page():
+    c = {"name": "Testi", "price": "1 €"}
+    return head("VibeXplorers – ilmoittautumisen testi", "Testisivu.", "ilmo-testi", "kuva-trampoliini.jpg").replace(
+        "<title>", '<meta name="robots" content="noindex, nofollow" />\n  <title>', 1).replace('  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
+  <main style="padding-top:72px">
+{reg_section("testi", c)}  </main>
+""" + FOOTER
+
+
+def confirm_page():
+    return head("VibeXplorers – vahvista paikka", "Jonotuslistalta tarjotun paikan vahvistus.", "vahvista", "kuva-trampoliini.jpg").replace(
+        "<title>", '<meta name="robots" content="noindex, nofollow" />\n  <title>', 1).replace('  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
+  <main style="padding-top:72px">
+    <section class="sec reg" id="vahvista">
+      <div class="wrap narrow">
+        <span class="label">Jonotuslista</span>
+        <h2 data-title>Vahvistetaan paikkaa…</h2>
+        <div class="reg-done" data-out aria-live="polite"><p>Hetki…</p></div>
+      </div>
+    </section>
+  </main>
+  <script>
+  (function () {{
+    var t = (location.hash || '').slice(1), out = document.querySelector('[data-out]'), h = document.querySelector('[data-title]');
+    function show(title, html) {{ h.textContent = title; out.innerHTML = html; }}
+    if (!/^[a-f0-9]{{64}}$/.test(t)) {{ show('Linkki ei toimi.', '<p>Avaa linkki suoraan sähköpostista tai kirjoita <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>'); return; }}
+    var tries = 0;
+    function go() {{
+      fetch('{API_URL}', {{ method: 'POST', headers: {{ 'Content-Type': 'text/plain;charset=utf-8' }}, body: JSON.stringify({{ action: 'confirm', token: t }}) }})
+        .then(function (r) {{ return r.json(); }})
+        .then(function (r) {{
+          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan' + (r.city ? ' ' + r.city + 'n ryhmään' : '') + '. Vahvistus ja laskun tiedot tulevat sähköpostiin. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
+          else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
+          else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
+          else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>');
+          else show('Linkki ei toimi.', '<p>' + (r.message || 'Kirjoita meille') + ' <a href="mailto:{EMAIL}">{EMAIL}</a></p>');
+        }})
+        .catch(function () {{ if (tries++ < 3) setTimeout(go, 2000 * tries); else show('Yhteys ei toiminut.', '<p>Päivitä sivu hetken päästä.</p>'); }});
+    }}
+    go();
+  }})();
+  </script>
+""" + FOOTER
+
+
 # ------------------------------------------------------------------ index
 def index_page():
     rows = "\n".join(
@@ -335,7 +460,7 @@ def city_page(slug, c):
       </div>
     </section>
 
-{cta(c["name"] + " on täynnä.", "Jonotuslistalle") if c.get("full") else cta("Talven ryhmät aukeavat pian.")}
+{reg_section(slug, c) if slug in REG_CITIES else (cta(c["name"] + " on täynnä.", "Jonotuslistalle") if c.get("full") else cta("Talven ryhmät aukeavat pian."))}
     <p style="text-align:center;color:var(--grey);margin:-3rem 0 5rem">Myös {others}</p>
   </main>
 
@@ -436,4 +561,6 @@ if __name__ == "__main__":
     (OUT / "index.html").write_text(index_page(), encoding="utf-8")
     for slug, c in CITIES.items():
         (OUT / f"{slug}.html").write_text(city_page(slug, c), encoding="utf-8")
+    (OUT / "ilmo-testi.html").write_text(test_page(), encoding="utf-8")
+    (OUT / "vahvista.html").write_text(confirm_page(), encoding="utf-8")
     print("built")
