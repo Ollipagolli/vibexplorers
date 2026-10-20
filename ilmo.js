@@ -28,7 +28,7 @@
   function kidCount() { return kidsEl.querySelectorAll('.kid').length; }
   function renumber() {
     kidsEl.querySelectorAll('.kid').forEach(function (k, i) {
-      k.querySelector('legend').textContent = i === 0 ? 'Lapsi' : 'Sisarus ' + i;
+      k.querySelector('legend').textContent = ['Lapsi', 'Toinen lapsi', 'Kolmas lapsi'][i];
       k.querySelectorAll('[data-k]').forEach(function (el) {
         var f = el.getAttribute('data-k');
         el.id = 'child' + i + f;
@@ -74,7 +74,7 @@
     else if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) m = v.indexOf('@') < 0 ? 'Tarkista sähköposti, siitä puuttuu @.' : 'Tarkista sähköpostiosoite.';
     else if (name === 'phone' && !phoneOk(v)) m = 'Tarkista puhelinnumero, esim. 040 123 4567.';
     else if (name === 'emergencyPhone' && v && !phoneOk(v)) m = 'Tarkista puhelinnumero.';
-    else if (name === 'photo' && !form.querySelector('[name=photo]:checked')) m = 'Valitse, saako lasta kuvata.';
+    else if (name === 'photo' && !form.querySelector('[name=photo]:checked')) m = 'Valitse kyllä tai ei.';
     else if (name === 'terms' && !form.elements.terms.checked) m = 'Hyväksy osallistumisehdot.';
     else if (name === 'privacy' && !form.elements.privacy.checked) m = 'Vahvista, että olet lukenut tietosuojaselosteen.';
     showErr(name, m);
@@ -154,15 +154,15 @@
       }
     } else if (state === 'open') {
       titleEl.textContent = 'Ilmoittaudu.';
-      statusEl.textContent = s.free < 10 ? 'Paikkoja jäljellä: ' + s.free : 'Paikkoja vapaana.';
+      statusEl.textContent = s.free < 10 ? 'Paikkoja jäljellä ' + s.free + '.' : 'Mukaan mahtuu.';
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
       titleEl.textContent = 'Ryhmät ovat täynnä.';
-      statusEl.textContent = 'Voit liittyä jonotuslistalle. Jos paikka vapautuu, saat siitä sähköpostin.';
+      statusEl.textContent = 'Voit liittyä jonoon. Jos paikka vapautuu, saat siitä sähköpostin.';
       btn.disabled = false; btnText.textContent = 'Liity jonoon';
     } else {
       titleEl.textContent = 'Ilmoittautuminen on sulkeutunut.';
-      statusEl.textContent = 'Kysy vapaista paikoista sähköpostilla.';
+      statusEl.innerHTML = 'Kysy vapaita paikkoja: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>';
       form.hidden = true;
     }
   }
@@ -233,7 +233,7 @@
     if (bad.length) {
       var first = form.elements[bad[0]];
       (first && first.focus ? first : form.querySelector('[name=' + bad[0] + ']')).focus();
-      say('Tarkista merkityt kentät.', 'err');
+      say('Muutama kohta puuttuu. Tarkista punaisella merkityt.', 'err');
       return;
     }
     send(1);
@@ -249,7 +249,7 @@
         busy(false, state === 'queue' ? 'Liity jonoon' : 'Ilmoittaudu');
         if (res.error === 'invalid' && res.fields) {
           Object.keys(res.fields).forEach(function (k) { showErr(k, res.fields[k]); });
-          say('Tarkista merkityt kentät.', 'err');
+          say('Muutama kohta puuttuu. Tarkista punaisella merkityt.', 'err');
         } else if (res.error === 'duplicate') {
           say(esc(res.message) + ' <button type="button" class="linkbtn" data-dup>Lähetä silti</button>', 'err');
           msgEl.querySelector('[data-dup]').addEventListener('click', function () { allowDuplicate = true; subId = newId(); say(''); send(1); });
@@ -279,18 +279,18 @@
     var kids = res.children > 1 ? 'Lapsille' : 'Lapselle';
     var html;
     if (res.status === 'booked') {
-      html = '<h3>Paikka varattu!</h3>' +
-        '<p>' + kids + ' on varattu paikka. Vahvistus on lähetetty osoitteeseen <b>' + esc(res.email || '') + '</b> – katso tarvittaessa myös roskaposti.</p>' +
+      html = '<h3>Paikka on varattu!</h3>' +
+        '<p>' + kids + ' on varattu paikka. Lähetimme vahvistuksen osoitteeseen <b>' + esc(res.email || '') + '</b>. Jos sitä ei näy, kurkkaa roskapostiin.</p>' +
         (res.dueDate ? '<p>Lasku tulee sähköpostilla, eräpäivä <b>' + esc(res.dueDate) + '</b>. Voit perua maksutta ' + esc(res.cancelBy || res.dueDate) + ' asti.</p>' : '') +
-        '<p>Ennen kauden alkua saat tervetuloviestin, jossa kerrotaan ryhmä ja käytännöt.</p>';
+        '<p>Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Nähdään kentän laidalla!</p>';
     } else {
       html = '<h3>Olette jonossa' + (res.queuePosition ? ' sijalla ' + esc(res.queuePosition) : '') + '.</h3>' +
-        '<p>Jos paikka vapautuu, lähetämme sähköpostin osoitteeseen <b>' + esc(res.email || '') + '</b>. Tarjous on voimassa 48 tuntia, joten seuraathan sähköpostia.</p>' +
+        '<p>Jos paikka vapautuu, lähetämme sähköpostin osoitteeseen <b>' + esc(res.email || '') + '</b>. Vahvistukseen on aikaa 48 tuntia, joten pidäthän silmällä myös roskapostia.</p>' +
         '<p>Jonossa oleminen ei maksa mitään eikä sido mihinkään.</p>';
     }
     form.hidden = true;
     statusEl.textContent = '';
-    titleEl.textContent = 'Kiitos!';
+    titleEl.textContent = res.status === 'booked' ? 'Tervetuloa mukaan!' : 'Kiitos!';
     var box = sec.querySelector('[data-done]');
     box.innerHTML = html;
     box.hidden = false;

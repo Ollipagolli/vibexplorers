@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeXplorers Host</title>
+  <meta name="description" content="Ryhmän oma vanhempi, joka pitää porukan fiiliksen yllä jokaisella lajikerralla." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <meta property="og:title" content="VibeXplorers Host" />
+  <meta property="og:description" content="Ryhmän oma vanhempi, joka pitää porukan fiiliksen yllä jokaisella lajikerralla." />
+  <meta property="og:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="VibeXplorers – Kokeile eri lajeja. Löydä oma juttu." />
+  <meta property="og:locale" content="fi_FI" />
+  <meta property="og:site_name" content="VibeXplorers" />
+  <meta property="og:url" content="https://vibexplorers.com/host" />
+  <link rel="canonical" href="https://vibexplorers.com/host" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibexplorers.com/share-2027.jpg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav" aria-label="Päävalikko">
+    <div class="wrap">
+      <a href="/" class="logo"><img src="logo.png" alt="" width="32" height="32" /><span>VibeXplorers</span></a>
+      <ul>
+        <li><a href="/syksy">Syksy<span class="yr"> 2026</span></a></li><li><a href="/espoo">Espoo</a></li><li><a href="/vantaa">Vantaa</a></li><li><a href="/tampere">Tampere</a></li><li><a href="/helsinki">Helsinki</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor" class="cta" target="_blank" rel="noopener noreferrer">Liity listalle</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main style="padding-top:72px">
+    <section class="sec reg">
+      <div class="wrap narrow prose">
+        <span class="label">Talvi 2027</span>
+        <h2>VibeXplorers Host.</h2>
+        <p class="lead">Host on ryhmän oma vanhempi, joka on mukana jokaisella lajikerralla ja pitää porukan fiiliksen yllä. Lajin ohjaavat seuran ohjaajat – Host on se tuttu aikuinen, joka kulkee ryhmän mukana lajista toiseen.</p>
+        <h3>Mitä Host tekee</h3>
+        <ol class="steps"><li>Tulet paikalle viimeistään 10 minuuttia ennen ryhmän alkua ja esittäydyt ohjaajille.</li><li>Toivotat lapset tervetulleiksi ja kyselet kuulumisia.</li><li>Kerrot lapsille, minne on tultu ja mitä tällä kertaa kokeillaan.</li><li>Autat ohjaajia tarvittaessa ryhmän kanssa.</li><li>Kuvaat kerrasta materiaalia somea varten – saat siihen omat ohjeet.</li><li>Lopuksi kiität seuraa ja varmistat, että lapset kuulevat, miten lajin parissa voi jatkaa.</li><li>Jaat lapsille tarrat Lajipasseihin. Ensimmäisellä kerralla jaat myös passit.</li></ol>
+        <h3>Mitä se vaatii</h3>
+        <p>Kauden kaikki 8 lajikertaa. Oma lapsesi on samassa ryhmässä. Aiempaa kokemusta ei tarvita, saat perehdytyksen ja ohjeet. Tehtävästä maksetaan palkkio jokaiselta pidetyltä kerralta.</p>
+        <h3>Kiinnostuitko?</h3>
+        <p>Rastita ilmoittautumisen yhteydessä kohta "Voisin toimia ryhmän VibeXplorers Hostina" tai kirjoita <a href="mailto:vibexhq@gmail.com?subject=VibeXplorers%20Host">vibexhq@gmail.com</a>. Olli soittaa ja kertoo lisää.</p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
+      <nav aria-label="Alatunniste">
+        <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
+        <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
+        <a href="vibexplorers-saannot.pdf" target="_blank" rel="noopener noreferrer">Säännöt</a>
+        <a href="https://www.instagram.com/vibexplorers_/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var nav = document.querySelector('.nav');
+      var onScroll = function () { nav.classList.toggle('solid', window.scrollY > 40); };
+      onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+      var els = document.querySelectorAll('.rv');
+      if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>

@@ -51,7 +51,7 @@
 
           <fieldset><legend>Huoltaja</legend>
             <div class="field"><label for="guardian">Nimi</label><input id="guardian" name="guardian" type="text" autocomplete="name" aria-describedby="err-guardian" /><span class="err" id="err-guardian" aria-live="polite"></span></div>
-            <div class="field"><label for="street">Katuosoite</label><span class="hint">Laskua varten</span><input id="street" name="street" type="text" autocomplete="street-address" aria-describedby="err-street" /><span class="err" id="err-street" aria-live="polite"></span></div>
+            <div class="field"><label for="street">Katuosoite</label><span class="hint">Laskutusta varten</span><input id="street" name="street" type="text" autocomplete="street-address" aria-describedby="err-street" /><span class="err" id="err-street" aria-live="polite"></span></div>
             <div class="two">
               <div class="field"><label for="postcode">Postinumero</label><input id="postcode" name="postcode" type="text" autocomplete="postal-code" aria-describedby="err-postcode" inputmode="numeric" maxlength="5"/><span class="err" id="err-postcode" aria-live="polite"></span></div>
               <div class="field"><label for="postCity">Postitoimipaikka</label><input id="postCity" name="postCity" type="text" autocomplete="address-level2" aria-describedby="err-postCity" /><span class="err" id="err-postCity" aria-live="polite"></span></div>
@@ -61,21 +61,21 @@
           </fieldset>
 
           <fieldset><legend>Varayhteyshenkilö <span class="opt">vapaaehtoinen</span></legend>
-            <p class="hint">Jos et itse ole paikalla.</p>
+            <p class="hint">Kenelle soitamme, jos emme tavoita sinua?</p>
             <div class="two">
               <div class="field"><label for="emergencyName">Nimi</label><input id="emergencyName" name="emergencyName" type="text" autocomplete="off" aria-describedby="err-emergencyName" /><span class="err" id="err-emergencyName" aria-live="polite"></span></div>
               <div class="field"><label for="emergencyPhone">Puhelin</label><input id="emergencyPhone" name="emergencyPhone" type="tel" autocomplete="off" aria-describedby="err-emergencyPhone" /><span class="err" id="err-emergencyPhone" aria-live="polite"></span></div>
             </div>
           </fieldset>
 
-          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lasta kuvata?</legend>
-            <p class="hint">Kuvat otetaan niin, etteivät lasten kasvot näy. Niitä käytetään somessa ja verkkosivuilla.</p>
+          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lapsi näkyä jakamissamme kuvissa?</legend>
+            <p class="hint">Kuvaamme kertoja someen ja verkkosivuille. Kuvat otetaan niin, etteivät lasten kasvot näy.</p>
             <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
             <span class="err" id="err-photo" aria-live="polite"></span>
           </fieldset>
 
           <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
-            <div class="field"><label for="notes">Lisätietoja ohjaajalle</label><span class="hint">Älä kirjoita terveystietoja. Kerro ne ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="notes">Onko jotain, mitä meidän olisi hyvä tietää?</label><span class="hint">Esimerkiksi jos lapsi jännittää uusia paikkoja. Terveysasioista, kuten allergioista, kerrothan ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
             <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option><option>Kaveri</option><option>Instagram</option><option>Facebook</option><option>Päiväkoti</option><option>Seura</option><option>Muu</option></select></div>
           </fieldset>
 
@@ -84,13 +84,13 @@
             <span class="err" id="err-terms" aria-live="polite"></span>
             <label class="check"><input type="checkbox" name="privacy" id="privacy" aria-describedby="err-privacy" /> <span>Olen lukenut <a href="/vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener">tietosuojaselosteen</a>.</span></label>
             <span class="err" id="err-privacy" aria-live="polite"></span>
-            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan tietoa tulevista kausista sähköpostilla.</span></label>
-            <label class="check"><input type="checkbox" name="host" /> <span>Kiinnostaisi toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Lue lisää</a></span></label>
+            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan kuulla tulevista kausista sähköpostilla.</span></label>
+            <label class="check"><input type="checkbox" name="host" /> <span>Voisin toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Mikä on Host?</a></span></label>
           </fieldset>
 
           <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
 
-          <p class="fine">Hinta 1 € / lapsi. Lasku tulee sähköpostilla, ja eräpäivä on 7 päivää ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <p class="fine">Hinta 1 € / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
           <div class="form-msg" data-form-msg hidden role="alert"></div>
           <button type="submit" class="btn submit" disabled><span>Ladataan…</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form>
@@ -98,7 +98,7 @@
           <fieldset class="kid"><legend>Lapsi</legend>
             <div class="field"><label data-for="Name">Lapsen etu- ja sukunimi</label><input data-k="Name" type="text" autocomplete="off" /><span class="err" data-err="Name" aria-live="polite"></span></div>
             <div class="field"><label data-for="Year">Syntymävuosi</label><select data-k="Year"><option value="">Valitse</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option></select><span class="err" data-err="Year" aria-live="polite"></span></div>
-            <button type="button" class="linkbtn rm" data-rm hidden>Poista sisarus</button>
+            <button type="button" class="linkbtn rm" data-rm hidden>Poista</button>
           </fieldset>
         </template>
       </div>

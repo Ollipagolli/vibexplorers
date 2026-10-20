@@ -271,3 +271,9 @@ section[id] { scroll-margin-top: 88px; }
   .reg .submit { width: 100%; justify-self: stretch; }
   .reg .kid { padding: 1rem; }
 }
+.prose .lead { font-size: 1.15rem; line-height: 1.6; margin: 0 0 2rem; }
+.prose h3 { font-size: 1.2rem; letter-spacing: -0.02em; margin: 2rem 0 .6rem; }
+.prose p { color: var(--grey); margin: 0 0 1rem; }
+.prose a { color: var(--orange); font-weight: 600; }
+.prose .steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .6rem; color: var(--grey); }
+.prose .steps li::marker { color: var(--orange); font-weight: 800; }

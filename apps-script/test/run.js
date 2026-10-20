@@ -72,8 +72,8 @@ t('kapasiteetti 3: neljäs jonoon, jonosijat kasvavat', () => {
   assert.strictEqual(setting(env, 'testi', 'Varattu'), 3);
   assert.strictEqual(setting(env, 'testi', 'Jonossa'), 3);
   assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'testi' } }).state, 'queue');
-  assert.ok(env.mails.some(m => /Olet jonossa/.test(m.subject)));
-  assert.ok(/sijalla 2/.test(env.mails[env.mails.length - 1].htmlBody));
+  assert.ok(env.mails.some(m => /Olette jonossa/.test(m.subject)));
+  assert.ok(/Paikka jonossa.*?>2</.test(env.mails[env.mails.length - 1].htmlBody));
 });
 
 t('sisarukset: mahtuvat ylärajaan 4, sen yli koko perhe jonoon', () => {
@@ -154,7 +154,7 @@ t('vahvistusviestissä eräpäivä, peruutusraja ja genetiivi', () => {
   assert.strictEqual(r.dueDate, '17.1.2027'); assert.strictEqual(r.cancelBy, '17.1.2027');
   const m = env.mails[env.mails.length - 1];
   assert.ok(/Espoon ryhmään/.test(m.htmlBody)); assert.ok(/17\.1\.2027/.test(m.htmlBody));
-  assert.ok(/Olli ottaa sinuun yhteyttä/.test(m.htmlBody));
+  assert.ok(/Olli soittaa sinulle/.test(m.htmlBody));
   assert.strictEqual(m.name, 'VibeXplorers');
 });
 
@@ -178,7 +178,7 @@ t('jonosta tarjous → vahvistus → varattu', () => {
   assert.strictEqual(setting(env, 'testi', 'Varattu'), 3);
   assert.strictEqual(setting(env, 'testi', 'Tarjottu'), 0);
   assert.strictEqual(setting(env, 'testi', 'Jonossa'), 1);
-  assert.ok(/Paikka varattu/.test(env.mails[env.mails.length - 1].subject));
+  assert.ok(/Paikka on varattu/.test(env.mails[env.mails.length - 1].subject));
 });
 
 t('vanhentunut tarjous siirtyy seuraavalle', () => {

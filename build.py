@@ -248,7 +248,7 @@ def reg_section(slug, c):
 
           <fieldset><legend>Huoltaja</legend>
             {field("guardian", "Nimi", ac="name")}
-            {field("street", "Katuosoite", ac="street-address", hint="Laskua varten")}
+            {field("street", "Katuosoite", ac="street-address", hint="Laskutusta varten")}
             <div class="two">
               {field("postcode", "Postinumero", ac="postal-code", extra='inputmode="numeric" maxlength="5"')}
               {field("postCity", "Postitoimipaikka", ac="address-level2")}
@@ -258,21 +258,21 @@ def reg_section(slug, c):
           </fieldset>
 
           <fieldset><legend>Varayhteyshenkilö <span class="opt">vapaaehtoinen</span></legend>
-            <p class="hint">Jos et itse ole paikalla.</p>
+            <p class="hint">Kenelle soitamme, jos emme tavoita sinua?</p>
             <div class="two">
               {field("emergencyName", "Nimi", ac="off")}
               {field("emergencyPhone", "Puhelin", typ="tel", ac="off")}
             </div>
           </fieldset>
 
-          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lasta kuvata?</legend>
-            <p class="hint">Kuvat otetaan niin, etteivät lasten kasvot näy. Niitä käytetään somessa ja verkkosivuilla.</p>
+          <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lapsi näkyä jakamissamme kuvissa?</legend>
+            <p class="hint">Kuvaamme kertoja someen ja verkkosivuille. Kuvat otetaan niin, etteivät lasten kasvot näy.</p>
             <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
             <span class="err" id="err-photo" aria-live="polite"></span>
           </fieldset>
 
           <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
-            <div class="field"><label for="notes">Lisätietoja ohjaajalle</label><span class="hint">Älä kirjoita terveystietoja. Kerro ne ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="notes">Onko jotain, mitä meidän olisi hyvä tietää?</label><span class="hint">Esimerkiksi jos lapsi jännittää uusia paikkoja. Terveysasioista, kuten allergioista, kerrothan ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
             <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option>{srcs}</select></div>
           </fieldset>
 
@@ -281,13 +281,13 @@ def reg_section(slug, c):
             <span class="err" id="err-terms" aria-live="polite"></span>
             <label class="check"><input type="checkbox" name="privacy" id="privacy" aria-describedby="err-privacy" /> <span>Olen lukenut <a href="/vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener">tietosuojaselosteen</a>.</span></label>
             <span class="err" id="err-privacy" aria-live="polite"></span>
-            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan tietoa tulevista kausista sähköpostilla.</span></label>
-            <label class="check"><input type="checkbox" name="host" /> <span>Kiinnostaisi toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Lue lisää</a></span></label>
+            <label class="check"><input type="checkbox" name="newsletter" /> <span>Haluan kuulla tulevista kausista sähköpostilla.</span></label>
+            <label class="check"><input type="checkbox" name="host" /> <span>Voisin toimia ryhmän VibeXplorers Hostina. <a href="/host" target="_blank" rel="noopener">Mikä on Host?</a></span></label>
           </fieldset>
 
           <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
 
-          <p class="fine">Hinta {c.get('price', PRICE)} / lapsi. Lasku tulee sähköpostilla, ja eräpäivä on 7 päivää ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <p class="fine">Hinta {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
           <div class="form-msg" data-form-msg hidden role="alert"></div>
           <button type="submit" class="btn submit" disabled><span>Ladataan…</span> {ARROW}</button>
         </form>
@@ -295,7 +295,7 @@ def reg_section(slug, c):
           <fieldset class="kid"><legend>Lapsi</legend>
             <div class="field"><label data-for="Name">Lapsen etu- ja sukunimi</label><input data-k="Name" type="text" autocomplete="off" /><span class="err" data-err="Name" aria-live="polite"></span></div>
             <div class="field"><label data-for="Year">Syntymävuosi</label><select data-k="Year"><option value="">Valitse</option>{years}</select><span class="err" data-err="Year" aria-live="polite"></span></div>
-            <button type="button" class="linkbtn rm" data-rm hidden>Poista sisarus</button>
+            <button type="button" class="linkbtn rm" data-rm hidden>Poista</button>
           </fieldset>
         </template>
       </div>
@@ -346,6 +346,37 @@ def confirm_page():
     go();
   }})();
   </script>
+""" + FOOTER
+
+
+def host_page():
+    tasks = [
+        "Tulet paikalle viimeistään 10 minuuttia ennen ryhmän alkua ja esittäydyt ohjaajille.",
+        "Toivotat lapset tervetulleiksi ja kyselet kuulumisia.",
+        "Kerrot lapsille, minne on tultu ja mitä tällä kertaa kokeillaan.",
+        "Autat ohjaajia tarvittaessa ryhmän kanssa.",
+        "Kuvaat kerrasta materiaalia somea varten – saat siihen omat ohjeet.",
+        "Lopuksi kiität seuraa ja varmistat, että lapset kuulevat, miten lajin parissa voi jatkaa.",
+        "Jaat lapsille tarrat Lajipasseihin. Ensimmäisellä kerralla jaat myös passit.",
+    ]
+    li = "".join(f"<li>{e(t)}</li>" for t in tasks)
+    return head("VibeXplorers Host", "Ryhmän oma vanhempi, joka pitää porukan fiiliksen yllä jokaisella lajikerralla.", "host", "kuva-trampoliini.jpg").replace(
+        '  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
+  <main style="padding-top:72px">
+    <section class="sec reg">
+      <div class="wrap narrow prose">
+        <span class="label">Talvi 2027</span>
+        <h2>VibeXplorers Host.</h2>
+        <p class="lead">Host on ryhmän oma vanhempi, joka on mukana jokaisella lajikerralla ja pitää porukan fiiliksen yllä. Lajin ohjaavat seuran ohjaajat – Host on se tuttu aikuinen, joka kulkee ryhmän mukana lajista toiseen.</p>
+        <h3>Mitä Host tekee</h3>
+        <ol class="steps">{li}</ol>
+        <h3>Mitä se vaatii</h3>
+        <p>Kauden kaikki 8 lajikertaa. Oma lapsesi on samassa ryhmässä. Aiempaa kokemusta ei tarvita, saat perehdytyksen ja ohjeet. Tehtävästä maksetaan palkkio jokaiselta pidetyltä kerralta.</p>
+        <h3>Kiinnostuitko?</h3>
+        <p>Rastita ilmoittautumisen yhteydessä kohta "Voisin toimia ryhmän VibeXplorers Hostina" tai kirjoita <a href="mailto:{EMAIL}?subject=VibeXplorers%20Host">{EMAIL}</a>. Olli soittaa ja kertoo lisää.</p>
+      </div>
+    </section>
+  </main>
 """ + FOOTER
 
 
@@ -563,4 +594,5 @@ if __name__ == "__main__":
         (OUT / f"{slug}.html").write_text(city_page(slug, c), encoding="utf-8")
     (OUT / "ilmo-testi.html").write_text(test_page(), encoding="utf-8")
     (OUT / "vahvista.html").write_text(confirm_page(), encoding="utf-8")
+    (OUT / "host.html").write_text(host_page(), encoding="utf-8")
     print("built")

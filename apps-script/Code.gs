@@ -173,7 +173,7 @@ function register_(req) {
         result = { ok: false, error: 'closed', message: 'Ilmoittautuminen on sulkeutunut.' };
       } else if (!req.allowDuplicate && isDuplicate_(sheet, d)) {
         result = { ok: false, error: 'duplicate',
-          message: 'Tällä sähköpostilla on jo ilmoitettu sama lapsi. Lähetä uudelleen vain, jos kyse on eri lapsesta.' };
+          message: 'Tämä lapsi on jo ilmoitettu samalla sähköpostiosoitteella. Jos kyse on eri lapsesta, voit lähettää ilmoittautumisen silti.' };
       } else {
         family = placeFamily_(sheet, s, d, subId);
         result = family.result;
@@ -436,7 +436,7 @@ function confirmOffer_(token) {
       if (first['Tila'] === STATUS.BOOKED) {
         result = { ok: true, status: 'already', message: 'Paikka on jo vahvistettu.' };
       } else if (first['Tila'] !== STATUS.OFFERED || parseStamp_(first['Tarjous vanhenee']) <= now_()) {
-        result = { ok: false, error: 'expired', message: 'Tarjous on valitettavasti vanhentunut.' };
+        result = { ok: false, error: 'expired', message: 'Vahvistusaika ehti valitettavasti umpeutua.' };
       } else {
         const due = dueDate_(s, now_());
         found.rows.forEach(r => setCells_(found.sheet, r, { 'Tila': STATUS.BOOKED, 'Eräpäivä': fmt_(due, 'yyyy-MM-dd') }));
@@ -707,78 +707,148 @@ function processMailQueue() {
 }
 
 // ---------------------------------------------------------------- viestipohjat
+// Brändi: Vibe Orange #FF6A3D, Deep Black #000, Charcoal #111, Muted Grey #B2B7C2, Montserrat.
+// Taulukkopohjainen rakenne toimii myös Outlookissa. Gmail ei lataa Montserratia, joten varafontti on Arial.
+
+const BRAND = {
+  orange: '#FF6A3D', black: '#000000', charcoal: '#111111', ink: '#1C1C1C',
+  grey: '#5F6470', light: '#F4F4F2', line: '#E6E6E3',
+  font: "'Montserrat',Arial,Helvetica,sans-serif",
+  logo: 'https://vibexplorers.com/logo.png'
+};
 
 function esc_(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-function layout_(title, bodyHtml) {
-  return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#14171f;max-width:560px;margin:0 auto;padding:24px">' +
-    '<div style="font-weight:700;font-size:18px;letter-spacing:.5px;margin-bottom:20px">VibeXplorers</div>' +
-    '<h1 style="font-size:22px;line-height:1.25;margin:0 0 16px">' + esc_(title) + '</h1>' + bodyHtml +
-    '<p style="margin:28px 0 0;color:#5b6170;font-size:13px">Kysyttävää? Vastaa tähän viestiin tai kirjoita ' +
-    '<a href="mailto:' + CFG.REPLY_TO + '" style="color:#14171f">' + CFG.REPLY_TO + '</a>.<br>' +
-    'VibeXplorers Oy · <a href="' + CFG.SITE + '" style="color:#14171f">vibexplorers.com</a></p></div>';
+/** Yhteinen pohja: musta yläpalkki logolla, valkoinen sisältö, musta alatunniste brändilauseella. */
+function layout_(title, preheader, bodyHtml) {
+  const f = BRAND.font;
+  return '<!DOCTYPE html><html lang="fi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light">' +
+    '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet"></head>' +
+    '<body style="margin:0;padding:0;background:' + BRAND.light + '">' +
+    '<div style="display:none;max-height:0;overflow:hidden;opacity:0">' + esc_(preheader) + '</div>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + BRAND.light + '"><tr><td align="center" style="padding:24px 12px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;border-radius:20px;overflow:hidden;background:#ffffff">' +
+    // yläpalkki
+    '<tr><td style="background:' + BRAND.black + ';padding:22px 28px">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0"><tr>' +
+    '<td style="padding-right:10px"><img src="' + BRAND.logo + '" width="32" height="32" alt="" style="display:block;border:0"></td>' +
+    '<td style="font-family:' + f + ';font-weight:800;font-size:18px;letter-spacing:-0.3px;color:#ffffff">VibeXplorers</td>' +
+    '</tr></table></td></tr>' +
+    // sisältö
+    '<tr><td style="padding:32px 28px 8px;font-family:' + f + ';font-size:15px;line-height:1.6;color:' + BRAND.ink + '">' +
+    '<h1 style="margin:0 0 18px;font-family:' + f + ';font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.8px;color:' + BRAND.black + '">' +
+    esc_(title.replace(/[.!]$/, '')) + '<span style="color:' + BRAND.orange + '">' + (/!$/.test(title) ? '!' : '.') + '</span></h1>' +
+    bodyHtml + '</td></tr>' +
+    // allekirjoitus
+    '<tr><td style="padding:8px 28px 28px;font-family:' + f + ';font-size:15px;line-height:1.6;color:' + BRAND.ink + '">' +
+    'Nähdään kentän laidalla!<br><b>Olli / VibeXplorers</b><br>' +
+    '<span style="color:' + BRAND.grey + ';font-size:13px">Kysyttävää? Vastaa tähän viestiin.</span></td></tr>' +
+    // alatunniste
+    '<tr><td style="background:' + BRAND.black + ';padding:24px 28px;font-family:' + f + '">' +
+    '<div style="font-weight:800;font-size:20px;line-height:1.2;letter-spacing:-0.5px;color:#ffffff">Kokeile eri lajeja. <span style="color:' + BRAND.orange + '">Löydä oma juttu.</span></div>' +
+    '<div style="margin-top:14px;font-size:12px;line-height:1.6;color:#B2B7C2">VibeXplorers Oy · ' +
+    '<a href="' + CFG.SITE + '" style="color:#B2B7C2">vibexplorers.com</a> · ' +
+    '<a href="https://www.instagram.com/vibexplorers_/" style="color:#B2B7C2">Instagram</a><br>' +
+    '<a href="' + CFG.TERMS_URL + '" style="color:#B2B7C2">Osallistumisehdot</a> · ' +
+    '<a href="' + CFG.PRIVACY_URL + '" style="color:#B2B7C2">Tietosuojaseloste</a></div>' +
+    '</td></tr></table></td></tr></table></body></html>';
+}
+
+function p_(html, extra) {
+  return '<p style="margin:0 0 14px' + (extra ? ';' + extra : '') + '">' + html + '</p>';
 }
 
 function kidsList_(children) {
-  return '<ul style="margin:0 0 16px;padding-left:20px">' +
-    children.map(c => '<li>' + esc_(c.name || c) + (c.year ? ' (' + esc_(c.year) + ')' : '') + '</li>').join('') + '</ul>';
+  return '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px">' +
+    children.map(c => '<tr><td style="padding:2px 10px 2px 0;color:' + BRAND.orange + ';font-weight:800">●</td>' +
+      '<td style="padding:2px 0;font-weight:600">' + esc_(c.name || c) + (c.year ? ' <span style="color:' + BRAND.grey + ';font-weight:400">(' + esc_(c.year) + ')</span>' : '') + '</td></tr>').join('') +
+    '</table>';
+}
+
+/** Harmaa tietolaatikko avain–arvo-riveillä. */
+function facts_(rows) {
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:4px 0 20px;background:' + BRAND.light + ';border-radius:14px">' +
+    '<tr><td style="padding:14px 18px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' +
+    rows.map(r => '<tr><td style="padding:5px 12px 5px 0;color:' + BRAND.grey + ';font-size:14px;white-space:nowrap;vertical-align:top">' + esc_(r[0]) + '</td>' +
+      '<td style="padding:5px 0;font-weight:700;font-size:14px;text-align:right">' + esc_(r[1]) + '</td></tr>').join('') +
+    '</table></td></tr></table>';
+}
+
+function button_(href, text) {
+  return '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:6px 0 22px"><tr>' +
+    '<td style="background:' + BRAND.orange + ';border-radius:999px">' +
+    '<a href="' + href + '" style="display:inline-block;padding:14px 26px;font-family:' + BRAND.font + ';font-weight:800;font-size:15px;color:' + BRAND.black + ';text-decoration:none">' +
+    esc_(text) + ' &rarr;</a></td></tr></table>';
+}
+
+function h2_(text) {
+  return '<h2 style="margin:22px 0 8px;font-family:' + BRAND.font + ';font-weight:800;font-size:17px;letter-spacing:-0.3px;color:' + BRAND.black + '">' + esc_(text) + '</h2>';
 }
 
 function mailBooked_(s, d, due) {
   const n = d.children.length;
-  const hostP = d.host
-    ? '<p>Kiitos, että olet kiinnostunut toimimaan ryhmän VibeXplorers Hostina! Olli ottaa sinuun yhteyttä viikon sisällä.</p>'
-    : '<p style="color:#5b6170">Etsimme ryhmille VibeXplorers Hosteja. <a href="' + CFG.HOST_URL + '" style="color:#14171f">Lue lisää</a>.</p>';
+  const host = d.host
+    ? p_('Kiitos, että voisit toimia ryhmän VibeXplorers Hostina! Olli soittaa sinulle viikon sisällä ja kertoo lisää.')
+    : p_('Etsimme jokaiseen ryhmään VibeXplorers Hostia – ryhmän omaa vanhempaa, joka on mukana kerroilla. <a href="' + CFG.HOST_URL + '" style="color:' + BRAND.black + ';font-weight:700">Lue lisää</a>', 'color:' + BRAND.grey + ';font-size:14px');
   const body =
-    '<p>Hei ' + esc_(firstName_(d.guardian)) + ',</p>' +
-    '<p>kiitos ilmoittautumisesta! ' + (n > 1 ? 'Lapsille on' : 'Lapselle on') + ' varattu paikka VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmään:</p>' +
+    p_('Hei ' + esc_(firstName_(d.guardian)) + '!') +
+    p_('Kiva, että lähdette mukaan kokeilemaan. ' + (n > 1 ? 'Lapsille on' : 'Lapselle on') + ' varattu paikka VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmään:') +
     kidsList_(d.children) +
-    '<table style="border-collapse:collapse;margin:0 0 16px;font-size:15px">' +
-    tr_('Kausi', 'Viikot ' + s.weeks) +
-    tr_('Ensimmäinen kerta', fmt_(s.firstSession, 'd.M.yyyy')) +
-    tr_('Hinta', s.price + ' / lapsi') +
-    tr_('Laskun eräpäivä', fmt_(due, 'd.M.yyyy')) +
-    '</table>' +
-    '<p>Lasku tulee erikseen sähköpostilla. Paikka on vahvistettu, kun lasku on maksettu. ' +
-    'Voit perua osallistumisen maksutta ' + fmt_(cancelDeadline_(s), 'd.M.yyyy') + ' asti vastaamalla tähän viestiin.</p>' +
-    '<p>Ennen kauden alkua saat tervetuloviestin, jossa kerrotaan ryhmä, ensimmäisen kerran paikka ja muut käytännöt.</p>' +
-    hostP +
-    '<p style="font-size:13px;color:#5b6170"><a href="' + CFG.TERMS_URL + '" style="color:#5b6170">Osallistumisehdot</a> · ' +
-    '<a href="' + CFG.PRIVACY_URL + '" style="color:#5b6170">Tietosuojaseloste</a></p>';
-  return { subject: 'Paikka varattu – VibeXplorers ' + s.name, html: layout_('Paikka varattu', body) };
+    facts_([
+      ['Kausi', 'Viikot ' + s.weeks + ', 8 lajikertaa'],
+      ['Ensimmäinen kerta', fmt_(s.firstSession, 'd.M.yyyy')],
+      ['Hinta', s.price + ' / lapsi'],
+      ['Laskun eräpäivä', fmt_(due, 'd.M.yyyy')],
+      ['Maksuton peruutus', fmt_(cancelDeadline_(s), 'd.M.yyyy') + ' asti']
+    ]) +
+    p_('Lasku tulee erikseen sähköpostilla, ja paikka vahvistuu, kun lasku on maksettu. Jos suunnitelmat muuttuvat, voit perua maksutta vastaamalla tähän viestiin.') +
+    h2_('Mitä seuraavaksi?') +
+    p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita – kokeilla saa.') +
+    host;
+  return {
+    subject: 'Paikka on varattu – VibeXplorers ' + s.name,
+    html: layout_('Paikka on varattu!', 'Lasku tulee erikseen, eräpäivä ' + fmt_(due, 'd.M.yyyy') + '.', body)
+  };
 }
 
 function mailQueued_(s, d, pos) {
+  const n = d.children.length;
   const body =
-    '<p>Hei ' + esc_(firstName_(d.guardian)) + ',</p>' +
-    '<p>kiitos ilmoittautumisesta! ' + esc_(gen_(s.name)) + ' ryhmät ovat tällä hetkellä täynnä, joten ' +
-    (d.children.length > 1 ? 'lapset ovat' : 'lapsi on') + ' jonotuslistalla:</p>' +
+    p_('Hei ' + esc_(firstName_(d.guardian)) + '!') +
+    p_('Kiitos ilmoittautumisesta. ' + esc_(gen_(s.name)) + ' ryhmät ovat tällä hetkellä täynnä, joten ' +
+      (n > 1 ? 'lapset ovat' : 'lapsi on') + ' jonotuslistalla:') +
     kidsList_(d.children) +
-    '<p><b>Olette jonossa sijalla ' + esc_(pos) + '.</b></p>' +
-    '<p>Jos paikka vapautuu, lähetämme sähköpostin, jossa on vahvistuslinkki. Paikka on voimassa ' + CFG.OFFER_HOURS +
-    ' tuntia, joten seuraathan sähköpostia (myös roskapostikansiota). Jonossa oleminen ei maksa mitään eikä sido mihinkään.</p>' +
-    '<p>Jos haluat poistua jonosta, vastaa tähän viestiin.</p>';
-  return { subject: 'Olet jonossa – VibeXplorers ' + s.name, html: layout_('Olette jonotuslistalla', body) };
+    facts_([['Paikka jonossa', String(pos)]]) +
+    p_('Jos paikka vapautuu, lähetämme sähköpostin, jossa on vahvistuslinkki. Linkki on voimassa ' + CFG.OFFER_HOURS +
+      ' tuntia, joten pidäthän silmällä myös roskapostikansiota.') +
+    p_('Jonossa oleminen ei maksa mitään eikä sido mihinkään. Jos haluat pois jonosta, vastaa tähän viestiin.');
+  return {
+    subject: 'Olette jonossa – VibeXplorers ' + s.name,
+    html: layout_('Olette jonossa.', 'Paikka jonossa: ' + pos + '. Ilmoitamme heti, jos paikka vapautuu.', body)
+  };
 }
 
 function mailOffer_(s, first, childNames, token, expires) {
   const link = CFG.SITE + '/vahvista#' + token;
+  const until = fmt_(expires, 'd.M.yyyy') + ' klo ' + fmt_(expires, 'HH.mm');
   const body =
-    '<p>Hei ' + esc_(firstName_(first['Huoltaja'])) + ',</p>' +
-    '<p>hyviä uutisia: VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmästä vapautui paikka!</p>' +
+    p_('Hei ' + esc_(firstName_(first['Huoltaja'])) + '!') +
+    p_('Hyviä uutisia: VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmästä vapautui paikka.') +
     kidsList_(childNames) +
-    '<p>Vahvista paikka viimeistään <b>' + fmt_(expires, 'd.M.yyyy') + ' klo ' + fmt_(expires, 'HH:mm') + '</b>. ' +
-    'Muuten paikka tarjotaan jonossa seuraavalle.</p>' +
-    '<p style="margin:24px 0"><a href="' + link + '" style="background:#14171f;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700">Vahvista paikka</a></p>' +
-    '<p>Hinta on ' + esc_(s.price) + ' / lapsi. Lasku tulee vahvistuksen jälkeen sähköpostilla.</p>' +
-    '<p>Jos ette halua paikkaa, voit jättää viestin huomiotta tai vastata tähän viestiin.</p>';
-  return { subject: 'Paikka vapautui – vahvista ' + fmt_(expires, 'd.M. HH:mm') + ' mennessä', html: layout_('Paikka vapautui', body) };
-}
-
-function tr_(k, v) {
-  return '<tr><td style="padding:4px 16px 4px 0;color:#5b6170">' + esc_(k) + '</td><td style="padding:4px 0;font-weight:700">' + esc_(v) + '</td></tr>';
+    p_('Vahvista paikka viimeistään <b>' + until + '</b>. Sen jälkeen tarjoamme paikan jonossa seuraavalle.') +
+    button_(link, 'Vahvista paikka') +
+    facts_([
+      ['Ensimmäinen kerta', fmt_(s.firstSession, 'd.M.yyyy')],
+      ['Hinta', s.price + ' / lapsi']
+    ]) +
+    p_('Lasku tulee vahvistuksen jälkeen sähköpostilla. Jos ette halua paikkaa, voit jättää viestin huomiotta.');
+  return {
+    subject: 'Paikka vapautui – vahvista ' + fmt_(expires, 'd.M. HH.mm') + ' mennessä',
+    html: layout_('Paikka vapautui!', 'Vahvista paikka ' + until + ' mennessä.', body)
+  };
 }
 
 function gen_(name) { return CFG.GENITIVE[name] || name + 'n'; }
