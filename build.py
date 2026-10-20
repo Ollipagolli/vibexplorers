@@ -75,7 +75,7 @@ CITIES = {
         ],
     },
     "vantaa": {
-        "name": "Vantaa", "hero": "kuva-stadion.jpg", "pos": "50% 60%",
+        "name": "Vantaa", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
@@ -103,7 +103,7 @@ CITIES = {
         ],
     },
     "helsinki": {
-        "name": "Helsinki", "groups": None, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
+        "name": "Helsinki", "groups": 2, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
         "sessions": [(w, None, None, None, None) for w in (4, 5, 6, 7, 9, 10, 11, 12)],
     },
@@ -320,7 +320,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} ryhmää</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
     </div>
   </header>
 
