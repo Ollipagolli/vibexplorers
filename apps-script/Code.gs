@@ -416,7 +416,7 @@ function firstQueuedFamily_(sheet) {
 }
 
 function confirmOffer_(token) {
-  if (!/^[a-f0-9]{64}$/.test(token)) return { ok: false, error: 'invalid_token', message: 'Linkki ei ole kelvollinen.' };
+  if (!/^[a-f0-9]{64}$/.test(token)) return { ok: false, error: 'invalid_token', message: 'Linkki ei toimi.' };
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(CFG.LOCK_WAIT_MS)) return { ok: false, error: 'busy', retry: true, message: 'Ruuhkaa. Yritä hetken päästä uudelleen.' };
   let result, mail = null;
@@ -429,7 +429,7 @@ function confirmOffer_(token) {
       return !!found;
     });
     if (!found) {
-      result = { ok: false, error: 'invalid_token', message: 'Linkki ei ole kelvollinen.' };
+      result = { ok: false, error: 'invalid_token', message: 'Linkki ei toimi.' };
     } else {
       const first = rowObj_(found.sheet, found.rows[0]);
       const s = readCity_(found.key);
@@ -791,11 +791,11 @@ function h2_(text) {
 function mailBooked_(s, d, due) {
   const n = d.children.length;
   const host = d.host
-    ? p_('Kiitos, että voisit toimia ryhmän VibeXplorers Hostina! Olli soittaa sinulle viikon sisällä ja kertoo lisää.')
-    : p_('Etsimme jokaiseen ryhmään VibeXplorers Hostia – ryhmän omaa vanhempaa, joka on mukana kerroilla. <a href="' + CFG.HOST_URL + '" style="color:' + BRAND.black + ';font-weight:700">Lue lisää</a>', 'color:' + BRAND.grey + ';font-size:14px');
+    ? p_('Kiva, että olet kiinnostunut toimimaan ryhmän VibeXplorers Hostina! Olli soittaa sinulle viikon sisällä ja kertoo lisää.')
+    : p_('Etsimme jokaiseen ryhmään VibeXplorers Hostia eli vanhempaa, joka on mukana jokaisella lajikerralla. <a href="' + CFG.HOST_URL + '" style="color:' + BRAND.black + ';font-weight:700">Lue lisää</a>', 'color:' + BRAND.grey + ';font-size:14px');
   const body =
     p_('Hei ' + esc_(firstName_(d.guardian)) + '!') +
-    p_('Kiva, että lähdette mukaan kokeilemaan. ' + (n > 1 ? 'Lapsille on' : 'Lapselle on') + ' varattu paikka VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmään:') +
+    p_('Kiva, että lähdette mukaan kokeilemaan. ' + (n > 1 ? 'Lapsille on varattu paikat' : 'Lapselle on varattu paikka') + ' VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmään:') +
     kidsList_(d.children) +
     facts_([
       ['Kausi', 'Viikot ' + s.weeks + ', 8 lajikertaa'],
@@ -804,7 +804,7 @@ function mailBooked_(s, d, due) {
       ['Laskun eräpäivä', fmt_(due, 'd.M.yyyy')],
       ['Maksuton peruutus', fmt_(cancelDeadline_(s), 'd.M.yyyy') + ' asti']
     ]) +
-    p_('Lasku tulee erikseen sähköpostilla, ja paikka vahvistuu, kun lasku on maksettu. Jos suunnitelmat muuttuvat, voit perua maksutta vastaamalla tähän viestiin.') +
+    p_('Lasku tulee erikseen sähköpostilla, ja paikka vahvistuu, kun lasku on maksettu. Jos suunnitelmat muuttuvat, voit perua maksutta yllä olevaan päivään asti vastaamalla tähän viestiin.') +
     h2_('Mitä seuraavaksi?') +
     p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita – kokeilla saa.') +
     host;
@@ -846,7 +846,7 @@ function mailOffer_(s, first, childNames, token, expires) {
     ]) +
     p_('Lasku tulee vahvistuksen jälkeen sähköpostilla. Jos ette halua paikkaa, voit jättää viestin huomiotta.');
   return {
-    subject: 'Paikka vapautui – vahvista ' + fmt_(expires, 'd.M. HH.mm') + ' mennessä',
+    subject: 'Paikka vapautui – vahvista ' + fmt_(expires, 'd.M.') + ' klo ' + fmt_(expires, 'HH.mm') + ' mennessä',
     html: layout_('Paikka vapautui!', 'Vahvista paikka ' + until + ' mennessä.', body)
   };
 }

@@ -71,7 +71,7 @@
     else if (name === 'street' && v.length < 3) m = 'Kirjoita katuosoite.';
     else if (name === 'postcode' && !/^\d{5}$/.test(v)) m = 'Postinumerossa on viisi numeroa.';
     else if (name === 'postCity' && v.length < 2) m = 'Kirjoita postitoimipaikka.';
-    else if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) m = v.indexOf('@') < 0 ? 'Tarkista sähköposti, siitä puuttuu @.' : 'Tarkista sähköpostiosoite.';
+    else if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) m = v.indexOf('@') < 0 ? 'Tarkista sähköpostiosoite, siitä puuttuu @-merkki.' : 'Tarkista sähköpostiosoite.';
     else if (name === 'phone' && !phoneOk(v)) m = 'Tarkista puhelinnumero, esim. 040 123 4567.';
     else if (name === 'emergencyPhone' && v && !phoneOk(v)) m = 'Tarkista puhelinnumero.';
     else if (name === 'photo' && !form.querySelector('[name=photo]:checked')) m = 'Valitse kyllä tai ei.';
@@ -149,12 +149,12 @@
         tick();
         timer = setInterval(tick, 1000);
       } else {
-        statusEl.textContent = 'Aukeamisaika julkaistaan pian. Voit täyttää lomakkeen valmiiksi.';
+        statusEl.textContent = 'Avautumisaika julkaistaan pian. Voit täyttää lomakkeen valmiiksi.';
         btnText.textContent = 'Ei vielä auki';
       }
     } else if (state === 'open') {
       titleEl.textContent = 'Ilmoittaudu.';
-      statusEl.textContent = s.free < 10 ? 'Paikkoja jäljellä ' + s.free + '.' : 'Mukaan mahtuu.';
+      statusEl.textContent = s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Mukaan mahtuu.';
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
       titleEl.textContent = 'Ryhmät ovat täynnä.';
@@ -162,7 +162,7 @@
       btn.disabled = false; btnText.textContent = 'Liity jonoon';
     } else {
       titleEl.textContent = 'Ilmoittautuminen on sulkeutunut.';
-      statusEl.innerHTML = 'Kysy vapaita paikkoja: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>';
+      statusEl.innerHTML = 'Kysy vapaista paikoista: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>';
       form.hidden = true;
     }
   }
@@ -170,7 +170,7 @@
     var ms = opensAt - Date.now();
     if (ms <= 0) {
       clearInterval(timer);
-      statusEl.textContent = 'Avautuu nyt…';
+      statusEl.textContent = 'Aukeaa nyt…';
       // Pieni hajautus, ettei kaikki selaimet kysy samalla sekunnilla.
       setTimeout(loadStatus, 300 + Math.random() * 2500);
       return;
@@ -264,7 +264,7 @@
       .catch(function () {
         if (attempt < 4) return later(attempt);
         busy(false, 'Yritä uudelleen');
-        say('Yhteys ei toiminut. Tietosi ovat tallessa – paina nappia uudelleen. Jos ongelma jatkuu, kirjoita <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.', 'err');
+        say('Yhteys katkesi. Tiedot ovat tallessa, joten paina nappia uudelleen. Jos ongelma jatkuu, kirjoita <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.', 'err');
       });
   }
   // Sama lähetystunniste: palvelin ei tee tuplailmoitusta, vaikka edellinen yritys olisi mennyt perille.
@@ -276,11 +276,11 @@
   function done(res) {
     clearDraft();
     clearInterval(timer);
-    var kids = res.children > 1 ? 'Lapsille' : 'Lapselle';
+    var kids = res.children > 1 ? 'Lapsille on varattu paikat' : 'Lapselle on varattu paikka';
     var html;
     if (res.status === 'booked') {
       html = '<h3>Paikka on varattu!</h3>' +
-        '<p>' + kids + ' on varattu paikka. Lähetimme vahvistuksen osoitteeseen <b>' + esc(res.email || '') + '</b>. Jos sitä ei näy, kurkkaa roskapostiin.</p>' +
+        '<p>' + kids + '. Lähetimme vahvistuksen osoitteeseen <b>' + esc(res.email || '') + '</b>. Jos sitä ei näy, kurkkaa roskapostiin.</p>' +
         (res.dueDate ? '<p>Lasku tulee sähköpostilla, eräpäivä <b>' + esc(res.dueDate) + '</b>. Voit perua maksutta ' + esc(res.cancelBy || res.dueDate) + ' asti.</p>' : '') +
         '<p>Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Nähdään kentän laidalla!</p>';
     } else {

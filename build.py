@@ -266,13 +266,13 @@ def reg_section(slug, c):
           </fieldset>
 
           <fieldset id="photo" aria-describedby="err-photo"><legend>Saako lapsi näkyä jakamissamme kuvissa?</legend>
-            <p class="hint">Kuvaamme kertoja someen ja verkkosivuille. Kuvat otetaan niin, etteivät lasten kasvot näy.</p>
+            <p class="hint">Otamme lajikerroilta kuvia someen ja verkkosivuille. Kuvaamme niin, etteivät lasten kasvot näy.</p>
             <div class="choice"><label><input type="radio" name="photo" value="yes" /> Kyllä</label><label><input type="radio" name="photo" value="no" /> Ei</label></div>
             <span class="err" id="err-photo" aria-live="polite"></span>
           </fieldset>
 
           <fieldset><legend>Lisätiedot <span class="opt">vapaaehtoinen</span></legend>
-            <div class="field"><label for="notes">Onko jotain, mitä meidän olisi hyvä tietää?</label><span class="hint">Esimerkiksi jos lapsi jännittää uusia paikkoja. Terveysasioista, kuten allergioista, kerrothan ohjaajalle paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
+            <div class="field"><label for="notes">Onko jotain, mitä meidän olisi hyvä tietää?</label><span class="hint">Kerro esimerkiksi, jos lapsi jännittää uusia paikkoja. Terveysasioista, kuten allergioista, kerrothan suoraan ohjaajalle tai Hostille paikan päällä.</span><textarea id="notes" name="notes" rows="3" maxlength="500"></textarea></div>
             <div class="field"><label for="source">Mistä kuulit meistä?</label><select id="source" name="source"><option value="">Valitse</option>{srcs}</select></div>
           </fieldset>
 
@@ -287,7 +287,7 @@ def reg_section(slug, c):
 
           <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
 
-          <p class="fine">Hinta {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <p class="fine">Hinta on {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja sen eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
           <div class="form-msg" data-form-msg hidden role="alert"></div>
           <button type="submit" class="btn submit" disabled><span>Ladataan…</span> {ARROW}</button>
         </form>
@@ -335,7 +335,7 @@ def confirm_page():
       fetch('{API_URL}', {{ method: 'POST', headers: {{ 'Content-Type': 'text/plain;charset=utf-8' }}, body: JSON.stringify({{ action: 'confirm', token: t }}) }})
         .then(function (r) {{ return r.json(); }})
         .then(function (r) {{
-          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan' + (r.city ? ' ' + r.city + 'n ryhmään' : '') + '. Vahvistus ja laskun tiedot tulevat sähköpostiin. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
+          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan! Vahvistus tulee sähköpostiin, ja lasku lähtee erikseen. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
           else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
           else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
           else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>');
@@ -351,29 +351,28 @@ def confirm_page():
 
 def host_page():
     tasks = [
-        "Tulet paikalle viimeistään 10 minuuttia ennen ryhmän alkua ja esittäydyt ohjaajille.",
+        "Tulet paikalle viimeistään 10 minuuttia ennen alkua, esittäydyt ohjaajille ja kerrot auttavasi tarvittaessa ryhmän kanssa.",
         "Toivotat lapset tervetulleiksi ja kyselet kuulumisia.",
-        "Kerrot lapsille, minne on tultu ja mitä tällä kertaa kokeillaan.",
-        "Autat ohjaajia tarvittaessa ryhmän kanssa.",
-        "Kuvaat kerrasta materiaalia somea varten – saat siihen omat ohjeet.",
-        "Lopuksi kiität seuraa ja varmistat, että lapset kuulevat, miten lajin parissa voi jatkaa.",
+        "Kerrot lapsille, missä ollaan ja mitä tänään kokeillaan.",
+        "Otat kuvia ja videoita somea varten. Saat kuvaamiseen erilliset ohjeet.",
+        "Lopuksi kiität seuraa ja huolehdit, että vanhemmat saavat tietää, miten lapsi voi jatkaa lajin parissa.",
         "Jaat lapsille tarrat Lajipasseihin. Ensimmäisellä kerralla jaat myös passit.",
     ]
     li = "".join(f"<li>{e(t)}</li>" for t in tasks)
-    return head("VibeXplorers Host", "Ryhmän oma vanhempi, joka pitää porukan fiiliksen yllä jokaisella lajikerralla.", "host", "kuva-trampoliini.jpg").replace(
+    return head("VibeXplorers Host", "Ryhmän oma vanhempi, joka on mukana jokaisella lajikerralla.", "host", "kuva-trampoliini.jpg").replace(
         '  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
   <main style="padding-top:72px">
     <section class="sec reg">
       <div class="wrap narrow prose">
         <span class="label">Talvi 2027</span>
         <h2>VibeXplorers Host.</h2>
-        <p class="lead">Host on ryhmän oma vanhempi, joka on mukana jokaisella lajikerralla ja pitää porukan fiiliksen yllä. Lajin ohjaavat seuran ohjaajat – Host on se tuttu aikuinen, joka kulkee ryhmän mukana lajista toiseen.</p>
+        <p class="lead">Host on yksi ryhmän vanhemmista. Hän on mukana jokaisella lajikerralla ja pitää huolen, että porukalla on hyvä fiilis. Seuran ohjaajat vetävät lajin, ja Host on se tuttu aikuinen, joka kulkee ryhmän mukana lajista toiseen.</p>
         <h3>Mitä Host tekee</h3>
         <ol class="steps">{li}</ol>
-        <h3>Mitä se vaatii</h3>
-        <p>Kauden kaikki 8 lajikertaa. Oma lapsesi on samassa ryhmässä. Aiempaa kokemusta ei tarvita, saat perehdytyksen ja ohjeet. Tehtävästä maksetaan palkkio jokaiselta pidetyltä kerralta.</p>
+        <h3>Mitä tehtävä vaatii</h3>
+        <p>Olet mukana kauden kaikilla kahdeksalla lajikerralla, ja oma lapsesi on samassa ryhmässä. Aiempaa kokemusta ei tarvita: saat perehdytyksen ja ohjeet. Tehtävästä maksetaan palkkio jokaiselta pidetyltä kerralta.</p>
         <h3>Kiinnostuitko?</h3>
-        <p>Rastita ilmoittautumisen yhteydessä kohta "Voisin toimia ryhmän VibeXplorers Hostina" tai kirjoita <a href="mailto:{EMAIL}?subject=VibeXplorers%20Host">{EMAIL}</a>. Olli soittaa ja kertoo lisää.</p>
+        <p>Valitse ilmoittautumislomakkeelta kohta ”Voisin toimia ryhmän VibeXplorers Hostina” tai kirjoita osoitteeseen <a href="mailto:{EMAIL}?subject=VibeXplorers%20Host">{EMAIL}</a>. Olli soittaa sinulle ja kertoo lisää.</p>
       </div>
     </section>
   </main>

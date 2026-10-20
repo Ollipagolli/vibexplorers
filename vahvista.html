@@ -57,7 +57,7 @@
       fetch('https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'confirm', token: t }) })
         .then(function (r) { return r.json(); })
         .then(function (r) {
-          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan' + (r.city ? ' ' + r.city + 'n ryhmään' : '') + '. Vahvistus ja laskun tiedot tulevat sähköpostiin. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
+          if (r.ok && r.status === 'booked') show('Paikka on vahvistettu!', '<p>Tervetuloa mukaan! Vahvistus tulee sähköpostiin, ja lasku lähtee erikseen. Laskun eräpäivä on <b>' + r.dueDate + '</b>.</p>');
           else if (r.ok) show('Paikka on jo vahvistettu.', '<p>Kaikki on kunnossa. Tiedot löytyvät sähköpostistasi.</p>');
           else if (r.retry && tries++ < 3) setTimeout(go, 2000 * tries);
           else if (r.error === 'expired') show('Tarjous on vanhentunut.', '<p>Valitettavasti 48 tunnin vahvistusaika ehti umpeutua, ja paikka on tarjottu seuraavalle. Kysy tilannetta: <a href="mailto:vibexhq@gmail.com">vibexhq@gmail.com</a>.</p>');
