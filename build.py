@@ -67,14 +67,14 @@ COMING = {
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
-        "name": "Espoo", "opens": "ke 28.10. klo 20", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
+        "name": "Espoo", "opens": "ke 28.10. klo 20", "gear": "Luisteluun tarvitaan omat luistimet ja kypärä ja lasketteluun omat varusteet. Lasketteluvarusteet voi vuokrata Granibackenilta 20 eurolla.", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
-            (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15"),
+            (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15", "Omat luistimet ja kypärä mukaan."),
             (4, "Paini", "Espoon Urheilijat", "Itätuulenkuja 9", "Su 31.1. klo 14–16"),
             (5, "Käsipallo", "GrIFK Handboll", None, "Ke 3.2."),
             (6, "Voimistelu", "Olarin Voimistelijat", None, "Ke 10.2."),
-            (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2."),
+            (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2.", "Omat varusteet mukaan. Ne voi myös vuokrata Granibackenilta 20 eurolla."),
             (9, "Jalkapallo", "Espoon Palloseura", None, None),
             (10, "Sulkapallo", "Laaksolahden Sulkapallo", "Laaksolahden Tenniskeskus", "La 13.3. klo 8–10"),
             (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", "Järvenperän sirkustila, Auroranmäki 1", "La 20.3. klo 15.30–17.30"),
@@ -290,7 +290,7 @@ def reg_section(slug, c, api=None):
 
           <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
 
-          <p class="fine">Hinta on {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja sen eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <p class="fine">{e(c['gear']) + ' ' if c.get('gear') else ''}Hinta on {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja sen eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
           <div class="form-msg" data-form-msg hidden role="alert"></div>
           <button type="submit" class="btn submit" disabled><span>Ladataan…</span> {ARROW}</button>
         </form>
@@ -454,10 +454,11 @@ def index_page():
 
 # ------------------------------------------------------------------ city
 def row(s):
-    wk, sport, club, place, time = s
+    wk, sport, club, place, time = s[:5]
+    gear = f'<div class="gear">{e(s[5])}</div>' if len(s) > 5 else ""
     if not sport:
         return f"""        <div class="row tba"><div class="wk">Viikko<b>{wk}</b></div><div><h3>Julkistetaan pian</h3></div><div class="time"></div><div class="place"></div><div></div></div>"""
-    return f"""        <div class="row"><div class="wk">Viikko<b>{wk}</b></div><div><h3>{e(sport)}</h3><div class="club">{e(club)}</div></div><div class="time">{e(time) if time else "Aika tarkentuu"}</div><div class="place">{e(place) if place else "Paikka tarkentuu"}</div>{logo_tile(club)}</div>"""
+    return f"""        <div class="row"><div class="wk">Viikko<b>{wk}</b></div><div><h3>{e(sport)}</h3><div class="club">{e(club)}</div>{gear}</div><div class="time">{e(time) if time else "Aika tarkentuu"}</div><div class="place">{e(place) if place else "Paikka tarkentuu"}</div>{logo_tile(club)}</div>"""
 
 
 def city_page(slug, c):
