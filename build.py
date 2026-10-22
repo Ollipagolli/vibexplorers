@@ -38,6 +38,7 @@ LOGOS = {
     "Tampereen Pyrintö": "pyrinto.png",
     "Tampereen Hiihtoseura": "tahs.png",
     "KooVee": "koovee.png",
+    "Tanssiseura Spiral": "spiral.png",
 }
 
 
@@ -104,8 +105,8 @@ CITIES = {
             (7, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 17.2."),
             (8, "Käsipallo", "KooVee", None, "To 25.2."),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
-            (11, None, None, None, None),
-            (12, None, None, None, None),
+            (11, "Lentopallo", "Tampereen Pyrintö", None, None),
+            (12, "Tanssi", "Tanssiseura Spiral", "Ikurin liikuntahalli", None),
         ],
     },
     "helsinki": {
