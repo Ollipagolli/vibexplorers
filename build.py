@@ -82,7 +82,7 @@ CITIES = {
         ],
     },
     "vantaa": {
-        "name": "Vantaa", "opens": "ti 27.10. klo 20", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
+        "name": "Vantaa", "opens": "ti 3.11. klo 20", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
@@ -96,7 +96,7 @@ CITIES = {
         ],
     },
     "tampere": {
-        "name": "Tampere", "opens": "to 29.10. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
+        "name": "Tampere", "opens": "su 8.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", None),
@@ -105,7 +105,7 @@ CITIES = {
             (7, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 17.2."),
             (8, "Käsipallo", "KooVee", None, "To 25.2."),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
-            (11, "Lentopallo", "Tampereen Pyrintö", None, None),
+            (11, "Lentopallo", "Tampereen Pyrintö", None, "Su 21.3."),
             (12, "Tanssi", "Tanssiseura Spiral", "Ikurin liikuntahalli", None),
         ],
     },
@@ -448,7 +448,7 @@ def index_page():
       </div>
     </section>
 
-{cta("Ilmoittautuminen aukeaa 27.10.", "Valitse kaupunki", "#kaupungit")}  </main>
+{cta("Ilmoittautuminen aukeaa 28.10.", "Valitse kaupunki", "#kaupungit")}  </main>
 
 """ + FOOTER
 

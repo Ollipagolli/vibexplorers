@@ -43,11 +43,11 @@ t('setup luo välilehdet ja ajastimet', () => {
 
 t('status: ennen avausta soon, avauksen jälkeen open', () => {
   const env = fresh();
-  env.now = new Date('2026-10-27T17:59:00Z'); // 19:59 Helsinki
+  env.now = new Date('2026-11-03T17:59:00Z'); // 19:59 Helsinki
   let s = env.api.doGet({ parameter: { action: 'status', city: 'vantaa' } });
   assert.strictEqual(s.state, 'soon');
-  assert.strictEqual(s.opensAt, '2026-10-27T18:00:00.000Z');
-  env.now = new Date('2026-10-27T18:00:00Z');
+  assert.strictEqual(s.opensAt, '2026-11-03T18:00:00.000Z');
+  env.now = new Date('2026-11-03T18:00:00Z');
   s = env.api.doGet({ parameter: { action: 'status', city: 'vantaa' } });
   assert.strictEqual(s.state, 'open'); assert.strictEqual(s.free, 27);
   assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'helsinki' } }).state, 'soon');
