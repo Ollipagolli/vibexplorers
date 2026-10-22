@@ -279,3 +279,6 @@ section[id] { scroll-margin-top: 88px; }
 .prose .steps li::marker { color: var(--orange); font-weight: 800; }
 .city-row .opens { display: block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--orange); }
 .row .gear { margin-top: .4rem; font-size: .82rem; font-weight: 500; color: var(--grey); line-height: 1.4; max-width: 34ch; }
+.reg[data-state="soon"] .reg-status { color: var(--white); background: rgba(255,106,61,.1); box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.55); border-radius: 14px; padding: 1rem 1.2rem; line-height: 1.5; }
+.reg[data-state="soon"] .reg-status b { color: var(--orange); }
+.reg .soon-note { margin: 0; font-weight: 700; color: var(--orange); }

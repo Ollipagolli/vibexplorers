@@ -11,6 +11,7 @@
   var btn = form.querySelector('[type=submit]');
   var btnText = btn.querySelector('span');
   var msgEl = form.querySelector('[data-form-msg]');
+  var soonNote = form.querySelector('[data-soon-note]');
   var kidsEl = form.querySelector('[data-kids]');
   var addKid = form.querySelector('[data-add-kid]');
   var tpl = document.getElementById('kid-tpl');
@@ -143,20 +144,23 @@
     clearInterval(timer);
     sec.setAttribute('data-state', state);
     if (state === 'soon') {
-      titleEl.textContent = 'Ilmoittautuminen aukeaa pian.';
+      titleEl.textContent = opensAt ? 'Ilmoittautuminen aukeaa ' + when(opensAt) + '.' : 'Ilmoittautuminen aukeaa pian.';
       btn.disabled = true;
+      if (soonNote) { soonNote.hidden = false; soonNote.textContent = opensAt ? 'Lomakkeen voi lähettää ' + when(opensAt) + ' alkaen.' : 'Lomaketta ei voi vielä lähettää.'; }
       if (opensAt) {
         tick();
         timer = setInterval(tick, 1000);
       } else {
-        statusEl.textContent = 'Avautumisaika julkaistaan pian. Voit täyttää lomakkeen valmiiksi.';
+        statusEl.innerHTML = '<b>Avautumisaika julkaistaan pian.</b><br>Voit jo täyttää tiedot valmiiksi. Ne säilyvät tällä laitteella.';
         btnText.textContent = 'Ei vielä auki';
       }
     } else if (state === 'open') {
+      if (soonNote) soonNote.hidden = true;
       titleEl.textContent = 'Ilmoittaudu.';
       statusEl.textContent = s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Mukaan mahtuu.';
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
+      if (soonNote) soonNote.hidden = true;
       titleEl.textContent = 'Ryhmät ovat täynnä.';
       statusEl.textContent = 'Voit liittyä jonoon. Jos paikka vapautuu, saat siitä sähköpostin.';
       btn.disabled = false; btnText.textContent = 'Liity jonoon';
@@ -177,7 +181,7 @@
     }
     var s = Math.floor(ms / 1000), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
     var left = d > 0 ? d + ' pv ' + h + ' h' : h > 0 ? h + ' h ' + m + ' min' : m + ' min ' + String(ss).padStart(2, '0') + ' s';
-    statusEl.textContent = 'Aukeaa ' + when(opensAt) + ' (' + left + '). Voit täyttää lomakkeen valmiiksi.';
+    statusEl.innerHTML = '<b>Aikaa avautumiseen ' + left + '.</b><br>Voit jo täyttää tiedot valmiiksi. Ne säilyvät tällä laitteella, ja lomakkeen voi lähettää heti, kun ilmoittautuminen aukeaa.';
     btnText.textContent = 'Aukeaa ' + when(opensAt).replace(/^.. /, '');
   }
   function loadStatus() {

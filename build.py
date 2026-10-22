@@ -243,7 +243,7 @@ def reg_section(slug, c, api=None):
     return f"""    <section class="sec reg" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
-        <h2 data-title>Ilmoittaudu.</h2>
+        <h2 data-title>{'Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.'}</h2>
         <p class="reg-status" data-status aria-live="polite"></p>
         <div class="reg-done" data-done hidden aria-live="polite"></div>
         <form novalidate>
@@ -292,6 +292,7 @@ def reg_section(slug, c, api=None):
           <div class="hp" aria-hidden="true"><label for="website">Älä täytä</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
 
           <p class="fine">{e(c['gear']) + ' ' if c.get('gear') else ''}Hinta on {c.get('price', PRICE)} / lapsi koko kaudelta (8 kertaa). Lasku tulee sähköpostilla, ja sen eräpäivä on viikko ennen ensimmäistä kertaa. Siihen asti voit perua maksutta.</p>
+          <p class="soon-note" data-soon-note hidden></p>
           <div class="form-msg" data-form-msg hidden role="alert"></div>
           <button type="submit" class="btn submit" disabled><span>Ladataan…</span> {ARROW}</button>
         </form>
@@ -304,7 +305,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=3" defer></script>
+    <script src="/ilmo.js?v=4" defer></script>
 """
 
 
@@ -481,7 +482,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{f'<span>Ilmoittautuminen {e(c["opens"])}</span>' if c.get('opens') and slug in REG_CITIES else ''}{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
     </div>
   </header>
 
