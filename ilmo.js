@@ -19,6 +19,8 @@
   var t0 = Date.now();
   var state = null, opensAt = null, sending = false, subId = newId(), allowDuplicate = false, timer = null;
   var DRAFT = 'vx-draft-' + CITY;
+  var CODE = '';
+  try { CODE = (new URLSearchParams(location.search).get('ennakko') || '').trim(); } catch (e) { /* vanha selain */ }
 
   function newId() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -156,8 +158,8 @@
       }
     } else if (state === 'open') {
       if (soonNote) soonNote.hidden = true;
-      titleEl.textContent = 'Ilmoittaudu.';
-      statusEl.textContent = s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Mukaan mahtuu.';
+      titleEl.textContent = s.early ? 'Ennakkoilmoittautuminen.' : 'Ilmoittaudu.';
+      statusEl.textContent = (s.early ? 'Syksyn perheille ennen yleistä avautumista. ' : '') + (s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Mukaan mahtuu.');
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
       if (soonNote) soonNote.hidden = true;
@@ -185,7 +187,7 @@
     btnText.textContent = 'Aukeaa ' + when(opensAt).replace(/^.. /, '');
   }
   function loadStatus() {
-    fetchTimeout(API + '?action=status&city=' + encodeURIComponent(CITY), {}, 20000)
+    fetchTimeout(API + '?action=status&city=' + encodeURIComponent(CITY) + (CODE ? '&code=' + encodeURIComponent(CODE) : ''), {}, 20000)
       .then(function (r) { return r.json(); })
       .then(function (s) { if (s.ok) setState(s); else throw new Error(s.error); })
       .catch(function () {
@@ -208,7 +210,7 @@
     for (var i = 0; i < kidCount(); i++) children.push({ name: val('child' + i + 'Name'), year: Number(val('child' + i + 'Year')) });
     var photo = form.querySelector('[name=photo]:checked');
     return {
-      action: 'register', city: CITY, submissionId: subId, elapsedMs: Date.now() - t0, allowDuplicate: allowDuplicate,
+      action: 'register', city: CITY, code: CODE, submissionId: subId, elapsedMs: Date.now() - t0, allowDuplicate: allowDuplicate,
       children: children, guardian: val('guardian'), street: val('street'), postcode: val('postcode'), postCity: val('postCity'),
       email: val('email'), phone: val('phone'), emergencyName: val('emergencyName'), emergencyPhone: val('emergencyPhone'),
       photo: photo ? photo.value : '', notes: val('notes'), source: val('source'),

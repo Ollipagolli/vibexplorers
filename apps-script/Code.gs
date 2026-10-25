@@ -58,7 +58,8 @@ const COLS = [
 const SETTINGS_COLS = [
   'Tunnus', 'Nimi', 'Ryhmiä', 'Paikkoja per ryhmä', 'Yläraja per ryhmä',
   'Avautuu', 'Sulkeutuu', 'Tila', 'Hinta', 'Viikot', 'Ensimmäinen kerta',
-  'Syntymävuodet', 'Varattu', 'Tarjottu', 'Jonossa', 'Viimeisin jonosija'
+  'Syntymävuodet', 'Varattu', 'Tarjottu', 'Jonossa', 'Viimeisin jonosija',
+  'Ennakkokoodi', 'Ennakko alkaa'
 ];
 
 const MAIL_COLS = ['Luotu', 'Vastaanottaja', 'Aihe', 'HTML', 'Tila', 'Yritykset', 'Virhe', 'Lähetetty'];
@@ -69,7 +70,7 @@ const LOG_COLS = ['Aikaleima', 'Taso', 'Viesti', 'Tiedot'];
 function doGet(e) {
   const p = (e && e.parameter) || {};
   try {
-    if (p.action === 'status') return json_(getStatus_(String(p.city || '')));
+    if (p.action === 'status') return json_(getStatus_(String(p.city || ''), String(p.code || '')));
     if (p.action === 'ping') return json_({ ok: true, time: now_().toISOString() });
     return json_({ ok: false, error: 'unknown_action' });
   } catch (err) {
@@ -101,28 +102,37 @@ function json_(obj) {
 
 // ---------------------------------------------------------------- paikkatilanne
 
-function getStatus_(cityKey) {
+function getStatus_(cityKey, code) {
   const s = readCity_(cityKey);
   if (!s) return { ok: false, error: 'unknown_city' };
-  const st = cityState_(s, now_());
+  const st = cityState_(s, now_(), code);
   return {
     ok: true, city: s.key, name: s.name, state: st.state,
     opensAt: s.opensAt ? s.opensAt.toISOString() : null,
     free: st.state === 'open' ? st.free : null,
-    price: s.price, weeks: s.weeks
+    price: s.price, weeks: s.weeks, early: !!st.early
   };
 }
 
 /** state: soon | open | queue | closed. free = vapaat normaalit paikat. */
-function cityState_(s, now) {
+function cityState_(s, now, code) {
   const cap = s.groups * s.perGroup;
   const free = Math.max(0, cap - s.booked - s.offered);
   if (s.mode === 'Kiinni') return { state: 'closed', free: 0 };
   const isOpen = s.mode === 'Auki' ||
     (s.opensAt && now >= s.opensAt && (!s.closesAt || now < s.closesAt));
-  if (!isOpen) return { state: (!s.opensAt || now < s.opensAt) ? 'soon' : 'closed', free: 0 };
-  if (free <= 0 || s.queued > 0) return { state: 'queue', free: 0 };
-  return { state: 'open', free: free };
+  // Ennakkoilmoittautuminen: oikealla koodilla auki jo ennen yleistä avautumista.
+  const early = !isOpen && earlyOk_(s, now, code);
+  if (!isOpen && !early) return { state: (!s.opensAt || now < s.opensAt) ? 'soon' : 'closed', free: 0 };
+  if (free <= 0 || s.queued > 0) return { state: 'queue', free: 0, early: early };
+  return { state: 'open', free: free, early: early };
+}
+
+function earlyOk_(s, now, code) {
+  const c = String(code || '').trim().toUpperCase();
+  if (!c || !s.earlyCode || c !== s.earlyCode) return false;
+  if (s.closesAt && now >= s.closesAt) return false;
+  return !s.earlyFrom || now >= s.earlyFrom;
 }
 
 // ---------------------------------------------------------------- ilmoittautuminen
@@ -165,7 +175,7 @@ function register_(req) {
       result = resultFromRows_(sheet, prev);
     } else {
       const s = readCity_(d.city); // tuoreet laskurit lukon alla
-      const st = cityState_(s, now_());
+      const st = cityState_(s, now_(), req.code);
       if (st.state === 'soon') {
         result = { ok: false, error: 'not_open', opensAt: s.opensAt && s.opensAt.toISOString(),
           message: 'Ilmoittautuminen ei ole vielä auki.' };
@@ -175,7 +185,7 @@ function register_(req) {
         result = { ok: false, error: 'duplicate',
           message: 'Tämä lapsi on jo ilmoitettu samalla sähköpostiosoitteella. Jos kyse on eri lapsesta, voit lähettää ilmoittautumisen silti.' };
       } else {
-        family = placeFamily_(sheet, s, d, subId);
+        family = placeFamily_(sheet, s, d, subId, st.early);
         result = family.result;
       }
     }
@@ -196,7 +206,7 @@ function register_(req) {
 }
 
 /** Päättää paikan tai jonon ja kirjoittaa rivit. Kutsutaan lukon alla. */
-function placeFamily_(sheet, s, d, subId) {
+function placeFamily_(sheet, s, d, subId, early) {
   const n = d.children.length;
   const cap = s.groups * s.perGroup;
   const max = s.groups * s.maxPerGroup;
@@ -221,7 +231,8 @@ function placeFamily_(sheet, s, d, subId) {
     'Ehdot hyväksytty': 'Kyllä', 'Tietosuoja luettu': 'Kyllä',
     'Uutiskirje': d.newsletter ? 'Kyllä' : 'Ei', 'Host-kiinnostus': d.host ? 'Kyllä' : 'Ei',
     'Eräpäivä': dueDate ? fmt_(dueDate, 'yyyy-MM-dd') : '',
-    'Lähetystunniste': subId
+    'Lähetystunniste': subId,
+    'Huom.': early ? 'Ennakko' : ''
   }));
   sheet.getRange(sheet.getLastRow() + 1, 1, rows.length, COLS.length).setValues(rows);
 
@@ -550,7 +561,9 @@ function readCity_(key) {
       firstSession: parseDay_(g('Ensimmäinen kerta')),
       years: String(g('Syntymävuodet')),
       booked: Number(g('Varattu')) || 0, offered: Number(g('Tarjottu')) || 0,
-      queued: Number(g('Jonossa')) || 0, lastQueueNo: Number(g('Viimeisin jonosija')) || 0
+      queued: Number(g('Jonossa')) || 0, lastQueueNo: Number(g('Viimeisin jonosija')) || 0,
+      earlyCode: String(g('Ennakkokoodi') || '').trim().toUpperCase(),
+      earlyFrom: g('Ennakko alkaa') ? parseStamp_(g('Ennakko alkaa')) : null
     };
   }
   return null;
@@ -969,9 +982,9 @@ function setup() {
 // Tunnus, Nimi, Ryhmiä, Paikkoja/ryhmä, Yläraja/ryhmä, Avautuu, Sulkeutuu, Tila, Hinta, Viikot,
 // Ensimmäinen kerta, Syntymävuodet, Varattu, Tarjottu, Jonossa, Viimeisin jonosija
 const DEFAULT_CITIES_ = [
-  ['vantaa',   'Vantaa',   '1', '27', '28', '2026-11-03 20:00', '', 'Auto',   '69 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0'],
-  ['espoo',    'Espoo',    '2', '27', '28', '2026-10-28 20:00', '', 'Auto',   '79 €', '3–11', '2027-01-24', '2020–2023', '0', '0', '0', '0'],
-  ['tampere',  'Tampere',  '2', '27', '28', '2026-11-08 20:00', '', 'Auto',   '69 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0'],
-  ['helsinki', 'Helsinki', '2', '27', '28', '',                 '', 'Auto',   '79 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0'],
-  ['testi',    'Testi',    '1', '3',  '4',  '2026-10-20 12:00', '', 'Auto',   '1 €',  '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0']
+  ['vantaa',   'Vantaa',   '1', '27', '28', '2026-11-03 20:00', '', 'Auto',   '69 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0', '', ''],
+  ['espoo',    'Espoo',    '2', '27', '28', '2026-10-28 20:00', '', 'Auto',   '79 €', '3–11', '2027-01-24', '2020–2023', '0', '0', '0', '0', '', ''],
+  ['tampere',  'Tampere',  '2', '27', '28', '2026-11-08 20:00', '', 'Auto',   '69 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0', '', ''],
+  ['helsinki', 'Helsinki', '2', '27', '28', '',                 '', 'Auto',   '79 €', '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0', '', ''],
+  ['testi',    'Testi',    '1', '3',  '4',  '2026-10-20 12:00', '', 'Auto',   '1 €',  '4–12', '2027-01-30', '2020–2023', '0', '0', '0', '0', '', '']
 ];

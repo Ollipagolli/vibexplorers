@@ -224,4 +224,28 @@ t('rikkinäinen pyyntö', () => {
   assert.strictEqual(post(env, { action: 'confirm', token: 'x' }).error, 'invalid_token');
 });
 
+t('ennakkokoodi avaa ilmoittautumisen etuajassa', () => {
+  const env = fresh();
+  const sh = env.sheets['Asetukset'];
+  let row = 0; for (let r = 2; r <= sh.getLastRow(); r++) if (sh.get(r, 1) === 'espoo') row = r;
+  sh.set(row, env.api.SETTINGS_COLS.indexOf('Ennakkokoodi') + 1, 'Syksy26');
+  sh.set(row, env.api.SETTINGS_COLS.indexOf('Ennakko alkaa') + 1, '2026-10-25 12:00');
+  env.now = new Date('2026-10-25T08:00:00Z'); // 11:00, ennakko ei vielä alkanut
+  assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'espoo', code: 'syksy26' } }).state, 'soon');
+  env.now = new Date('2026-10-25T10:00:00Z'); // 13:00
+  const st = env.api.doGet({ parameter: { action: 'status', city: 'espoo', code: ' syksy26 ' } });
+  assert.strictEqual(st.state, 'open'); assert.strictEqual(st.early, true);
+  assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'espoo' } }).state, 'soon');
+  assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'espoo', code: 'vaara' } }).state, 'soon');
+  assert.strictEqual(post(env, form({ city: 'espoo' })).error, 'not_open');
+  assert.strictEqual(post(env, form({ city: 'espoo', code: 'väärä' })).error, 'not_open');
+  const r = post(env, form({ city: 'espoo', code: 'SYKSY26' }));
+  assert.strictEqual(r.status, 'booked');
+  assert.strictEqual(rows(env, 'espoo')[0]['Huom.'], 'Ennakko');
+  // yleisen avautumisen jälkeen koodia ei tarvita eikä merkintää tule
+  env.now = new Date('2026-10-28T18:00:05Z');
+  post(env, form({ city: 'espoo' }));
+  assert.strictEqual(rows(env, 'espoo')[1]['Huom.'], '');
+});
+
 console.log(`\n${passed} testiä läpi`);

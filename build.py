@@ -19,7 +19,7 @@ LOGOS = {
     "Espoon Jäätaiturit": "esjt.png",
     "Espoon Urheilijat": "esu.png",
     "GrIFK Handboll": "grifk.png",
-    "GrIFK Alpine": "grifk.png",
+    "GrIFK Alpine": "grani.png",
     "Olarin Voimistelijat": "ovo.png",
     "Espoon Palloseura": "eps.png",
     "Laaksolahden Sulkapallo": "lasupa.png",
@@ -305,7 +305,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=4" defer></script>
+    <script src="/ilmo.js?v=5" defer></script>
 """
 
 

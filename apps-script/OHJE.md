@@ -54,3 +54,13 @@ Testi-rivi on testejä varten: 3 paikkaa, yläraja 4, auki heti.
 | processMailQueue | 15 min | Odottavat sähköpostit |
 | dailyBackup | yöllä klo 3 | Kopio Driven kansioon "VibeXplorers varmuuskopiot", yli 30 pv vanhat poistetaan |
 | onSheetEdit | muokkaus | Laskurit päivittyvät, kun Tila muuttuu |
+
+## Ennakkoilmoittautuminen
+
+Ennakkokoodilla ilmoittautuminen aukeaa valitulle porukalle ennen yleistä avautumista.
+
+1. Lisää Asetukset-välilehdelle otsikot **Q1 = Ennakkokoodi** ja **R1 = Ennakko alkaa** (jos niitä ei vielä ole).
+2. Kirjoita kaupungin riville koodi (esim. `SYKSY26`) ja alkuaika (esim. `2026-10-25 18:00`). Tyhjä alkuaika = heti.
+3. Jaa linkki: `https://vibexplorers.com/espoo?ennakko=SYKSY26#ilmoittaudu`
+4. Ennakkona tulleissa riveissä lukee Huom.-sarakkeessa "Ennakko". Paikat ovat samat kuin yleisessä ilmoittautumisessa.
+5. Kun yleinen ilmoittautuminen aukeaa, koodia ei enää tarvita. Ennakon voi lopettaa tyhjentämällä koodin.
