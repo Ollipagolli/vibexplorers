@@ -378,7 +378,8 @@ def host_page():
         <h3>Mitä tehtävä vaatii</h3>
         <p>Olet mukana kauden kaikilla kahdeksalla lajikerralla, ja oma lapsesi on samassa ryhmässä. Aiempaa kokemusta ei tarvita: saat perehdytyksen ja ohjeet. Tehtävästä maksetaan palkkio jokaiselta pidetyltä kerralta.</p>
         <h3>Kiinnostuitko?</h3>
-        <p>Valitse ilmoittautumislomakkeelta kohta ”Voisin toimia ryhmän VibeXplorers Hostina” tai kirjoita osoitteeseen <a href="mailto:{EMAIL}?subject=VibeXplorers%20Host">{EMAIL}</a>. Olli soittaa sinulle ja kertoo lisää.</p>
+        <p>Rastita ilmoittautumislomakkeelta kohta ”Voisin toimia ryhmän VibeXplorers Hostina”. Jos olet jo ilmoittautunut, voit kertoa kiinnostuksesta osoitteeseen <a href="mailto:{EMAIL}?subject=VibeXplorers%20Host">{EMAIL}</a>.</p>
+        <p>Jokaiseen ryhmään valitaan yksi Host ja tarvittaessa varahost. Olemme yhteydessä kaikkiin kiinnostuneisiin lähempänä kauden alkua.</p>
       </div>
     </section>
   </main>

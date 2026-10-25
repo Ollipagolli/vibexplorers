@@ -154,7 +154,7 @@ t('vahvistusviestissä eräpäivä, peruutusraja ja genetiivi', () => {
   assert.strictEqual(r.dueDate, '17.1.2027'); assert.strictEqual(r.cancelBy, '17.1.2027');
   const m = env.mails[env.mails.length - 1];
   assert.ok(/Espoon ryhmään/.test(m.htmlBody)); assert.ok(/17\.1\.2027/.test(m.htmlBody));
-  assert.ok(/Olli soittaa sinulle/.test(m.htmlBody));
+  assert.ok(/Kirjasimme kiinnostuksesi/.test(m.htmlBody));
   assert.strictEqual(m.name, 'VibeXplorers');
 });
 

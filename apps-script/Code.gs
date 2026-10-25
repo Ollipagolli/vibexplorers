@@ -804,8 +804,8 @@ function h2_(text) {
 function mailBooked_(s, d, due) {
   const n = d.children.length;
   const host = d.host
-    ? p_('Kiva, että olet kiinnostunut toimimaan ryhmän VibeXplorers Hostina! Olli soittaa sinulle viikon sisällä ja kertoo lisää.')
-    : p_('Etsimme jokaiseen ryhmään VibeXplorers Hostia eli vanhempaa, joka on mukana jokaisella lajikerralla. <a href="' + CFG.HOST_URL + '" style="color:' + BRAND.black + ';font-weight:700">Lue lisää</a>', 'color:' + BRAND.grey + ';font-size:14px');
+    ? p_('Mahtavaa, että olet kiinnostunut toimimaan ryhmän VibeXplorers Hostina! Kirjasimme kiinnostuksesi ylös, ja olemme yhteydessä aiheen tiimoilta lähempänä kauden alkua.')
+    : '';
   const body =
     p_('Hei ' + esc_(firstName_(d.guardian)) + '!') +
     p_('Kiva, että lähdette mukaan kokeilemaan. ' + (n > 1 ? 'Lapsille on varattu paikat' : 'Lapselle on varattu paikka') + ' VibeXplorersin ' + esc_(gen_(s.name)) + ' ryhmään:') +
