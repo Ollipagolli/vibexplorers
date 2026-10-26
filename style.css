@@ -283,3 +283,6 @@ section[id] { scroll-margin-top: 88px; }
 .reg[data-state="soon"] .reg-status b { color: var(--orange); }
 .reg .soon-note { margin: 0; font-weight: 700; color: var(--orange); }
 .reg h2 { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+.cta .opens-list { list-style: none; padding: 0; margin: 1.8rem auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 2rem; font-size: 1.05rem; color: var(--grey); }
+.cta .opens-list b { color: var(--white); margin-right: .45rem; }
+@media (max-width: 640px) { .cta .opens-list { flex-direction: column; gap: .4rem; } }

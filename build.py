@@ -11,6 +11,7 @@ API_URL = "https://script.google.com/macros/s/AKfycbxaE8k7ecQkRbApqkRnJxMLZdKQ93
 API_TEST_URL = "https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec"
 # Kaupungit, joiden sivulla näkyy oma ilmoittautumislomake. Muilla on kiinnostuslista.
 REG_CITIES = {"vantaa", "espoo", "tampere"}
+OPEN_ORDER = ["Espoo", "Vantaa", "Tampere", "Helsinki"]  # avautumisjärjestys etusivulla
 BIRTH_YEARS = [2020, 2021, 2022, 2023]
 PRICE = "69 €"  # oletushinta; kaupunkikohtainen hinta CITIES-listassa ("price")
 
@@ -170,12 +171,12 @@ def nav(active):
 """
 
 
-def cta(title, button="Liity listalle", href=None):
+def cta(title, button="Liity listalle", href=None, sub=""):
     link = f'href="{href}"' if href else f'href="{FORM_URL}" target="_blank" rel="noopener noreferrer"'
     return f"""    <section class="sec cta">
       <div class="wrap rv">
         <h2>{title}</h2>
-        <a {link} class="btn">{button} {ARROW}</a>
+        {sub}<a {link} class="btn">{button} {ARROW}</a>
         <div class="contact">
           <img src="olli.jpg" alt="" width="56" height="56" />
           <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div>
@@ -450,7 +451,7 @@ def index_page():
       </div>
     </section>
 
-{cta("Ilmoittautuminen aukeaa 28.10.", "Valitse kaupunki", "#kaupungit")}  </main>
+{cta("Ilmoittaudu talven ryhmiin.", "Valitse kaupunki", "#kaupungit")}  </main>
 
 """ + FOOTER
 
