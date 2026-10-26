@@ -282,3 +282,4 @@ section[id] { scroll-margin-top: 88px; }
 .reg[data-state="soon"] .reg-status { color: var(--white); background: rgba(255,106,61,.1); box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.55); border-radius: 14px; padding: 1rem 1.2rem; line-height: 1.5; }
 .reg[data-state="soon"] .reg-status b { color: var(--orange); }
 .reg .soon-note { margin: 0; font-weight: 700; color: var(--orange); }
+.reg h2 { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }

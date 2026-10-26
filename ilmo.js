@@ -158,7 +158,7 @@
       }
     } else if (state === 'open') {
       if (soonNote) soonNote.hidden = true;
-      titleEl.textContent = s.early ? 'Ennakkoilmoittautuminen.' : 'Ilmoittaudu.';
+      titleEl.textContent = s.early ? 'Ilmoittaudu ennakkoon.' : 'Ilmoittaudu.';
       statusEl.textContent = (s.early ? 'Syksyn perheille ennen yleistä avautumista. ' : '') + (s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Mukaan mahtuu.');
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {

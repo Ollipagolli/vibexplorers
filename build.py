@@ -68,7 +68,7 @@ COMING = {
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
-        "name": "Espoo", "opens": "ke 28.10. klo 20", "gear": "Luisteluun tarvitaan omat luistimet ja kypärä ja lasketteluun omat varusteet. Lasketteluvarusteet voi vuokrata Granibackenilta 20 eurolla.", "price": "79 €", "hero": "kuva-judo.jpg", "pos": "50% 70%",
+        "name": "Espoo", "opens": "ke 28.10. klo 20", "gear": "Luisteluun tarvitaan omat luistimet ja kypärä ja lasketteluun omat varusteet. Lasketteluvarusteet voi vuokrata Granibackenilta 20 eurolla.", "price": "79 €", "hero": "kuva-piiri.jpg", "pos": "50% 45%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15", "Omat luistimet ja kypärä mukaan."),
@@ -305,7 +305,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=5" defer></script>
+    <script src="/ilmo.js?v=6" defer></script>
 """
 
 
@@ -512,9 +512,9 @@ def fall_page():
     return head(
         "VibeXplorers Espoo – Syksy 2026 aikataulu",
         "Syksyn 2026 VibeXplorers-ryhmän aikataulu Espoossa: lajit, ajat ja paikat.",
-        "syksy", "kuva-piiri.jpg") + nav("syksy") + f"""
+        "syksy", "kuva-judo.jpg") + nav("syksy") + f"""
   <header class="hero city-hero fall-hero">
-    <img src="img/kuva-piiri.jpg" alt="" style="object-position:50% 45%" />
+    <img src="img/kuva-judo.jpg" alt="" style="object-position:50% 70%" />
     <div class="wrap">
       <span class="label">Espoo · 26.8.–28.10.2026</span>
       <h1>Syksy 2026</h1>
