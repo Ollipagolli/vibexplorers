@@ -318,7 +318,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=6" defer></script>
+    <script src="/ilmo.js?v=8" defer></script>
 """
 
 
