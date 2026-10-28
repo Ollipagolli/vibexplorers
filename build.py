@@ -40,6 +40,9 @@ LOGOS = {
     "Tampereen Hiihtoseura": "tahs.png",
     "KooVee": "koovee.png",
     "Tanssiseura Spiral": "spiral.png",
+    "Pakilan Voimistelijat": "pnv.png",
+    "Sirkus Magenta": "magenta.png",
+    "Helsinki Rugby Club": "hrc.png",
 }
 
 
@@ -113,7 +116,16 @@ CITIES = {
     "helsinki": {
         "name": "Helsinki", "groups": 2, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
-        "sessions": [(w, None, None, None, None) for w in (4, 5, 6, 7, 9, 10, 11, 12)],
+        "sessions": [
+            (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1."),
+            (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
+            (6, None, None, None, None),
+            (7, "Rugby", "Helsinki Rugby Club", None, "La 20.2."),
+            (9, None, None, None, None),
+            (10, None, None, None, None),
+            (11, None, None, None, None),
+            (12, None, None, None, None),
+        ],
     },
 }
 
@@ -149,7 +161,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
 </head>
 <body>
 """
@@ -241,7 +253,7 @@ def reg_section(slug, c, api=None):
     def field(name, label, typ="text", ac="", extra="", hint=""):
         h = f'<span class="hint">{hint}</span>' if hint else ""
         return f"""<div class="field"><label for="{name}">{label}</label>{h}<input id="{name}" name="{name}" type="{typ}" autocomplete="{ac}" aria-describedby="err-{name}" {extra}/><span class="err" id="err-{name}" aria-live="polite"></span></div>"""
-    return f"""    <section class="sec reg" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
+    return f"""    <section class="sec reg light" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
         <h2 data-title>{'Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.'}</h2>
@@ -323,7 +335,7 @@ def confirm_page():
     return head("VibeXplorers – vahvista paikka", "Jonotuslistalta tarjotun paikan vahvistus.", "vahvista", "kuva-trampoliini.jpg").replace(
         "<title>", '<meta name="robots" content="noindex, nofollow" />\n  <title>', 1).replace('  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
   <main style="padding-top:72px">
-    <section class="sec reg" id="vahvista">
+    <section class="sec reg light" id="vahvista">
       <div class="wrap narrow">
         <span class="label">Jonotuslista</span>
         <h2 data-title>Vahvistetaan paikkaa…</h2>
@@ -369,7 +381,7 @@ def host_page():
     return head("VibeXplorers Host", "Ryhmän oma vanhempi, joka on mukana jokaisella lajikerralla.", "host", "kuva-trampoliini.jpg").replace(
         '  <link rel="preload" as="image" href="img/kuva-trampoliini.jpg">\n', '') + nav("") + f"""
   <main style="padding-top:72px">
-    <section class="sec reg">
+    <section class="sec reg light page">
       <div class="wrap narrow prose">
         <span class="label">Talvi 2027</span>
         <h2>VibeXplorers Host.</h2>
@@ -440,14 +452,14 @@ def index_page():
       </div>
     </section>
 
-    <section class="sec" style="padding-top:0">
+    <section class="sec light">
       <div class="wrap split">
         <div class="rv">
           <span class="label">Lajipassi</span>
           <h2 class="statement" style="margin-top:.8rem">Tarra jokaisesta kokeilusta.</h2>
           <p class="sub">Ei siksi, että olisi paras. Vaan siksi, että uskalsi kokeilla.</p>
         </div>
-        <div class="passi-img rv"><img src="img/lajipassi-kansi.jpg" alt="VibeXplorers Lajipassi" width="638" height="900" loading="lazy" /></div>
+        <div class="passi-img rv"><span class="sticker"><span>Rohkea kokeilija</span></span><img src="img/lajipassi-kansi.jpg" alt="VibeXplorers Lajipassi" width="638" height="900" loading="lazy" /></div>
       </div>
     </section>
 
@@ -489,7 +501,7 @@ def city_page(slug, c):
   </header>
 
   <main>
-    <section class="sec">
+    <section class="sec light">
       <div class="wrap">
         <div class="head rv"><h2 class="statement">Talven lajit.</h2></div>
         <div class="program rv">
@@ -524,7 +536,7 @@ def fall_page():
   </header>
 
   <main>
-    <section class="sec">
+    <section class="sec light">
       <div class="wrap">
         <div class="program fall">
 {rows}
@@ -533,7 +545,7 @@ def fall_page():
       </div>
     </section>
 
-    <section class="sec cta" style="padding-top:0">
+    <section class="sec cta">
       <div class="wrap rv">
         <h2>Jatketaanko talvella?</h2>
         <a href="/#kaupungit" class="btn">Talvi 2027 {ARROW}</a>

@@ -286,3 +286,98 @@ section[id] { scroll-margin-top: 88px; }
 .cta .opens-list { list-style: none; padding: 0; margin: 1.8rem auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 2rem; font-size: 1.05rem; color: var(--grey); }
 .cta .opens-list b { color: var(--white); margin-right: .45rem; }
 @media (max-width: 640px) { .cta .opens-list { flex-direction: column; gap: .4rem; } }
+
+/* ===== Esikatselu: vaihtoehto 2 – tumma ja vaalea vuorottelevat ===== */
+:root {
+  --ink: #121110;            /* lämpimämpi hiilenmusta */
+  --charcoal: #1b1a18;
+  --cream: #F6F1EA;          /* lämmin vaalea pohja */
+  --cream-2: #EFE8DE;
+  --text-dark: #1a1816;
+  --muted-dark: #625d56;
+  --line-dark: rgba(26,24,22,.12);
+  --orange-deep: #D4461A;    /* oranssi pieneen tekstiin vaalealla (kontrasti) */
+  --r: 24px;
+}
+body { font-size: 17px; }
+.hero::after { background: linear-gradient(180deg, rgba(18,17,16,.35) 0%, rgba(18,17,16,0) 25%, rgba(18,17,16,.3) 55%, rgba(18,17,16,.88) 100%), linear-gradient(90deg, rgba(18,17,16,.45) 0%, rgba(18,17,16,0) 65%); }
+
+/* Vaalea osio */
+.light { background: var(--cream); color: var(--text-dark); }
+.light .label { color: var(--muted-dark); }
+.light .statement, .light h2 { color: var(--text-dark); }
+.light .note, .light .sub { color: var(--muted-dark); }
+
+/* Ohjelma kortteina */
+.light .program { border-top: 0; display: grid; gap: 12px; }
+.light .row { background: #fff; border-bottom: 0; border-radius: 20px; padding: 1.25rem 1.4rem; box-shadow: 0 1px 2px rgba(26,24,22,.04), 0 6px 20px rgba(26,24,22,.05); }
+.light .row .wk { color: var(--muted-dark); }
+.light .row .wk b { color: var(--orange); }
+.light .row .club { color: var(--orange-deep); }
+.light .row .place, .light .row .gear { color: var(--muted-dark); }
+.light .row.off { background: transparent; box-shadow: none; opacity: 1; }
+.light .row.off h3, .light .row.off .wk, .light .row.off .wk b { color: var(--muted-dark); }
+.light .row.off { border: 1.5px dashed var(--line-dark); }
+.light .logo-tile { background: #fff; box-shadow: inset 0 0 0 1px var(--line-dark); }
+
+/* Tarramerkki (Lajipassi-henki) */
+.head { position: relative; }
+.sticker { display: inline-grid; place-items: center; text-align: center; width: 112px; height: 112px; border-radius: 50%;
+  background: var(--orange); color: #000; font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; font-size: 1.05rem;
+  transform: rotate(-8deg); box-shadow: 0 8px 24px rgba(212,70,26,.25); }
+.sticker b { display: block; font-size: 2.2rem; letter-spacing: -0.05em; }
+.sticker.teal { background: #00BFB3; box-shadow: 0 8px 24px rgba(0,191,179,.25); }
+
+/* Lomake vaalealla */
+.light.reg .reg-status { color: var(--muted-dark); }
+.light.reg[data-state="open"] .reg-status { color: var(--text-dark); }
+.light.reg[data-state="soon"] .reg-status { color: var(--text-dark); background: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.6); }
+.light.reg[data-state="soon"] .reg-status b, .light .soon-note { color: var(--orange-deep); }
+.light.reg .kid { background: #fff; box-shadow: 0 6px 20px rgba(26,24,22,.06); }
+.light.reg input[type=text], .light.reg input[type=email], .light.reg input[type=tel], .light.reg select, .light.reg textarea,
+.light.reg .kid input, .light.reg .kid select { background-color: #fff; color: var(--text-dark); border-color: #D8D0C4; }
+.light.reg .hint, .light.reg .opt, .light.reg .fine { color: var(--muted-dark); }
+.light.reg .choice label { background: #fff; box-shadow: inset 0 0 0 1.5px #D8D0C4; }
+.light.reg .check a, .light.reg .linkbtn { color: var(--orange-deep); }
+.light.reg .linkbtn.rm { color: var(--muted-dark); }
+.light.reg .err { color: #C0391B; }
+.light.reg [aria-invalid="true"] { border-color: #E0603F; }
+.light.reg .form-msg { background: #FBE3DA; color: #9A2E12; }
+.light.reg .submit:disabled { background: #E3DCD2; color: #8a847b; }
+.light.reg .reg-done { background: #fff; box-shadow: 0 6px 20px rgba(26,24,22,.06); }
+.light + p { background: var(--cream); margin: 0 !important; padding: 0 0 5rem; }
+.light + p a { color: var(--text-dark) !important; }
+@media (max-width: 640px) { .sticker { width: 88px; height: 88px; font-size: .85rem; } .sticker b { font-size: 1.7rem; } .light .row { padding: 1rem 84px 1rem 1.1rem; } .light .row .logo-tile { right: 14px; top: 1rem; } .light .row.off { padding-right: 1.1rem; } }
+
+/* ===== Korjauskierros ===== */
+/* 1. Lomake erottuu ohjelmasta: syvempi hiekkasävy + valkoinen paneeli */
+.light.reg { background: var(--cream-2); border-top: 1px solid var(--line-dark); }
+.light.reg .wrap.narrow { background: #fff; border-radius: 28px; padding: clamp(1.6rem, 4vw, 3rem); box-shadow: 0 10px 40px rgba(26,24,22,.07); width: min(100% - 32px, 720px); }
+.light.reg .kid { background: var(--cream); box-shadow: none; }
+.light.reg .kid input, .light.reg .kid select { background-color: #fff; }
+.light.reg + p { background: var(--cream-2); }
+/* 2. Tarra vain Lajipassin yhteydessä */
+.passi-img { position: relative; }
+.light .passi-img { background: var(--cream-2); }
+.light .passi-img img { box-shadow: 0 30px 60px rgba(26,24,22,.25); }
+.passi-img .sticker { position: absolute; top: 8%; right: 6%; width: 124px; height: 124px; font-size: .95rem; padding: 10px; }
+@media (max-width: 640px) { .passi-img .sticker { width: 96px; height: 96px; font-size: .78rem; top: 5%; right: 4%; } }
+.light.reg ~ p { background: var(--cream-2); color: var(--muted-dark) !important; margin: 0 !important; padding: 0 0 5rem; }
+.light.reg ~ p a { color: var(--text-dark) !important; }
+
+/* Host- ja muut tekstisivut vaalealla ilman paneelia */
+.light.reg.page { background: var(--cream); border-top: 0; }
+.light.reg.page .wrap.narrow { background: none; box-shadow: none; padding: 0; width: min(100% - 40px, 640px); }
+.light .prose .lead { color: var(--text-dark); }
+.light .prose p, .light .prose .steps { color: var(--muted-dark); }
+.light .prose a { color: var(--orange-deep); }
+/* Syksyn aikataulu vaalealla */
+.light .row.past { opacity: .55; }
+.light .row.past .done { background: var(--cream-2); color: var(--text-dark); }
+.light .row.is-next { background: #fff; box-shadow: inset 0 0 0 2px var(--orange), 0 6px 20px rgba(26,24,22,.06); }
+.light .program.fall + p, .light .note a { color: var(--muted-dark); }
+.light .note a { color: var(--orange-deep); }
+.light .row.tba { background: transparent; box-shadow: none; border: 1.5px dashed var(--line-dark); }
+.light .row.tba h3, .light .row.tba .wk b { color: var(--muted-dark); }
+.light.reg:not(.page) h2 { font-size: clamp(1.7rem, 7vw, 3.4rem); }
+@media (max-width: 640px) { .light.reg .wrap.narrow { padding: 1.4rem 1.2rem; } }
