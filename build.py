@@ -402,7 +402,7 @@ def host_page():
 # ------------------------------------------------------------------ index
 def index_page():
     rows = "\n".join(
-        f"""        <a href="/{s}" class="city-row rv">
+        f"""        <a href="/{s}" class="city-row rv"{f' data-city="{s}" data-groups="{c.get('groups', 2)}"' if s in REG_CITIES else ''}>
           <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else ''}{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
@@ -464,6 +464,27 @@ def index_page():
     </section>
 
 {cta("Ilmoittaudu talven ryhmiin.", "Valitse kaupunki", "#kaupungit")}  </main>
+  <script>
+  /* Kaupunkilistan tilanne: auki / ryhmä täynnä / jonoon. Jos haku epäonnistuu, staattinen teksti jää. */
+  (function () {{
+    var API = '{API_URL}', PER = 27;
+    document.querySelectorAll('.city-row[data-city]').forEach(function (row) {{
+      var el = row.querySelector('.opens'), g = Number(row.getAttribute('data-groups')) || 1;
+      if (!el || !window.fetch) return;
+      fetch(API + '?action=status&city=' + row.getAttribute('data-city')).then(function (r) {{ return r.json(); }}).then(function (s) {{
+        if (!s.ok) return;
+        if (s.state === 'open') {{
+          var full = g > 1 && (g * PER - s.free) >= PER;
+          el.textContent = full ? 'Ilmoittautuminen auki · 1. ryhmä täynnä' : 'Ilmoittautuminen auki';
+        }} else if (s.state === 'queue') {{
+          el.textContent = 'Ryhmät täynnä · liity jonoon';
+        }} else if (s.state === 'closed') {{
+          el.textContent = 'Ilmoittautuminen päättynyt';
+        }}
+      }}).catch(function () {{}});
+    }});
+  }})();
+  </script>
 
 """ + FOOTER
 
