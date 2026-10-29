@@ -20,6 +20,20 @@
   var state = null, opensAt = null, sending = false, subId = newId(), allowDuplicate = false, timer = null;
   var DRAFT = 'vx-draft-' + CITY;
   var CODE = '';
+  var GROUPS = Number(sec.getAttribute('data-groups')) || 1;
+  var PER_GROUP = Number(sec.getAttribute('data-per-group')) || 27;
+  var FULL = ['', 'Ensimmäinen ryhmä on täynnä!', 'Kaksi ryhmää on täynnä!'];
+  var IN_GROUP = ['ensimmäisessä', 'toisessa', 'kolmannessa'];
+  // Esim. 2 ryhmää: kun vapaita on enintään yhden ryhmän verran, ensimmäinen ryhmä on täynnä.
+  function spotsText(free) {
+    var fullGroups = Math.min(GROUPS - 1, Math.floor((GROUPS * PER_GROUP - free) / PER_GROUP));
+    var spots = free < 10 ? 'paikkoja on jäljellä ' + free + '.' : 'paikkoja vielä vapaana.';
+    if (GROUPS > 1 && fullGroups >= 1 && FULL[fullGroups]) {
+      var where = GROUPS - fullGroups === 1 ? IN_GROUP[GROUPS - 1] + ' ryhmässä ' : 'muissa ryhmissä ';
+      return FULL[fullGroups] + ' ' + where.charAt(0).toUpperCase() + where.slice(1) + spots;
+    }
+    return spots.charAt(0).toUpperCase() + spots.slice(1);
+  }
   try { CODE = (new URLSearchParams(location.search).get('ennakko') || '').trim(); } catch (e) { /* vanha selain */ }
 
   function newId() {
@@ -159,7 +173,7 @@
     } else if (state === 'open') {
       if (soonNote) soonNote.hidden = true;
       titleEl.textContent = s.early ? 'Ilmoittaudu ennakkoon.' : 'Ilmoittaudu.';
-      statusEl.textContent = (s.early ? 'Ennakkoilmoittautuminen syksyn perheille. ' : '') + (s.free < 10 ? 'Paikkoja on jäljellä ' + s.free + '.' : 'Paikkoja vielä vapaana.');
+      statusEl.textContent = (s.early ? 'Ennakkoilmoittautuminen syksyn perheille. ' : '') + spotsText(s.free);
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
       if (soonNote) soonNote.hidden = true;

@@ -253,7 +253,7 @@ def reg_section(slug, c, api=None):
     def field(name, label, typ="text", ac="", extra="", hint=""):
         h = f'<span class="hint">{hint}</span>' if hint else ""
         return f"""<div class="field"><label for="{name}">{label}</label>{h}<input id="{name}" name="{name}" type="{typ}" autocomplete="{ac}" aria-describedby="err-{name}" {extra}/><span class="err" id="err-{name}" aria-live="polite"></span></div>"""
-    return f"""    <section class="sec reg light" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}">
+    return f"""    <section class="sec reg light" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}" data-groups="{c.get('groups', 1) if slug == 'testi' else c.get('groups', 2)}" data-per-group="{3 if slug == 'testi' else 27}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
         <h2 data-title>{'Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.'}</h2>
@@ -318,7 +318,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=8" defer></script>
+    <script src="/ilmo.js?v=9" defer></script>
 """
 
 
