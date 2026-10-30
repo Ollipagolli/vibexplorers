@@ -43,6 +43,8 @@ LOGOS = {
     "Pakilan Voimistelijat": "pnv.png",
     "Sirkus Magenta": "magenta.png",
     "Helsinki Rugby Club": "hrc.png",
+    "Helsingin Tanssiopisto": "htanssiopisto.png",
+    "HLK": "hlk.png",
 }
 
 
@@ -103,10 +105,10 @@ CITIES = {
         "name": "Tampere", "opens": "su 8.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
-            (4, "Tennis", "TATS", "Tampereen tenniskeskus", None),
-            (5, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 3.2."),
-            (6, "Padel", "TATS", "Tampereen tenniskeskus", None),
-            (7, "Yleisurheilu", "Tampereen Pyrintö", None, "Ke 17.2."),
+            (4, "Tennis", "TATS", "Tampereen tenniskeskus", "La 30.1. klo 10–12"),
+            (5, "Yleisurheilu", "Tampereen Pyrintö", None, None),
+            (6, "Padel", "TATS", "Tampereen tenniskeskus", "La 13.2. klo 10–12"),
+            (7, "Yleisurheilu", "Tampereen Pyrintö", None, None),
             (8, "Käsipallo", "KooVee", None, "To 25.2."),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
             (11, "Lentopallo", "Tampereen Pyrintö", None, "Su 21.3."),
@@ -117,13 +119,13 @@ CITIES = {
         "name": "Helsinki", "groups": 2, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
         "sessions": [
-            (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1."),
+            (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1. klo 12–13"),
             (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
             (6, None, None, None, None),
             (7, "Rugby", "Helsinki Rugby Club", None, "La 20.2."),
-            (9, None, None, None, None),
+            (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45"),
             (10, None, None, None, None),
-            (11, None, None, None, None),
+            (11, "Tennis", "HLK", "Meilahden liikuntakeskus", "La 20.3. klo 12 ja 13"),
             (12, None, None, None, None),
         ],
     },
