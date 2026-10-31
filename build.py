@@ -89,7 +89,7 @@ CITIES = {
     },
     "vantaa": {
         "name": "Vantaa", "opens": "ti 3.11. klo 20", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
-        "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
+        "weeks": "4–13", "dates": "25.1.–4.4.", "break": 8, "extra_breaks": [(12, "Pääsiäinen")],
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
             (5, "Käsipallo", "Atlas Handball", "Kivimäen koulu, Lintukallionkuja 6", "La 6.2. klo 10–11"),
@@ -98,7 +98,7 @@ CITIES = {
             (9, "Paini", "Ylä-Tikkurilan Kipinä", "Tikkurilan urheilutalo", "La 6.3. klo 12"),
             (10, "Hiihto", "Vantaan Hiihtoseura", "Hakunilan urheilupuisto", "La 13.3."),
             (11, "Jalkapallo", "Pakkalan Palloseura", None, "La 20.3."),
-            (12, "Lentopallo", "Vantaan Lentopalloseura", None, "La 27.3."),
+            (13, "Lentopallo", "Vantaan Lentopalloseura", None, "La 3.4."),
         ],
     },
     "tampere": {
@@ -503,9 +503,10 @@ def row(s):
 def city_page(slug, c):
     items = list(c["sessions"])
     rows = []
-    for s in sorted(items + ([(c["break"], "__break")] if c["break"] else []), key=lambda x: x[0]):
+    breaks = ([(c["break"], "Hiihtoloma")] if c["break"] else []) + list(c.get("extra_breaks", []))
+    for s in sorted(items + [(w, ("__break", label)) for w, label in breaks], key=lambda x: x[0]):
         if len(s) == 2:
-            rows.append(f'        <div class="row off"><div class="wk">Viikko<b>{s[0]}</b></div><div><h3>Hiihtoloma</h3></div><div></div><div></div><div></div></div>')
+            rows.append(f'        <div class="row off"><div class="wk">Viikko<b>{s[0]}</b></div><div><h3>{s[1][1]}</h3></div><div></div><div></div><div></div></div>')
         else:
             rows.append(row(s))
     allc = {**CITIES, **COMING}
