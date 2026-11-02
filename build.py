@@ -45,6 +45,7 @@ LOGOS = {
     "Helsinki Rugby Club": "hrc.png",
     "Helsingin Tanssiopisto": "htanssiopisto.png",
     "HLK": "hlk.png",
+    "Sapa": "sapa.png",
 }
 
 
@@ -78,13 +79,13 @@ CITIES = {
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15", "Omat luistimet ja kypärä mukaan."),
-            (4, "Paini", "Espoon Urheilijat", "Itätuulenkuja 9", "Su 31.1. klo 14–16"),
+            (4, "Paini", "Espoon Urheilijat", "Itätuulenkuja 9", "Su 31.1. klo 14 ja 15"),
             (5, "Käsipallo", "GrIFK Handboll", None, "Ke 3.2."),
-            (6, "Voimistelu", "Olarin Voimistelijat", None, "Ke 10.2."),
-            (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2.", "Omat varusteet mukaan. Ne voi myös vuokrata Granibackenilta 20 eurolla."),
+            (6, "Voimistelu", "Olarin Voimistelijat", None, "To 11.2. klo 17 ja 18"),
+            (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2. klo 17.30 ja 18.30", "Omat varusteet mukaan. Ne voi myös vuokrata Granibackenilta 20 eurolla."),
             (9, "Jalkapallo", "Espoon Palloseura", None, None),
-            (10, "Sulkapallo", "Laaksolahden Sulkapallo", "Laaksolahden Tenniskeskus", "La 13.3. klo 8–10"),
-            (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", "Järvenperän sirkustila, Auroranmäki 1", "La 20.3. klo 15.30–17.30"),
+            (10, "Sulkapallo", "Laaksolahden Sulkapallo", "Laaksolahden Tenniskeskus", "La 13.3. klo 8 ja 9"),
+            (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", "Järvenperän sirkustila, Auroranmäki 1", "La 20.3. klo 15.30 ja 16.30"),
         ],
     },
     "vantaa": {
@@ -98,7 +99,7 @@ CITIES = {
             (9, "Paini", "Ylä-Tikkurilan Kipinä", "Tikkurilan urheilutalo", "La 6.3. klo 12"),
             (10, "Hiihto", "Vantaan Hiihtoseura", "Hakunilan urheilupuisto", "La 13.3."),
             (11, "Jalkapallo", "Pakkalan Palloseura", None, "La 20.3."),
-            (13, "Lentopallo", "Vantaan Lentopalloseura", None, "La 3.4."),
+            (13, "Lentopallo", "Vantaan Lentopalloseura", None, "La 3.4. klo 12.30–13.30"),
         ],
     },
     "tampere": {
@@ -108,8 +109,8 @@ CITIES = {
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", "La 30.1. klo 10–12"),
             (5, "Yleisurheilu", "Tampereen Pyrintö", None, None),
             (6, "Padel", "TATS", "Tampereen tenniskeskus", "La 13.2. klo 10–12"),
-            (7, "Yleisurheilu", "Tampereen Pyrintö", None, None),
-            (8, "Käsipallo", "KooVee", None, "To 25.2."),
+            (7, "Käsipallo", "KooVee", None, None),
+            (8, "Yleisurheilu", "Tampereen Pyrintö", None, None),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
             (11, "Lentopallo", "Tampereen Pyrintö", None, "Su 21.3."),
             (12, "Tanssi", "Tanssiseura Spiral", "Ikurin liikuntahalli", None),
@@ -117,16 +118,16 @@ CITIES = {
     },
     "helsinki": {
         "name": "Helsinki", "groups": 2, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
-        "weeks": "4–12", "dates": "25.1.–28.3.", "break": 8,
+        "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
+            (3, None, None, None, None),
             (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1. klo 12–13"),
             (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
             (6, None, None, None, None),
             (7, "Rugby", "Helsinki Rugby Club", None, "La 20.2."),
             (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45"),
-            (10, None, None, None, None),
+            (10, "Jalkapallo", "Sapa", "Haapaniemen kenttä, Haapaniemenkatu 2", "La 13.3. klo 12–13"),
             (11, "Tennis", "HLK", "Meilahden liikuntakeskus", "La 20.3. klo 12 ja 13"),
-            (12, None, None, None, None),
         ],
     },
 }
