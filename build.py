@@ -55,12 +55,12 @@ def logo_tile(club):
 
 # ---- SYKSY 2026 (käynnissä oleva ryhmä) ----
 # Kun syksyn ryhmä päättyy, vaihda FALL_ACTIVE = False -> linkit katoavat etusivulta ja valikosta.
-FALL_ACTIVE = True
+FALL_ACTIVE = False
 # (viikko, ISO-päivä, laji, seura, paikka, ajankohta, logo)
 FALL = [
     (35, "2026-08-26", "Pesäpallo", "Espoon Pesis", "Saunalahden koulun kenttä", "Ke 26.8. klo 17.00–18.00", "pesis.png"),
     (36, "2026-09-02", "Yleisurheilu", "Leppävaaran Sisu", "Leppävaaran urheilupuisto", "Ke 2.9. klo 17.30–18.30", "lesi.png"),
-    (37, "2026-09-12", "Telinevoimistelu", "Espoon Telinetaiturit", "Kameleonten-halli, Monikonkatu 8", "La 12.9. klo 14.00–15.00", "telinetaiturit.png"),
+    (37, "2026-09-12", "Teline\u00advoimistelu", "Espoon Telinetaiturit", "Kameleonten-halli, Monikonkatu 8", "La 12.9. klo 14.00–15.00", "telinetaiturit.png"),
     (38, "2026-09-19", "Tennis", "Espoon Tennisseura", "Laaksolahden Tenniskeskus", "La 19.9. klo 9.30–10.30", "ets.png"),
     (39, "2026-09-26", "Judo", "Espoon Urheilijat", "Ruukintie 3", "La 26.9. klo 10.00–11.00", "eu-judo.png"),
     (40, "2026-10-03", "Koripallo", "Espoo Basket Team", "Espoonlahden koulu", "La 3.10. klo 10.00–11.00", "ebt.png"),
@@ -75,7 +75,7 @@ COMING = {
 # (viikko, laji, seura, paikka, ajankohta) – laji=None => julkistetaan pian
 CITIES = {
     "espoo": {
-        "name": "Espoo", "opens": "ke 28.10. klo 20", "gear": "Luisteluun tarvitaan omat luistimet ja kypärä ja lasketteluun omat varusteet. Lasketteluvarusteet voi vuokrata Granibackenilta 20 eurolla.", "price": "79 €", "hero": "kuva-piiri.jpg", "pos": "50% 45%",
+        "name": "Espoo", "full": True, "opens": "ke 28.10. klo 20", "gear": "Luisteluun tarvitaan omat luistimet ja kypärä ja lasketteluun omat varusteet. Lasketteluvarusteet voi vuokrata Granibackenilta 20 eurolla.", "price": "79 €", "hero": "kuva-piiri.jpg", "pos": "50% 45%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Luistelu", "Espoon Jäätaiturit", "Genano Arena, Leppävaara", "Su 24.1. klo 12.30–13.15", "Omat luistimet ja kypärä mukaan."),
@@ -164,7 +164,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
 """
@@ -205,6 +205,7 @@ FOOTER = f"""  <footer>
     <div class="wrap">
       <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
       <nav aria-label="Alatunniste">
+        <a href="/syksy">Syksy 2026</a>
         <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
         <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
         <a href="vibexplorers-saannot.pdf" target="_blank" rel="noopener noreferrer">Säännöt</a>
@@ -259,7 +260,7 @@ def reg_section(slug, c, api=None):
     return f"""    <section class="sec reg light" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}" data-groups="{c.get('groups', 1) if slug == 'testi' else c.get('groups', 2)}" data-per-group="{3 if slug == 'testi' else 27}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
-        <h2 data-title>{'Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.'}</h2>
+        <h2 data-title>{'Ryhmät ovat täynnä.' if c.get('full') else ('Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.')}</h2>
         <p class="reg-status" data-status aria-live="polite"></p>
         <div class="reg-done" data-done hidden aria-live="polite"></div>
         <form novalidate>
@@ -321,7 +322,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=9" defer></script>
+    <script src="/ilmo.js?v=10" defer></script>
 """
 
 
@@ -406,7 +407,7 @@ def host_page():
 def index_page():
     rows = "\n".join(
         f"""        <a href="/{s}" class="city-row rv"{f' data-city="{s}" data-groups="{c.get('groups', 2)}"' if s in REG_CITIES else ''}>
-          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else ''}{city_logos(c)}</div>
+          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{'<span class="opens">Ryhmät täynnä · liity jonoon</span>' if c.get('full') else (f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else '')}{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
         </a>""" for s, c in CITIES.items()) + "\n" + "\n".join(
@@ -417,12 +418,12 @@ def index_page():
         </a>""" for s, c in COMING.items())
     return head(
         "VibeXplorers – 8 lajin liikkari 4–6-vuotiaille",
-        "Kokeile eri lajeja. Löydä oma juttu. 8 lajin liikkari 4–6-vuotiaille – talvi 2027 Espoossa, Vantaalla ja Tampereella.",
+        "Kokeile eri lajeja. Löydä oma juttu. 8 lajin liikkari 4–6-vuotiaille – talvi 2027 Espoossa, Vantaalla, Tampereella ja Helsingissä.",
         "", "hero-porukka.jpg") + nav("home") + f"""
   <header class="hero">
     <img src="img/hero-porukka.jpg" alt="Iso porukka lapsia rivissä kentällä ohjaajien edessä" width="1600" height="1200" />
     <div class="wrap">
-      {FALL_NOTICE if FALL_ACTIVE else ""}<span class="label">Talvi 2027 · Espoo · Vantaa · Tampere</span>
+      {FALL_NOTICE if FALL_ACTIVE else ""}<span class="label">Talvi 2027 · Espoo · Vantaa · Tampere · Helsinki</span>
       <h1>Kokeile eri lajeja.<br><span class="o">Löydä oma juttu.</span></h1>
       <p>8 lajin liikkari 4–6-vuotiaille.</p>
       <div class="actions">
@@ -521,7 +522,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{f'<span>Ilmoittautuminen {e(c["opens"])}</span>' if c.get('opens') and slug in REG_CITIES else ''}{'<span class="full-tag">Täynnä</span>' if c.get('full') else ''}</div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Ryhmät täynnä</span>' if c.get('full') else (f'<span data-opens-fact>Ilmoittautuminen {e(c["opens"])}</span>' if c.get('opens') and slug in REG_CITIES else '')}</div>
     </div>
   </header>
 
@@ -544,49 +545,41 @@ def city_page(slug, c):
 
 
 def fall_page():
+    """Arkistoitu syksyn 2026 kausi: staattinen, ei "seuraavaksi"-merkintöjä."""
     rows = "\n".join(
-        f"""        <div class="row" data-date="{d}"><div class="wk">Viikko<b>{wk}</b></div><div><h3>{e(sport)}</h3><div class="club">{e(club)}</div></div><div class="time">{e(time)}<span class="done">Pidetty</span><span class="next">Seuraavaksi</span></div><div class="place">{e(place)}</div><div class="logo-tile"><img src="img/logot/{logo}" alt="{e(club)}" loading="lazy" /></div></div>"""
+        f"""        <div class="row"><div class="wk">Viikko<b>{wk}</b></div><div><h3>{e(sport)}</h3><div class="club">{e(club)}</div></div><div class="time">{e(time)}</div><div class="place">{e(place)}</div><div class="logo-tile"><img src="img/logot/{logo}" alt="{e(club)}" loading="lazy" /></div></div>"""
         for wk, d, sport, club, place, time, logo in FALL)
     return head(
-        "VibeXplorers Espoo – Syksy 2026 aikataulu",
-        "Syksyn 2026 VibeXplorers-ryhmän aikataulu Espoossa: lajit, ajat ja paikat.",
-        "syksy", "kuva-judo.jpg") + nav("syksy") + f"""
+        "VibeXplorers Espoo – Syksy 2026",
+        "Ensimmäinen VibeXplorers-kausi Espoossa syksyllä 2026: 8 lajia ja 8 paikallista seuraa.",
+        "syksy", "kuva-judo.jpg") + nav("") + f"""
   <header class="hero city-hero fall-hero">
     <img src="img/kuva-judo.jpg" alt="" style="object-position:50% 70%" />
     <div class="wrap">
       <span class="label">Espoo · 26.8.–28.10.2026</span>
       <h1>Syksy 2026</h1>
-      <div class="facts"><span>Syksyn ryhmän aikataulu</span></div>
+      <div class="facts"><span>Ensimmäinen kausi</span><span>8 lajia</span><span>8 seuraa</span></div>
     </div>
   </header>
 
   <main>
     <section class="sec light">
       <div class="wrap">
+        <div class="head rv"><h2 class="statement">Näitä kokeiltiin.</h2></div>
         <div class="program fall">
 {rows}
         </div>
-        <p class="note">Muutoksista ilmoitetaan ryhmän WhatsAppissa. Kysyttävää? <a href="mailto:{EMAIL}" style="color:var(--orange)">{EMAIL}</a></p>
+        <p class="note">Kiitos kaikille perheille ja seuroille ensimmäisestä kaudesta!</p>
       </div>
     </section>
 
     <section class="sec cta">
       <div class="wrap rv">
-        <h2>Jatketaanko talvella?</h2>
-        <a href="/#kaupungit" class="btn">Talvi 2027 {ARROW}</a>
+        <h2>Seuraavaksi talvi 2027.</h2>
+        <a href="/#kaupungit" class="btn">Valitse kaupunki {ARROW}</a>
       </div>
     </section>
   </main>
-  <script>
-    (function () {{
-      var t = new Date(); t.setHours(0,0,0,0); var nextSet = false;
-      document.querySelectorAll('.fall .row[data-date]').forEach(function (r) {{
-        var d = new Date(r.getAttribute('data-date') + 'T00:00:00');
-        if (d < t) r.classList.add('past');
-        else if (!nextSet) {{ r.classList.add('is-next'); nextSet = true; }}
-      }});
-    }})();
-  </script>
 
 """ + FOOTER
 
@@ -632,8 +625,7 @@ def coming_page(slug, c):
 if __name__ == "__main__":
     for slug, c in COMING.items():
         (OUT / f"{slug}.html").write_text(coming_page(slug, c), encoding="utf-8")
-    if FALL_ACTIVE:
-        (OUT / "syksy.html").write_text(fall_page(), encoding="utf-8")
+    (OUT / "syksy.html").write_text(fall_page(), encoding="utf-8")  # arkistoitu kausi, ei valikossa
     (OUT / "index.html").write_text(index_page(), encoding="utf-8")
     for slug, c in CITIES.items():
         (OUT / f"{slug}.html").write_text(city_page(slug, c), encoding="utf-8")

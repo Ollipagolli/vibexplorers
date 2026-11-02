@@ -381,3 +381,11 @@ body { font-size: 17px; }
 .light .row.tba h3, .light .row.tba .wk b { color: var(--muted-dark); }
 .light.reg:not(.page) h2 { font-size: clamp(1.7rem, 7vw, 3.4rem); }
 @media (max-width: 640px) { .light.reg .wrap.narrow { padding: 1.4rem 1.2rem; } }
+/* Pitkät sanat (esim. Telinevoimistelu) eivät saa leventää riviä kapealla näytöllä */
+.row { grid-template-columns: minmax(0, 90px) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr) 76px; }
+.row > div { min-width: 0; }
+.row h3, .row .club, .row .place, .row .time { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+@media (max-width: 900px) { .row { grid-template-columns: 70px minmax(0, 1fr); } }
+/* hidden-attribuutti voittaa aina (esim. suljetun ilmoittautumisen lomake) */
+[hidden] { display: none !important; }
+@media (max-width: 640px) { .row h3 { font-size: 1.2rem; } }

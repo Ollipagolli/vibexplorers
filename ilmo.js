@@ -159,6 +159,9 @@
     opensAt = s.opensAt ? new Date(s.opensAt) : null;
     clearInterval(timer);
     sec.setAttribute('data-state', state);
+    var fact = document.querySelector('[data-opens-fact]');
+    if (fact && state === 'open') fact.textContent = 'Ilmoittautuminen auki';
+    if (fact && state === 'queue') fact.textContent = 'Ryhmät täynnä · jonoon voi liittyä';
     if (state === 'soon') {
       titleEl.textContent = opensAt ? 'Ilmoittautuminen aukeaa ' + when(opensAt) + '.' : 'Ilmoittautuminen aukeaa pian.';
       btn.disabled = true;
