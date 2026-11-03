@@ -89,7 +89,7 @@ CITIES = {
         ],
     },
     "vantaa": {
-        "name": "Vantaa", "opens": "ti 3.11. klo 20", "groups": 1, "hero": "kuva-stadion.jpg", "pos": "50% 60%",
+        "name": "Vantaa", "opens": "ti 3.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-stadion.jpg", "pos": "50% 60%",
         "weeks": "4–13", "dates": "25.1.–4.4.", "break": 8, "extra_breaks": [(12, "Pääsiäinen")],
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
