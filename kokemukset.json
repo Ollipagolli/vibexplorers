@@ -1,0 +1,35 @@
+{
+  "_ohje": "Palautteet kausittain. type: vanhempi | lapsi | seura. Perheiden sitaatit näytetään aina nimettöminä; seurat antoivat luvan omalla nimellään. Lisää uusi kausi lisäämällä rivejä ja tarvittaessa uusi stats-lohko.",
+  "stats": {
+    "syksy-2026": {
+      "items": [
+        {"value": "13 / 14", "label": "perheestä suosittelisi meitä"},
+        {"value": "Yli puolet", "label": "lapsista aloitti tai aloittaa kokeillun lajin"},
+        {"value": "8 / 8", "label": "lajia oli jonkun lapsen suosikki"},
+        {"value": "4 päivässä", "label": "Espoon talviryhmät olivat täynnä"}
+      ],
+      "footnote": "Palautekysely syksy 2026, vastaajia 14 / 28 perhettä."
+    }
+  },
+  "quotes": [
+    {"type": "vanhempi", "city": "Espoo", "season": "syksy-2026", "front": true,
+     "text": "Tykkäsi kokeilla eri lajeja ja sanoi jokaisen jälkeen, että haluaa harrastaa tätä."},
+    {"type": "vanhempi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Oli tosi kiva aikuisena päästä näkemään eri seurojen toimintaa, tämä on niin hyvä konsepti!"},
+    {"type": "vanhempi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Ihanaa, kun ei itse tarvinnut selvitellä mitään, vaan näki kaikki osoitteetkin valmiina linkkinä ja yhdessä viestissä."},
+    {"type": "vanhempi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Helposti tällaiset lähtee keskittymään esim. pallopeleihin, mutta tässä tuli monipuolisesti lajeja kokeiltua."},
+    {"type": "lapsi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Telinevoimistelun tramppa, tanssiopettaja, tarrat ja Olli :D"},
+    {"type": "lapsi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Yleisurheilun täysi ratakierros oli huippua!"},
+    {"type": "lapsi", "city": "Espoo", "season": "syksy-2026",
+     "text": "Onnistumiset"},
+    {"type": "seura", "city": "Espoo", "season": "syksy-2026", "author": "Espoon Telinetaiturit", "logo": "telinetaiturit.png",
+     "text": "Ihan mahtavaa, että tavoitettiin uusia kokeilijoita ja potentiaalisia jäseniä ilman omaa markkinointia ja suoraan paikanpäälle tuotuina!",
+     "note": "Telinetaitureille tuli kokeilun kautta myös uusia jäseniä."},
+    {"type": "seura", "city": "Espoo", "season": "syksy-2026", "author": "Espoon Tanssiopisto", "logo": "tanssiopisto.png",
+     "text": "Kokeilu antoi vanhemmille tietoisuutta Espoon Tanssiopistosta."}
+  ]
+}

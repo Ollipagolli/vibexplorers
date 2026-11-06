@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """VibeXplorers Talvi 2027 – sivugeneraattori (v4, minimal).
 Päivitä CITIES ja aja:  python3 build.py"""
-import html, pathlib
+import html, json, pathlib
 
 OUT = pathlib.Path(__file__).parent
 FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe_YJ9dkoUE5K3sF5b0w_JwyZYUpLwiZAT1DXrKAmhbZa-1VA/viewform?usp=publish-editor"
@@ -103,7 +103,7 @@ CITIES = {
         ],
     },
     "tampere": {
-        "name": "Tampere", "opens": "su 8.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
+        "name": "Tampere", "opens": "su 15.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", "La 30.1. klo 10–12"),
@@ -164,7 +164,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 """
@@ -194,7 +194,7 @@ def cta(title, button="Liity listalle", href=None, sub=""):
         {sub}<a {link} class="btn">{button} {ARROW}</a>
         <div class="contact">
           <img src="olli.jpg" alt="" width="56" height="56" />
-          <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:{EMAIL}">{EMAIL}</a></div>
+          <div style="text-align:left"><strong>Olli Syrjälä</strong><a href="mailto:{EMAIL}">{EMAIL}</a><a href="tel:+358400854493" class="tel">040 085 4493</a></div>
         </div>
       </div>
     </section>
@@ -205,6 +205,7 @@ FOOTER = f"""  <footer>
     <div class="wrap">
       <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
       <nav aria-label="Alatunniste">
+        <a href="/kokemukset">Kokemuksia</a>
         <a href="/syksy">Syksy 2026</a>
         <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
         <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
@@ -433,6 +434,7 @@ def index_page():
   </header>
 
   <main>
+{proof_strip()}
     <section class="sec">
       <div class="wrap">
         <div class="head rv">
@@ -468,27 +470,7 @@ def index_page():
     </section>
 
 {cta("Ilmoittaudu talven ryhmiin.", "Valitse kaupunki", "#kaupungit")}  </main>
-  <script>
-  /* Kaupunkilistan tilanne: auki / ryhmä täynnä / jonoon. Jos haku epäonnistuu, staattinen teksti jää. */
-  (function () {{
-    var API = '{API_URL}', PER = 27;
-    document.querySelectorAll('.city-row[data-city]').forEach(function (row) {{
-      var el = row.querySelector('.opens'), g = Number(row.getAttribute('data-groups')) || 1;
-      if (!el || !window.fetch) return;
-      fetch(API + '?action=status&city=' + row.getAttribute('data-city')).then(function (r) {{ return r.json(); }}).then(function (s) {{
-        if (!s.ok) return;
-        if (s.state === 'open') {{
-          var full = g > 1 && (g * PER - s.free) >= PER;
-          el.textContent = full ? 'Ilmoittautuminen auki · 1. ryhmä täynnä' : 'Ilmoittautuminen auki';
-        }} else if (s.state === 'queue') {{
-          el.textContent = 'Ryhmät täynnä · liity jonoon';
-        }} else if (s.state === 'closed') {{
-          el.textContent = 'Ilmoittautuminen päättynyt';
-        }}
-      }}).catch(function () {{}});
-    }});
-  }})();
-  </script>
+{LIVE_STATUS_JS}
 
 """ + FOOTER
 
@@ -543,6 +525,152 @@ def city_page(slug, c):
 
 """ + FOOTER
 
+
+
+
+LIVE_STATUS_JS = """  <script>
+  /* Kaupunkilistan tilanne: auki / ryhmä täynnä / jonoon. Jos haku epäonnistuu, staattinen teksti jää. */
+  (function () {
+    var API = '__API__', PER = 27;
+    document.querySelectorAll('.city-row[data-city]').forEach(function (row) {
+      var el = row.querySelector('.opens'), g = Number(row.getAttribute('data-groups')) || 1;
+      if (!el || !window.fetch) return;
+      fetch(API + '?action=status&city=' + row.getAttribute('data-city')).then(function (r) { return r.json(); }).then(function (s) {
+        if (!s.ok) return;
+        if (s.state === 'open') {
+          var full = g > 1 && (g * PER - s.free) >= PER;
+          el.textContent = full ? 'Ilmoittautuminen auki · 1. ryhmä täynnä' : 'Ilmoittautuminen auki';
+        } else if (s.state === 'queue') {
+          el.textContent = 'Ryhmät täynnä · liity jonoon';
+        } else if (s.state === 'closed') {
+          el.textContent = 'Ilmoittautuminen päättynyt';
+        }
+      }).catch(function () {});
+    });
+  })();
+  </script>""".replace("__API__", API_URL)
+
+# ------------------------------------------------------------------ kokemukset
+KOKEMUKSET = json.loads((OUT / "kokemukset.json").read_text(encoding="utf-8"))
+QUOTE_SVG = '<svg class="qmark" viewBox="0 0 32 24" aria-hidden="true"><path d="M0 24V14C0 6 4 1.5 12 0l1.6 3.4C9 4.8 7 7.5 6.8 11H12v13H0zm19 0V14c0-8 4-12.5 12-14l1.6 3.4C28 4.8 26 7.5 25.8 11H31v13H19z" fill="currentColor"/></svg>'
+SEASON_LABEL = {"syksy-2026": "syksy 2026"}
+
+
+def quotes(kind, season=None):
+    return [q for q in KOKEMUKSET["quotes"] if q["type"] == kind and (season is None or q["season"] == season)]
+
+
+def stat_items(season, items=None):
+    st = KOKEMUKSET["stats"][season]["items"]
+    if items is not None:
+        st = [st[i] for i in items]
+    return "".join(f'<div class="stat"><b>{e(x["value"])}</b><span>{e(x["label"])}</span></div>' for x in st)
+
+
+def proof_strip():
+    """Etusivun nauha heti heron alla: luvut, yksi sitaatti ja linkki kokemuksiin."""
+    season = "syksy-2026"
+    q = next(x for x in quotes("vanhempi", season) if x.get("front"))
+    return f"""    <section class="proof">
+      <div class="wrap">
+        <div class="stats rv">{stat_items(season, [0, 2, 3])}</div>
+        <figure class="proof-quote rv">{QUOTE_SVG}<blockquote>{e(q["text"])}</blockquote>
+          <figcaption>Vanhempi, {e(q["city"])}, {SEASON_LABEL[season]} · <a href="/kokemukset">Lue lisää kokemuksista {ARROW}</a></figcaption></figure>
+        <p class="footnote">{e(KOKEMUKSET["stats"][season]["footnote"])}</p>
+      </div>
+    </section>
+"""
+
+
+def kokemukset_page():
+    season = "syksy-2026"
+    parents = "".join(f"""          <figure class="qcard">{QUOTE_SVG}<blockquote>{e(q["text"])}</blockquote><figcaption>Vanhempi, {e(q["city"])}, {SEASON_LABEL[q["season"]]}</figcaption></figure>
+""" for q in quotes("vanhempi", season))
+    kids = "".join(f'<li class="bubble">{e(q["text"])}</li>' for q in quotes("lapsi", season))
+    clubs = "".join(f"""          <figure class="qcard club">
+            <div class="club-head"><span class="logo-tile"><img src="img/logot/{q["logo"]}" alt="{e(q["author"])}" loading="lazy" /></span><strong>{e(q["author"])}</strong></div>
+            <blockquote>{e(q["text"])}</blockquote>{f'<p class="club-note">{e(q["note"])}</p>' if q.get("note") else ''}
+          </figure>
+""" for q in quotes("seura", season))
+    wall = "".join(f'<span class="logo-tile" title="{e(club)}"><img src="img/logot/{logo}" alt="{e(club)}" loading="lazy" /></span>'
+                   for _wk, _d, _sport, club, _place, _time, logo in FALL)
+    city_cards = {
+        "espoo": ("Ryhmät täynnä · jonoon voi ilmoittautua", ""),
+        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa myöhemmin"),
+        "vantaa": ("79 € / kausi · lauantaisin 30.1.–3.4.", ""),
+        "tampere": ("69 € / kausi", "Ilmoittautuminen aukeaa su 15.11. klo 20"),
+    }
+    order = ["espoo", "vantaa", "tampere", "helsinki"]
+    cards = "".join(f"""          <a href="/{slug}{'#ilmoittaudu' if slug in REG_CITIES else ''}" class="ccard"{f' data-city="{slug}" data-groups="{CITIES[slug].get("groups", 2)}"' if slug in REG_CITIES and slug != 'espoo' else ''}>
+            <h3>{CITIES[slug]['name']}</h3><span class="ccard-meta">{e(city_cards[slug][0])}</span>{f'<span class="opens">{e(city_cards[slug][1])}</span>' if city_cards[slug][1] else '<span class="opens"></span>'}
+            <span class="arrow">{ARROW}</span>
+          </a>
+""" for slug in order)
+    return head(
+        "Kokemuksia | VibeXplorers – 8 lajin liikkari 4–6-vuotiaille",
+        "Mitä perheet ja seurat sanoivat ensimmäisestä kaudesta Espoossa.",
+        "kokemukset", "hero-porukka.jpg") + nav("") + f"""
+  <header class="hero city-hero story-hero">
+    <img src="img/hero-porukka.jpg" alt="Syksyn 2026 VibeXplorers-ryhmä rivissä kentällä ohjaajien edessä, lasten kasvot sumennettu" style="object-position:50% 55%" />
+    <div class="wrap">
+      <span class="label">Kokemuksia · Syksy 2026</span>
+      <h1>Ensimmäinen kausi takana. <span class="o">Tältä se tuntui.</span></h1>
+      <p>Syksyllä 2026 Espoossa 28 lasta kokeili kahdeksaa lajia kahdeksassa paikallisessa seurassa. Kysyimme perheiltä ja seuroilta, miten meni.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="sec proof big">
+      <div class="wrap">
+        <div class="stats rv">{stat_items(season)}</div>
+        <p class="footnote">{e(KOKEMUKSET["stats"][season]["footnote"])}</p>
+      </div>
+    </section>
+
+    <section class="sec light">
+      <div class="wrap">
+        <div class="head rv"><h2 class="statement">Vanhemmat kertovat.</h2></div>
+        <div class="qgrid rv">
+{parents}        </div>
+      </div>
+    </section>
+
+    <section class="sec light kids">
+      <div class="wrap">
+        <div class="head rv"><h2 class="statement">Mitä lapselle jäi mieleen?</h2></div>
+        <ul class="bubbles rv">{kids}</ul>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="head rv"><h2 class="statement">Seurat kertovat.</h2></div>
+        <div class="qgrid two rv">
+{clubs}        </div>
+        <div class="partners rv" style="margin-top:clamp(3rem,6vw,5rem)">
+          <span class="label">Kiitos syksyn seuroille</span>
+          <div class="partner-grid wall">{wall}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec light" id="talvi">
+      <div class="wrap">
+        <div class="head rv"><div><span class="label">Talvi 2027</span><h2 class="statement" style="margin-top:.8rem">Lähde mukaan.</h2></div></div>
+        <div class="ccards rv">
+{cards}        </div>
+      </div>
+    </section>
+
+    <section class="sec cta">
+      <div class="wrap rv">
+        <h2>Lapsen ei tarvitse vielä tietää, mikä on oma laji.</h2>
+        <a href="/#kaupungit" class="btn">Valitse kaupunki {ARROW}</a>
+      </div>
+    </section>
+  </main>
+{LIVE_STATUS_JS.replace("'.city-row[data-city]'", "'.ccard[data-city]'")}
+""" + FOOTER
 
 def fall_page():
     """Arkistoitu syksyn 2026 kausi: staattinen, ei "seuraavaksi"-merkintöjä."""
@@ -625,6 +753,7 @@ def coming_page(slug, c):
 if __name__ == "__main__":
     for slug, c in COMING.items():
         (OUT / f"{slug}.html").write_text(coming_page(slug, c), encoding="utf-8")
+    (OUT / "kokemukset.html").write_text(kokemukset_page(), encoding="utf-8")
     (OUT / "syksy.html").write_text(fall_page(), encoding="utf-8")  # arkistoitu kausi, ei valikossa
     (OUT / "index.html").write_text(index_page(), encoding="utf-8")
     for slug, c in CITIES.items():
