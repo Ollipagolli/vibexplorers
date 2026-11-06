@@ -396,7 +396,7 @@ body { font-size: 17px; }
 .proof { padding: clamp(3rem, 7vw, 5rem) 0; border-bottom: 1px solid var(--line); }
 .proof.big { padding: clamp(4rem, 9vw, 7rem) 0; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.2rem, 3vw, 2.5rem); }
-.proof.big .stats { grid-template-columns: repeat(4, 1fr); }
+.proof.big .stats { grid-template-columns: repeat(3, 1fr); }
 .stat b { display: block; font-size: clamp(2.2rem, 4.6vw, 3.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--orange); }
 .stat span { display: block; margin-top: .6rem; color: var(--grey); font-weight: 600; line-height: 1.4; max-width: 22ch; }
 .proof-quote { margin: clamp(2.2rem, 5vw, 3.4rem) 0 0; max-width: 46rem; }
@@ -433,7 +433,6 @@ body { font-size: 17px; }
 .ccard .arrow { position: absolute; left: 1.4rem; bottom: 1.3rem; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); color: #000; }
 .ccard .arrow svg { width: 18px; height: 18px; }
 @media (max-width: 900px) {
-  .proof.big .stats { grid-template-columns: repeat(2, 1fr); }
   .ccards { grid-template-columns: repeat(2, 1fr); }
   .partner-grid.wall { grid-template-columns: repeat(4, 1fr); }
 }
@@ -442,7 +441,6 @@ body { font-size: 17px; }
   .proof .stats { grid-template-columns: repeat(3, 1fr); gap: .9rem; }
   .proof .stat b { font-size: 1.6rem; }
   .proof .stat span { font-size: .85rem; }
-  .proof.big .stats { grid-template-columns: 1fr 1fr; }
   .qgrid { grid-template-columns: 1fr; }
   .ccards { grid-template-columns: 1fr; }
   .partner-grid.wall { grid-template-columns: repeat(4, 1fr); }
@@ -455,4 +453,26 @@ body { font-size: 17px; }
   .proof .stat span { margin-top: 0; font-size: .92rem; }
   .ccard { padding: 1.3rem 4.6rem 1.3rem 1.3rem; }
   .ccard .arrow { left: auto; right: 1.2rem; bottom: auto; top: 50%; transform: translateY(-50%); }
+}
+
+/* Kokemukset: kaupunkikorttien napit */
+.ccard { display: flex; flex-direction: column; align-items: flex-start; padding: 1.5rem 1.4rem; }
+.ccard .opens:empty { display: none; }
+.ccard-btn { margin-top: auto; display: inline-flex; align-items: center; gap: .5rem; background: var(--orange); color: #000; border-radius: 999px; padding: .65rem 1.1rem; font-weight: 800; font-size: .95rem; }
+.ccard .opens:not(:empty), .ccard .ccard-meta { margin-bottom: 1.3rem; }
+.ccard .ccard-meta:has(+ .opens:not(:empty)) { margin-bottom: 0; }
+.ccard .ccard-btn { margin-top: auto; }
+.ccard-btn svg { width: 16px; height: 16px; }
+@media (max-width: 640px) { .ccard { padding: 1.3rem; } }
+/* Seuroille */
+.club-stats { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+.club-stats .footnote { margin-top: 1.2rem; }
+.bysport { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: .55rem; max-width: 30rem; }
+.bysport li { display: grid; grid-template-columns: 9.5rem 1fr 1.5rem; align-items: center; gap: .8rem; color: var(--grey); font-weight: 600; font-size: .95rem; }
+.bysport .bs-bar { height: 10px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; }
+.bysport .bs-bar i { display: block; height: 100%; background: var(--orange); border-radius: 999px; }
+.bysport b { color: var(--white); text-align: right; }
+@media (max-width: 760px) {
+  .club-stats { grid-template-columns: 1fr; }
+  .bysport li { grid-template-columns: 8.2rem 1fr 1.3rem; font-size: .88rem; }
 }

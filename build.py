@@ -164,7 +164,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
 """
@@ -206,6 +206,7 @@ FOOTER = f"""  <footer>
       <span>&copy; 2026 VibeXplorers Oy · 3628620-7</span>
       <nav aria-label="Alatunniste">
         <a href="/kokemukset">Kokemuksia</a>
+        <a href="/seuroille">Seuroille</a>
         <a href="/syksy">Syksy 2026</a>
         <a href="vibexplorers-osallistumisehdot.pdf" target="_blank" rel="noopener noreferrer">Osallistumisehdot</a>
         <a href="vibexplorers-tietosuojaseloste.pdf" target="_blank" rel="noopener noreferrer">Tietosuoja</a>
@@ -573,7 +574,7 @@ def proof_strip():
     q = next(x for x in quotes("vanhempi", season) if x.get("front"))
     return f"""    <section class="proof">
       <div class="wrap">
-        <div class="stats rv">{stat_items(season, [0, 2, 3])}</div>
+        <div class="stats rv">{stat_items(season)}</div>
         <figure class="proof-quote rv">{QUOTE_SVG}<blockquote>{e(q["text"])}</blockquote>
           <figcaption>Vanhempi, {e(q["city"])}, {SEASON_LABEL[season]} · <a href="/kokemukset">Lue lisää kokemuksista {ARROW}</a></figcaption></figure>
         <p class="footnote">{e(KOKEMUKSET["stats"][season]["footnote"])}</p>
@@ -594,16 +595,17 @@ def kokemukset_page():
 """ for q in quotes("seura", season))
     wall = "".join(f'<span class="logo-tile" title="{e(club)}"><img src="img/logot/{logo}" alt="{e(club)}" loading="lazy" /></span>'
                    for _wk, _d, _sport, club, _place, _time, logo in FALL)
+    # (hinta/tila, aukeamisteksti, napin teksti) – päivitä kun tilanne muuttuu
     city_cards = {
-        "espoo": ("Ryhmät täynnä · jonoon voi ilmoittautua", ""),
-        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa myöhemmin"),
-        "vantaa": ("79 € / kausi · lauantaisin 30.1.–3.4.", ""),
-        "tampere": ("69 € / kausi", "Ilmoittautuminen aukeaa su 15.11. klo 20"),
+        "espoo": ("Täynnä", "", "Ilmoittaudu jonoon"),
+        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa myöhemmin", "Katso ohjelma"),
+        "vantaa": ("Lauantaisin 30.1.–3.4. · 79 €", "", "Ilmoittaudu"),
+        "tampere": ("69 € / kausi", "Ilmoittautuminen aukeaa su 15.11. klo 20", "Katso ohjelma"),
     }
-    order = ["espoo", "vantaa", "tampere", "helsinki"]
+    order = ["espoo", "helsinki", "vantaa", "tampere"]
     cards = "".join(f"""          <a href="/{slug}{'#ilmoittaudu' if slug in REG_CITIES else ''}" class="ccard"{f' data-city="{slug}" data-groups="{CITIES[slug].get("groups", 2)}"' if slug in REG_CITIES and slug != 'espoo' else ''}>
-            <h3>{CITIES[slug]['name']}</h3><span class="ccard-meta">{e(city_cards[slug][0])}</span>{f'<span class="opens">{e(city_cards[slug][1])}</span>' if city_cards[slug][1] else '<span class="opens"></span>'}
-            <span class="arrow">{ARROW}</span>
+            <h3>{CITIES[slug]['name']}</h3><span class="ccard-meta">{e(city_cards[slug][0])}</span><span class="opens">{e(city_cards[slug][1])}</span>
+            <span class="ccard-btn">{e(city_cards[slug][2])} {ARROW}</span>
           </a>
 """ for slug in order)
     return head(
@@ -613,7 +615,7 @@ def kokemukset_page():
   <header class="hero city-hero story-hero">
     <img src="img/hero-porukka.jpg" alt="Syksyn 2026 VibeXplorers-ryhmä rivissä kentällä ohjaajien edessä, lasten kasvot sumennettu" style="object-position:50% 55%" />
     <div class="wrap">
-      <span class="label">Kokemuksia · Syksy 2026</span>
+      <span class="label">Syksy 2026 · Espoo</span>
       <h1>Ensimmäinen kausi takana. <span class="o">Tältä se tuntui.</span></h1>
       <p>Syksyllä 2026 Espoossa 28 lasta kokeili kahdeksaa lajia kahdeksassa paikallisessa seurassa. Kysyimme perheiltä ja seuroilta, miten meni.</p>
     </div>
@@ -656,7 +658,7 @@ def kokemukset_page():
 
     <section class="sec light" id="talvi">
       <div class="wrap">
-        <div class="head rv"><div><span class="label">Talvi 2027</span><h2 class="statement" style="margin-top:.8rem">Lähde mukaan.</h2></div></div>
+        <div class="head rv"><h2 class="statement">Talvi 2027 – <span class="o">mukaan ehtii vielä.</span></h2></div>
         <div class="ccards rv">
 {cards}        </div>
       </div>
@@ -671,6 +673,74 @@ def kokemukset_page():
   </main>
 {LIVE_STATUS_JS.replace("'.city-row[data-city]'", "'.ccard[data-city]'")}
 """ + FOOTER
+
+def seuroille_page():
+    season = "syksy-2026"
+    cs = KOKEMUKSET["clubStats"][season]
+    r, nh = cs["rating"], cs["newHobbies"]
+    mx = max(nh["bySport"].values())
+    bars = "".join(f'<li><span class="bs-name">{e(k)}</span><span class="bs-bar"><i style="width:{v / mx * 100:.0f}%"></i></span><b>{v}</b></li>'
+                   for k, v in nh["bySport"].items())
+    clubs = "".join(f"""          <figure class="qcard club">
+            <div class="club-head"><span class="logo-tile"><img src="img/logot/{q["logo"]}" alt="{e(q["author"])}" loading="lazy" /></span><strong>{e(q["author"])}</strong></div>
+            <blockquote>{e(q["text"])}</blockquote>{f'<p class="club-note">{e(q["note"])}</p>' if q.get("note") else ''}
+          </figure>
+""" for q in quotes("seura", season))
+    wall = "".join(f'<span class="logo-tile" title="{e(club)}"><img src="img/logot/{logo}" alt="{e(club)}" loading="lazy" /></span>'
+                   for _wk, _d, _sport, club, _place, _time, logo in FALL)
+    return head(
+        "Seuroille | VibeXplorers – 8 lajin liikkari 4–6-vuotiaille",
+        "VibeXplorers tuo 4–6-vuotiaiden ryhmän seuranne kokeilukerralle. Syksyn 2026 seurojen kokemukset ja tulokset.",
+        "seuroille", "kuva-trampoliini.jpg") + nav("") + f"""
+  <header class="hero city-hero story-hero">
+    <img src="img/kuva-trampoliini.jpg" alt="Lapsi hyppää trampoliinilla telinevoimistelukerralla, kasvot sumennettu" style="object-position:50% 50%" />
+    <div class="wrap">
+      <span class="label">Seuroille</span>
+      <h1>Uudet kokeilijat <span class="o">suoraan teidän tiloihin.</span></h1>
+      <p>Tuomme 4–6-vuotiaiden ryhmän seuranne kokeilukerralle. Te ohjaatte lajin, me hoidamme ilmoittautumiset, viestinnän ja ryhmän paikalle.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="sec proof big">
+      <div class="wrap">
+        <div class="club-stats rv">
+          <div>
+            <div class="stat"><b>{e(r["value"])}</b><span>{e(r["label"])}</span></div>
+            <p class="footnote">{e(r["footnote"])}</p>
+          </div>
+          <div>
+            <div class="stat"><b>{e(nh["value"])}</b><span>{e(nh["label"])}</span></div>
+            <ul class="bysport">{bars}</ul>
+            <p class="footnote">{e(nh["footnote"])}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" style="border-top:0;padding-top:clamp(1rem,3vw,2rem)">
+      <div class="wrap">
+        <div class="head rv"><h2 class="statement">Seurat kertovat.</h2></div>
+        <div class="qgrid two rv">
+{clubs}        </div>
+        <div class="partners rv" style="margin-top:clamp(3rem,6vw,5rem)">
+          <span class="label">Syksyn 2026 seurat</span>
+          <div class="partner-grid wall">{wall}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec cta">
+      <div class="wrap rv">
+        <h2>Tuo lajisi mukaan.</h2>
+        <p class="sub" style="margin:1rem auto 2rem">Ota yhteyttä: <a href="mailto:{EMAIL}" style="color:var(--white);font-weight:700">{EMAIL}</a> · <a href="tel:+358400854493" style="color:var(--white);font-weight:700">040 085 4493</a></p>
+        <a href="mailto:{EMAIL}?subject=Seurayhteisty%C3%B6" class="btn">Ota yhteyttä {ARROW}</a>
+      </div>
+    </section>
+  </main>
+
+""" + FOOTER
+
 
 def fall_page():
     """Arkistoitu syksyn 2026 kausi: staattinen, ei "seuraavaksi"-merkintöjä."""
@@ -754,6 +824,7 @@ if __name__ == "__main__":
     for slug, c in COMING.items():
         (OUT / f"{slug}.html").write_text(coming_page(slug, c), encoding="utf-8")
     (OUT / "kokemukset.html").write_text(kokemukset_page(), encoding="utf-8")
+    (OUT / "seuroille.html").write_text(seuroille_page(), encoding="utf-8")
     (OUT / "syksy.html").write_text(fall_page(), encoding="utf-8")  # arkistoitu kausi, ei valikossa
     (OUT / "index.html").write_text(index_page(), encoding="utf-8")
     for slug, c in CITIES.items():
