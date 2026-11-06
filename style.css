@@ -476,3 +476,5 @@ body { font-size: 17px; }
   .club-stats { grid-template-columns: 1fr; }
   .bysport li { grid-template-columns: 8.2rem 1fr 1.3rem; font-size: .88rem; }
 }
+.clubs-note { margin: 1.4rem 0 0; color: var(--orange); font-weight: 700; }
+.clubs-note:empty { display: none; }

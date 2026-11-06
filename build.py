@@ -164,7 +164,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
 """
@@ -649,6 +649,7 @@ def kokemukset_page():
         <div class="head rv"><h2 class="statement">Seurat kertovat.</h2></div>
         <div class="qgrid two rv">
 {clubs}        </div>
+        <p class="clubs-note rv">{e(KOKEMUKSET["clubStats"][season].get("clubsNote", ""))}</p>
         <div class="partners rv" style="margin-top:clamp(3rem,6vw,5rem)">
           <span class="label">Kiitos syksyn seuroille</span>
           <div class="partner-grid wall">{wall}</div>
@@ -723,6 +724,7 @@ def seuroille_page():
         <div class="head rv"><h2 class="statement">Seurat kertovat.</h2></div>
         <div class="qgrid two rv">
 {clubs}        </div>
+        <p class="clubs-note rv">{e(KOKEMUKSET["clubStats"][season].get("clubsNote", ""))}</p>
         <div class="partners rv" style="margin-top:clamp(3rem,6vw,5rem)">
           <span class="label">Syksyn 2026 seurat</span>
           <div class="partner-grid wall">{wall}</div>

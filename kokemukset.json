@@ -69,8 +69,7 @@
       "season": "syksy-2026",
       "author": "Espoon Telinetaiturit",
       "logo": "telinetaiturit.png",
-      "text": "Ihan mahtavaa, että tavoitettiin uusia kokeilijoita ja potentiaalisia jäseniä ilman omaa markkinointia ja suoraan paikanpäälle tuotuina!",
-      "note": "Telinetaitureille tuli kokeilun kautta myös uusia jäseniä."
+      "text": "Ihan mahtavaa, että tavoitettiin uusia kokeilijoita ja potentiaalisia jäseniä ilman omaa markkinointia ja suoraan paikanpäälle tuotuina!"
     },
     {
       "type": "seura",
@@ -100,7 +99,8 @@
           "Tanssi": 1
         },
         "footnote": "Perhekysely syksy 2026, vastaajia 14 / 28. Aloitettu tai alkamassa ensi vuonna."
-      }
+      },
+      "clubsNote": "Molemmille seuroille tuli kokeilun kautta uusia harrastajia."
     }
   }
 }
