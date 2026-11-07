@@ -819,7 +819,7 @@ function mailBooked_(s, d, due) {
     ]) +
     p_('Lasku tulee erikseen sähköpostilla, ja paikka vahvistuu, kun lasku on maksettu. Jos suunnitelmat muuttuvat, voit perua maksutta yllä olevaan päivään asti vastaamalla tähän viestiin.') +
     h2_('Mitä seuraavaksi?') +
-    p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita – kokeilla saa.') +
+    p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita. Tärkeintä on, että lapsi uskaltaa kokeilla.') +
     host;
   return {
     subject: 'Paikka on varattu – VibeXplorers ' + s.name,
