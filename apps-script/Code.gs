@@ -6,7 +6,7 @@
  * Käyttöoikeus: Kuka tahansa.
  *
  * Rajapinta (kaikki vastaukset JSON):
- *   GET  ?action=status&city=espoo          → paikkatilanne
+ *   GET  ?action=status&city=espoo          → paikkatilanne (+ jonon pituus, kun ryhmät täynnä)
  *   POST {action:"register", ...}           → ilmoittautuminen (text/plain, ei CORS-esitarkistusta)
  *   POST {action:"confirm", token}          → jonosta tarjotun paikan vahvistus
  */
@@ -110,6 +110,7 @@ function getStatus_(cityKey, code) {
     ok: true, city: s.key, name: s.name, state: st.state,
     opensAt: s.opensAt ? s.opensAt.toISOString() : null,
     free: st.state === 'open' ? st.free : null,
+    queued: st.state === 'queue' ? s.queued + s.offered : null, // jonossa edellä (myös tarjouksen saaneet)
     price: s.price, weeks: s.weeks, early: !!st.early
   };
 }
@@ -819,7 +820,7 @@ function mailBooked_(s, d, due) {
     ]) +
     p_('Lasku tulee erikseen sähköpostilla, ja paikka vahvistuu, kun lasku on maksettu. Jos suunnitelmat muuttuvat, voit perua maksutta yllä olevaan päivään asti vastaamalla tähän viestiin.') +
     h2_('Mitä seuraavaksi?') +
-    p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita. Tärkeintä on, että lapsi uskaltaa kokeilla.') +
+    p_('Ennen kauden alkua lähetämme tervetuloviestin, jossa kerromme ryhmän, ensimmäisen kerran paikan ja muut käytännöt. Aiempaa kokemusta ei tarvita. Tärkeintä on, että lapsi pääsee kokeilemaan.') +
     host;
   return {
     subject: 'Paikka on varattu – VibeXplorers ' + s.name,
@@ -837,6 +838,7 @@ function mailQueued_(s, d, pos) {
     facts_([['Paikka jonossa', String(pos)]]) +
     p_('Jos paikka vapautuu, lähetämme sähköpostin, jossa on vahvistuslinkki. Linkki on voimassa ' + CFG.OFFER_HOURS +
       ' tuntia, joten pidäthän silmällä myös roskapostikansiota.') +
+    p_('Jos paikka ei tänä talvena vapaudu, saatte etuoikeuden seuraavaan kauteen ja kuulette ensimmäisenä tulevista toteutuksista.') +
     p_('Jonossa oleminen ei maksa mitään eikä sido mihinkään. Jos haluat pois jonosta, vastaa tähän viestiin.');
   return {
     subject: 'Olette jonossa – VibeXplorers ' + s.name,

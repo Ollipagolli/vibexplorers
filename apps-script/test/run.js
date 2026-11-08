@@ -71,7 +71,9 @@ t('kapasiteetti 3: neljäs jonoon, jonosijat kasvavat', () => {
   assert.strictEqual(q2.queuePosition, 2);
   assert.strictEqual(setting(env, 'testi', 'Varattu'), 3);
   assert.strictEqual(setting(env, 'testi', 'Jonossa'), 3);
-  assert.strictEqual(env.api.doGet({ parameter: { action: 'status', city: 'testi' } }).state, 'queue');
+  const qs = env.api.doGet({ parameter: { action: 'status', city: 'testi' } });
+  assert.strictEqual(qs.state, 'queue');
+  assert.strictEqual(qs.queued, 3); // jonossa olevat lapset näytetään sivulla
   assert.ok(env.mails.some(m => /Olette jonossa/.test(m.subject)));
   assert.ok(/Paikka jonossa.*?>2</.test(env.mails[env.mails.length - 1].htmlBody));
 });

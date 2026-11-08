@@ -83,7 +83,7 @@ CITIES = {
             (5, "Käsipallo", "GrIFK Handboll", None, "Ke 3.2."),
             (6, "Voimistelu", "Olarin Voimistelijat", "Vanttilan koulu", "To 11.2. klo 17 ja 18"),
             (7, "Laskettelu", "GrIFK Alpine", "Granibacken, Kauniainen", "Ke 17.2. klo 17.30 ja 18.30", "Omat varusteet mukaan. Ne voi myös vuokrata Granibackenilta 20 eurolla."),
-            (9, "Jalkapallo", "Espoon Palloseura", "Myntinsyrjän jalkapallohalli, Myntinsyrjä 7", "Su 7.3. klo 13–15"),
+            (9, "Jalkapallo", "Espoon Palloseura", "Myntinsyrjän jalkapallohalli, Myntinsyrjä 7", "Su 7.3. klo 13 ja 14"),
             (10, "Sulkapallo", "Laaksolahden Sulkapallo", "Laaksolahden Tenniskeskus", "La 13.3. klo 8 ja 9"),
             (11, "Sirkus", "Sirkus- ja teatterikoulu Esko", "Järvenperän sirkustila, Auroranmäki 1", "La 20.3. klo 15.30 ja 16.30"),
         ],
@@ -164,7 +164,7 @@ def head(title, desc, path, preload):
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" as="image" href="img/{preload}">
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=8" />
 </head>
 <body>
 """
@@ -324,7 +324,7 @@ def reg_section(slug, c, api=None):
         </template>
       </div>
     </section>
-    <script src="/ilmo.js?v=10" defer></script>
+    <script src="/ilmo.js?v=12" defer></script>
 """
 
 

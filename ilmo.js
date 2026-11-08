@@ -181,7 +181,12 @@
     } else if (state === 'queue') {
       if (soonNote) soonNote.hidden = true;
       titleEl.textContent = 'Ryhmät ovat täynnä.';
-      statusEl.textContent = 'Voit liittyä jonoon. Jos paikka vapautuu, saat siitä sähköpostin.';
+      var q = typeof s.queued === 'number' ? s.queued : null;
+      var head = q === null ? '' : (q === 0 ? '<b>Jono on tyhjä – olisit ensimmäisenä.</b><br>' :
+        '<b>Jonossa on nyt ' + q + (q === 1 ? ' lapsi' : ' lasta') + '.</b><br>');
+      statusEl.innerHTML = head + 'Peruutusten sattuessa vapautuvat paikat tarjotaan jonosta järjestyksessä. Saat silloin sähköpostin ja 48 tuntia aikaa vahvistaa. ' +
+        'Jos paikka ei tänä talvena vapaudu, saat etuoikeuden seuraavaan kauteen ja kuulet ensimmäisenä tulevista toteutuksista. ' +
+        'Jonoon liittyminen on maksutonta eikä sido mihinkään.';
       btn.disabled = false; btnText.textContent = 'Liity jonoon';
     } else {
       titleEl.textContent = 'Ilmoittautuminen on sulkeutunut.';
@@ -309,6 +314,7 @@
     } else {
       html = '<h3>Olette jonossa' + (res.queuePosition ? ' sijalla ' + esc(res.queuePosition) : '') + '.</h3>' +
         '<p>Jos paikka vapautuu, lähetämme sähköpostin osoitteeseen <b>' + esc(res.email || '') + '</b>. Vahvistukseen on aikaa 48 tuntia, joten pidäthän silmällä myös roskapostia.</p>' +
+        '<p>Jos paikka ei tänä talvena vapaudu, saatte etuoikeuden seuraavaan kauteen ja kuulette ensimmäisenä tulevista toteutuksista.</p>' +
         '<p>Jonossa oleminen ei maksa mitään eikä sido mihinkään.</p>';
     }
     form.hidden = true;

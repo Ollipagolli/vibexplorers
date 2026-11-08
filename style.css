@@ -279,8 +279,8 @@ section[id] { scroll-margin-top: 88px; }
 .prose .steps li::marker { color: var(--orange); font-weight: 800; }
 .city-row .opens { display: block; margin-top: .35rem; font-size: .85rem; font-weight: 600; color: var(--orange); }
 .row .gear { margin-top: .4rem; font-size: .82rem; font-weight: 500; color: var(--grey); line-height: 1.4; max-width: 34ch; }
-.reg[data-state="soon"] .reg-status { color: var(--white); background: rgba(255,106,61,.1); box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.55); border-radius: 14px; padding: 1rem 1.2rem; line-height: 1.5; }
-.reg[data-state="soon"] .reg-status b { color: var(--orange); }
+.reg[data-state="soon"] .reg-status, .reg[data-state="queue"] .reg-status { color: var(--white); background: rgba(255,106,61,.1); box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.55); border-radius: 14px; padding: 1rem 1.2rem; line-height: 1.5; }
+.reg[data-state="soon"] .reg-status b, .reg[data-state="queue"] .reg-status b { color: var(--orange); }
 .reg .soon-note { margin: 0; font-weight: 700; color: var(--orange); }
 .reg h2 { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
 .cta .opens-list { list-style: none; padding: 0; margin: 1.8rem auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 2rem; font-size: 1.05rem; color: var(--grey); }
@@ -331,8 +331,8 @@ body { font-size: 17px; }
 /* Lomake vaalealla */
 .light.reg .reg-status { color: var(--muted-dark); }
 .light.reg[data-state="open"] .reg-status { color: var(--text-dark); }
-.light.reg[data-state="soon"] .reg-status { color: var(--text-dark); background: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.6); }
-.light.reg[data-state="soon"] .reg-status b, .light .soon-note { color: var(--orange-deep); }
+.light.reg[data-state="soon"] .reg-status, .light.reg[data-state="queue"] .reg-status { color: var(--text-dark); background: #fff; box-shadow: inset 0 0 0 1.5px rgba(255,106,61,.6); }
+.light.reg[data-state="soon"] .reg-status b, .light.reg[data-state="queue"] .reg-status b, .light .soon-note { color: var(--orange-deep); }
 .light.reg .kid { background: #fff; box-shadow: 0 6px 20px rgba(26,24,22,.06); }
 .light.reg input[type=text], .light.reg input[type=email], .light.reg input[type=tel], .light.reg select, .light.reg textarea,
 .light.reg .kid input, .light.reg .kid select { background-color: #fff; color: var(--text-dark); border-color: #D8D0C4; }
