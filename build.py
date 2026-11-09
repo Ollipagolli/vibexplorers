@@ -107,10 +107,10 @@ CITIES = {
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", "La 30.1. klo 10–12"),
-            (5, "Yleisurheilu", "Tampereen Pyrintö", None, None),
+            (5, "Luistelu", "KooVee", "Hakametsän jäähalli 3", "Su 7.2. klo 15–16.30"),
             (6, "Padel", "TATS", "Tampereen tenniskeskus", "La 13.2. klo 10–12"),
-            (7, "Käsipallo", "KooVee", None, None),
-            (8, "Yleisurheilu", "Tampereen Pyrintö", None, None),
+            (7, "Käsipallo", "KooVee", None, "To 18.2."),
+            (8, "Yleisurheilu", "Tampereen Pyrintö", "Pirkkahalli", "La 27.2. klo 11–13"),
             (10, "Hiihto", "Tampereen Hiihtoseura", "Kaupin hiihtoladut", "La 13.3. klo 10–12"),
             (11, "Lentopallo", "Tampereen Pyrintö", None, "Su 21.3."),
             (12, "Tanssi", "Tanssiseura Spiral", "Ikurin liikuntahalli", None),
