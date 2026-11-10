@@ -176,7 +176,7 @@
     } else if (state === 'open') {
       if (soonNote) soonNote.hidden = true;
       titleEl.textContent = s.early ? 'Ilmoittaudu ennakkoon.' : 'Ilmoittaudu.';
-      statusEl.textContent = (s.early ? 'Ennakkoilmoittautuminen syksyn perheille. ' : '') + spotsText(s.free);
+      statusEl.textContent = (s.early ? 'Ennakkoilmoittautuminen on auki. ' : '') + spotsText(s.free);
       btn.disabled = false; btnText.textContent = 'Ilmoittaudu';
     } else if (state === 'queue') {
       if (soonNote) soonNote.hidden = true;
