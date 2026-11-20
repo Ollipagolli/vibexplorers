@@ -10,7 +10,7 @@ EMAIL = "vibexhq@gmail.com"
 API_URL = "https://script.google.com/macros/s/AKfycbxaE8k7ecQkRbApqkRnJxMLZdKQ932snYAb1148hZ644TEFt3Ra5DZ1m1UEX1Vsi7Tr/exec"
 API_TEST_URL = "https://script.google.com/macros/s/AKfycbwpaGGxiNfeCe-fEAa7WxTKQgsAnlOfkSeM9Txe16iZOwWGrtiJBPius-hAwYCuT9dB/exec"
 # Kaupungit, joiden sivulla näkyy oma ilmoittautumislomake. Muilla on kiinnostuslista.
-REG_CITIES = {"vantaa", "espoo", "tampere"}
+REG_CITIES = {"vantaa", "espoo", "tampere", "helsinki"}
 OPEN_ORDER = ["Espoo", "Vantaa", "Tampere", "Helsinki"]  # avautumisjärjestys etusivulla
 BIRTH_YEARS = [2020, 2021, 2022, 2023]
 PRICE = "69 €"  # oletushinta; kaupunkikohtainen hinta CITIES-listassa ("price")
@@ -46,6 +46,7 @@ LOGOS = {
     "Helsingin Tanssiopisto": "htanssiopisto.png",
     "HLK": "hlk.png",
     "Sapa": "sapa.png",
+    "HIFK Friidrott": "hifk.png",
 }
 
 
@@ -117,17 +118,17 @@ CITIES = {
         ],
     },
     "helsinki": {
-        "name": "Helsinki", "groups": 2, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
+        "name": "Helsinki", "opens": "ti 24.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
-            (3, None, None, None, None),
+            (3, "Yleisurheilu", "HIFK Friidrott", "Liikuntamylly, Myllypuro", "Su 24.1. klo 11–12"),
             (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1. klo 12–13"),
             (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
             (6, None, None, None, None),
-            (7, "Rugby", "Helsinki Rugby Club", None, "La 20.2."),
-            (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45"),
+            (7, "Rugby", "Helsinki Rugby Club", "Pallomylly, Myllypuro", "La 20.2. klo 17.30–18.30"),
+            (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45", "Ryhmä jaetaan kahteen vuoroon, tarkempi jako tervetuloviestissä."),
             (10, "Jalkapallo", "Sapa", "Haapaniemen kenttä, Haapaniemenkatu 2", "La 13.3. klo 12–13"),
-            (11, "Tennis", "HLK", "Meilahden liikuntakeskus", "La 20.3. klo 12 ja 13"),
+            (11, "Tennis", "HLK", "Meilahden liikuntakeskus", "La 20.3. klo 12 ja 13", "Ryhmä jaetaan kahteen vuoroon, tarkempi jako tervetuloviestissä."),
         ],
     },
 }
@@ -598,7 +599,7 @@ def kokemukset_page():
     # (hinta/tila, aukeamisteksti, napin teksti) – päivitä kun tilanne muuttuu
     city_cards = {
         "espoo": ("Täynnä", "", "Ilmoittaudu jonoon"),
-        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa myöhemmin", "Katso ohjelma"),
+        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa ti 24.11. klo 20", "Katso ohjelma"),
         "vantaa": ("Lauantaisin 30.1.–3.4. · 79 €", "", "Ilmoittaudu"),
         "tampere": ("69 € / kausi", "Ilmoittautuminen aukeaa su 15.11. klo 20", "Katso ohjelma"),
     }
