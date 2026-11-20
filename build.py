@@ -47,6 +47,7 @@ LOGOS = {
     "HLK": "hlk.png",
     "Sapa": "sapa.png",
     "HIFK Friidrott": "hifk.png",
+    "Tapanilan Erä": "tapanilan-era.png",
 }
 
 
@@ -124,7 +125,7 @@ CITIES = {
             (3, "Yleisurheilu", "HIFK Friidrott", "Liikuntamylly, Myllypuro", "Su 24.1. klo 11–12"),
             (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1. klo 12–13"),
             (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
-            (6, None, None, None, None),
+            (6, "Judo", "Tapanilan Erä", None, "Su 14.2., aika tarkentuu"),
             (7, "Rugby", "Helsinki Rugby Club", "Pallomylly, Myllypuro", "La 20.2. klo 17.30–18.30"),
             (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45", "Ryhmä jaetaan kahteen vuoroon, tarkempi jako tervetuloviestissä."),
             (10, "Jalkapallo", "Sapa", "Haapaniemen kenttä, Haapaniemenkatu 2", "La 13.3. klo 12–13"),
