@@ -91,7 +91,7 @@ CITIES = {
         ],
     },
     "vantaa": {
-        "name": "Vantaa", "opens": "ti 3.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-stadion.jpg", "pos": "50% 60%",
+        "name": "Vantaa", "open": True, "opens": "ti 3.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-stadion.jpg", "pos": "50% 60%",
         "weeks": "4–13", "dates": "25.1.–4.4.", "break": 8, "extra_breaks": [(12, "Pääsiäinen")],
         "sessions": [
             (4, "Voimistelu", "Vantaan Voimisteluseura", "Vetokuja 1 B, Vantaa", "La 30.1. klo 10–11"),
@@ -105,7 +105,7 @@ CITIES = {
         ],
     },
     "tampere": {
-        "name": "Tampere", "opens": "su 15.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
+        "name": "Tampere", "open": True, "opens": "su 15.11. klo 20", "hero": "kuva-tennis.jpg", "pos": "50% 62%",
         "weeks": "4–12", "dates": "25.1.–28.3.", "break": 9,
         "sessions": [
             (4, "Tennis", "TATS", "Tampereen tenniskeskus", "La 30.1. klo 10–12"),
@@ -119,14 +119,14 @@ CITIES = {
         ],
     },
     "helsinki": {
-        "name": "Helsinki", "opens": "ti 24.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
+        "name": "Helsinki", "open": True, "opens": "ti 24.11. klo 20", "groups": 1, "price": "79 €", "hero": "kuva-trampoliini.jpg", "pos": "50% 30%",
         "weeks": "3–11", "dates": "18.1.–21.3.", "break": 8,
         "sessions": [
             (3, "Yleisurheilu", "HIFK Friidrott", "Liikuntamylly, Myllypuro", "Su 24.1. klo 11–12"),
             (4, "Voimistelu", "Pakilan Voimistelijat", "PNV liikuntakeskus, Itä-Pakila", "La 30.1. klo 12–13"),
-            (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16"),
-            (6, "Judo", "Tapanilan Erä", None, "Su 14.2., aika tarkentuu"),
-            (7, "Rugby", "Helsinki Rugby Club", "Pallomylly, Myllypuro", "La 20.2. klo 17.30–18.30"),
+            (5, "Perhesirkus", "Sirkus Magenta", "Itis, Itäkatu 7", "La 6.2. klo 15.15–16", "Vanhempi osallistuu yhdessä lapsen kanssa."),
+            (6, "Judo", "Tapanilan Erä", "Tapanilan urheilukeskus, Erätie 3", "Su 14.2. klo 14.15–15", "Vanhempi osallistuu yhdessä lapsen kanssa."),
+            (7, "Rugby", "Helsinki Rugby Club", "Pallomylly, Myllypuro", "Su 21.2. klo 17.30–18.30"),
             (9, "Tanssi", "Helsingin Tanssiopisto", "Leipätehdas, Kaikukatu 4 A", "La 6.3. klo 14.45 ja 15.45", "Ryhmä jaetaan kahteen vuoroon, tarkempi jako tervetuloviestissä."),
             (10, "Jalkapallo", "Sapa", "Haapaniemen kenttä, Haapaniemenkatu 2", "La 13.3. klo 12–13"),
             (11, "Tennis", "HLK", "Meilahden liikuntakeskus", "La 20.3. klo 12 ja 13", "Ryhmä jaetaan kahteen vuoroon, tarkempi jako tervetuloviestissä."),
@@ -264,7 +264,7 @@ def reg_section(slug, c, api=None):
     return f"""    <section class="sec reg light" id="ilmoittaudu" data-api="{api}" data-city="{slug}" data-years="{','.join(map(str, BIRTH_YEARS))}" data-groups="{c.get('groups', 1) if slug == 'testi' else c.get('groups', 2)}" data-per-group="{3 if slug == 'testi' else 27}">
       <div class="wrap narrow">
         <span class="label">{e(c['name'])} · Talvi 2027</span>
-        <h2 data-title>{'Ryhmät ovat täynnä.' if c.get('full') else ('Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') else 'Ilmoittaudu.')}</h2>
+        <h2 data-title>{'Ryhmät ovat täynnä.' if c.get('full') else ('Ilmoittautuminen aukeaa ' + e(c['opens']) + '.' if c.get('opens') and not c.get('open') else 'Ilmoittaudu.')}</h2>
         <p class="reg-status" data-status aria-live="polite"></p>
         <div class="reg-done" data-done hidden aria-live="polite"></div>
         <form novalidate>
@@ -411,7 +411,7 @@ def host_page():
 def index_page():
     rows = "\n".join(
         f"""        <a href="/{s}" class="city-row rv"{f' data-city="{s}" data-groups="{c.get('groups', 2)}"' if s in REG_CITIES else ''}>
-          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{'<span class="opens">Ryhmät täynnä · liity jonoon</span>' if c.get('full') else (f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else '')}{city_logos(c)}</div>
+          <div><h3>{c['name']}{' <span class="full-tag">Täynnä</span>' if c.get('full') else ''}</h3>{'<span class="opens">Ryhmät täynnä · liity jonoon</span>' if c.get('full') else ('<span class="opens">Ilmoittautuminen auki</span>' if c.get('open') else (f'<span class="opens">Ilmoittautuminen {c["opens"]} alkaen</span>' if c.get('opens') else ''))}{city_logos(c)}</div>
           <span class="when">{c['dates']}2027</span>
           <span class="arrow">{ARROW}</span>
         </a>""" for s, c in CITIES.items()) + "\n" + "\n".join(
@@ -507,7 +507,7 @@ def city_page(slug, c):
     <div class="wrap">
       <span class="label">Talvi 2027 · {c['dates']}2027</span>
       <h1>{c['name']}</h1>
-      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Ryhmät täynnä</span>' if c.get('full') else (f'<span data-opens-fact>Ilmoittautuminen {e(c["opens"])}</span>' if c.get('opens') and slug in REG_CITIES else '')}</div>
+      <div class="facts"><span>4–6-vuotiaat</span><span>Viikot {c['weeks']}</span>{f'<span>{c.get("groups", 2)} {"ryhmä" if c.get("groups", 2) == 1 else "ryhmää"}</span>' if c.get("groups", 2) else ''}<span><b>{c.get('price', PRICE)}</b> / kausi</span>{'<span class="full-tag">Ryhmät täynnä</span>' if c.get('full') else ('<span data-opens-fact>Ilmoittautuminen auki</span>' if c.get('open') and slug in REG_CITIES else (f'<span data-opens-fact>Ilmoittautuminen {e(c["opens"])}</span>' if c.get('opens') and slug in REG_CITIES else ''))}</div>
     </div>
   </header>
 
@@ -600,9 +600,9 @@ def kokemukset_page():
     # (hinta/tila, aukeamisteksti, napin teksti) – päivitä kun tilanne muuttuu
     city_cards = {
         "espoo": ("Täynnä", "", "Ilmoittaudu jonoon"),
-        "helsinki": ("79 € / kausi", "Ilmoittautuminen aukeaa ti 24.11. klo 20", "Katso ohjelma"),
+        "helsinki": ("79 € / kausi", "Ilmoittautuminen auki", "Ilmoittaudu"),
         "vantaa": ("Lauantaisin 30.1.–3.4. · 79 €", "", "Ilmoittaudu"),
-        "tampere": ("69 € / kausi", "Ilmoittautuminen aukeaa su 15.11. klo 20", "Katso ohjelma"),
+        "tampere": ("69 € / kausi", "Ilmoittautuminen auki", "Ilmoittaudu"),
     }
     order = ["espoo", "helsinki", "vantaa", "tampere"]
     cards = "".join(f"""          <a href="/{slug}{'#ilmoittaudu' if slug in REG_CITIES else ''}" class="ccard"{f' data-city="{slug}" data-groups="{CITIES[slug].get("groups", 2)}"' if slug in REG_CITIES and slug != 'espoo' else ''}>
